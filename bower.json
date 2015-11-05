@@ -1,0 +1,14 @@
+{
+  "name": "simple-brunch",
+  "version": "0.1.0",
+  "private": true,
+  "ignore": ["**/.*", "node_modules", "bower_components", "test", "tests"],
+  "dependencies": {
+    "jquery": "1.*",
+    "d3": "3.*",
+    "dcjs": "1.*",
+    "crossfilter":"1.*",
+    "lodash": "3.*",
+    "queue-async": "1.*"
+  }
+}
