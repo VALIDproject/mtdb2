@@ -24,5 +24,7 @@ exports.init = function(datafile) {
       .dimension(yearDim)
       .group(spendPerYear)
       .innerRadius(50);
+
+    dc.renderAll();
   }
 }

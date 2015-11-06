@@ -7,12 +7,11 @@
  * @type {string}
  * @memberof force
  */
-var sourceFileName = "data/data20144.csv";
+var sourceFileName = "data/data.csv";
 
 var App = {
   init: function init() {
     require('charts').init(sourceFileName);
-    //dc.renderAll();
   }
 };
 
