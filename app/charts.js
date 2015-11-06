@@ -1,9 +1,13 @@
 exports.init = function(datafile) {
 
-  var yearRingChart   = dc.pieChart("#chart-ring-year");
-
   var q = queue()
     .defer(d3.dsv(";", "text/csv"), datafile);
+
+  yearsChart = dc.pieChart('#years-chart');
+
+  quarterChart = dc.pieChart('#quarter-chart');
+
+  lawsChart = dc.pieChart("#laws-chart");
 
   q.await(initCharts);
 
@@ -16,14 +20,27 @@ exports.init = function(datafile) {
     var ndxLinks = crossfilter(links);
 
     var yearDim  = ndxLinks.dimension(function(d) {return +d.year;});
+    var quarterDim  = ndxLinks.dimension(function(d) {return +d.quarter;});
+    var lawsDim = ndxLinks.dimension(function(d) {return +d.law;});
 
     var spendPerYear = yearDim.group().reduceSum(function(d) {return +d.euro;});
+    var spendPerQuarter = quarterDim.group().reduceSum(function(d) {return +d.euro;});
+    var spendPerLaw = lawsDim.group().reduceSum(function(d) {return +d.euro;});
 
-    yearRingChart
-      .width(200).height(200)
+    yearsChart
+      .width(180).height(180).radius(80)
       .dimension(yearDim)
-      .group(spendPerYear)
-      .innerRadius(50);
+      .group(spendPerYear);
+
+    quarterChart
+      .width(180).height(180).radius(80)
+      .dimension(quarterDim)
+      .group(spendPerQuarter);
+
+    lawsChart
+      .width(180).height(180).radius(80)
+      .dimension(lawsDim)
+      .group(spendPerLaw);    
 
     dc.renderAll();
   }

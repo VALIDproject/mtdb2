@@ -95,10 +95,6 @@ exports.parse = function(data) {
         euro : d.EURO// Money value
       });
     }
-    else
-    {
-      console.log("leermeldung " + d.MEDIUM_MEDIENINHABER);
-    }
   });
 
   return [nodes, links];

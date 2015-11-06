@@ -6,7 +6,7 @@
   "dependencies": {
     "jquery": "1.*",
     "d3": "3.*",
-    "dcjs": "1.*",
+    "dcjs": "2.*",
     "crossfilter":"1.*",
     "lodash": "3.*",
     "queue-async": "1.*"
