@@ -9,6 +9,7 @@
     "dcjs": "2.*",
     "crossfilter":"1.*",
     "lodash": "3.*",
-    "queue-async": "1.*"
+    "queue-async": "1.*",
+    "bootstrap": ">=3.2.0"
   }
 }

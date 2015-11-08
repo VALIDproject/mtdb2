@@ -1,3 +1,5 @@
+"use strict";
+
 exports.parse = function(data) {
 
   /**
@@ -27,17 +29,6 @@ exports.parse = function(data) {
    */
   var links = [];
 
-  /**
-   * Enables a rounding of all numbers.
-   * 
-   * @property {Number} rounds the number to two.
-   * @this is the number to round.
-   */
-  Number.prototype.roundToTwo = function()
-  {
-    return Math.round(this * 100) / 100;
-  }
-
   // Since it is a csv file we have to format the data a bit
   data.forEach(function (d) {
         
@@ -56,13 +47,13 @@ exports.parse = function(data) {
         if (nodes[i].name == d.RECHTSTRGER)
         {
           ri = i;
-          nodes[i].overall = (nodes[i].overall + d.EURO).roundToTwo();
+          nodes[i].overall = nodes[i].overall + d.EURO;
         }
 
         if (nodes[i].name == d.MEDIUM_MEDIENINHABER)
         {
           mi = i;
-          nodes[i].overall = (nodes[i].overall + d.EURO).roundToTwo();
+          nodes[i].overall = nodes[i].overall + d.EURO;
         }
       }
 
