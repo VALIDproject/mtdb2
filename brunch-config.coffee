@@ -8,7 +8,6 @@ module.exports = config:
       joinTo:
         'vendor.css': /^(bower_components|vendor)\//
         'app.css': /^app\//
-        
     templates: 
       joinTo: 
         'app.js'
