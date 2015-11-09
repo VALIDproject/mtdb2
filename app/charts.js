@@ -37,6 +37,22 @@ exports.init = function(datafile) {
     links = data[1];
     ndxLinks = crossfilter(links);
 
+    legalNameDim = ndxLinks.dimension(function(d) {return nodes[+d.source].name;});
+    mediaNameDim = ndxLinks.dimension(function(d) {return nodes[+d.target].name;});
+
+    text_filter = function(dim, q, tab) {
+      tab.filterAll();
+      var re = new RegExp(q, "i")
+      if (q != '') {
+        dim.filter(function(d) {
+            return 0 == d.search(re);
+        });
+      } else {
+        dim.filterAll();
+      }
+      dc.redrawAll();
+    };
+
     all = ndxLinks.groupAll();
 
     require('filterCharts');

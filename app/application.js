@@ -20,6 +20,9 @@ var ndxLinks;
 var all;
 var locale;
 var formatEuro;
+var legalNameDim;
+var mediaNameDim;
+var text_filter;
 
 var App = {
   items: ['Home', 'About', 'Contact'],

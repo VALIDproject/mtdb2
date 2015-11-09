@@ -11,6 +11,14 @@
   <script src="app.js"></script>
   <script>
   require('application').init();
+
+  $("#legalSearch").on('input', function () {
+    text_filter(legalNameDim, this.value, legalTable);
+  });
+
+  $("#mediaSearch").on('input', function () {
+    text_filter(mediaNameDim, this.value, mediaTable);
+  });  
   </script>
 </body>
 </html>

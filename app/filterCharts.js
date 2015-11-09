@@ -13,45 +13,45 @@ yearsChart
   .dimension(yearDim)
   .group(spendPerYear)
   .label(function (d) {
-    if (yearsChart.hasFilter() && !yearsChart.hasFilter(d.key)) {
-        return d.key + '(0%)';
-    }
     var label = d.key;
-    if (all.value()) {
-        label += '(' + Math.floor(d.value / all.value() * 100) + '%)';
+    if (yearsChart.hasFilter() && !yearsChart.hasFilter(d.key)) {
+        return label + '(0%)';
+    }
+    var all = d3.sum(spendPerYear.all(),function(d) {return d.value;});
+    if (all) {
+        label += '(' + Math.floor(d.value / all * 100) + '%)';
     }
     return label;
-  })
-  .renderLabel(true);
+  });
 
 quarterChart
   .width(180).height(180).radius(80)
   .dimension(quarterDim)
   .group(spendPerQuarter)
   .label(function (d) {
-    if (quarterChart.hasFilter() && !quarterChart.hasFilter(d.key)) {
-        return d.key + '(0%)';
-    }
     var label = d.key;
-    if (all.value()) {
-        label += '(' + Math.floor(d.value / all.value() * 100) + '%)';
+    if (quarterChart.hasFilter() && !quarterChart.hasFilter(d.key)) {
+        return label + '(0%)';
+    }
+    var all = d3.sum(spendPerQuarter.all(),function(d) {return d.value;});
+    if (all) {
+        label += '(' + Math.floor(d.value / all * 100) + '%)';
     }
     return label;
-  })
-  .renderLabel(true);      
+  });      
 
 lawsChart
   .width(180).height(180).radius(80)
   .dimension(lawsDim)
   .group(spendPerLaw)
   .label(function (d) {
+    var label = d.key;
     if (lawsChart.hasFilter() && !lawsChart.hasFilter(d.key)) {
-        return '§' + d.key + '(0%)';
+        return label + '(0%)';
     }
-    var label = '§' + d.key;
-    if (all.value()) {
-        label += '(' + Math.floor(d.value / all.value() * 100) + '%)';
+    var all = d3.sum(spendPerLaw.all(),function(d) {return d.value;});
+    if (all) {
+        label += '(' + Math.floor(d.value / all * 100) + '%)';
     }
     return label;
-  })
-  .renderLabel(true); 
+  });

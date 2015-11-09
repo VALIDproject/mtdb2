@@ -19,8 +19,22 @@
         .clearfix
     .row
       .col-sm-6
+        .row
+          .span12
+            form.custom-search-form.search-form.form-horizontal.pull-right
+              .input-append.span12
+                input(type="text",placeholder="Filter")#legalSearch.search-query.mac-style
+                button(type="submit").btn
+                  i.icon-search
         span#data-count-legal
         table.table.table-hover#legal-table
       .col-sm-6
+        .row
+          .span12
+            form.custom-search-form.search-form.form-horizontal.pull-right
+              .input-append.span12
+                input(type="text",placeholder="Filter")#mediaSearch.search-query.mac-style
+                button(type="submit").btn
+                  i.icon-search
         span#data-count-media
         table.table.table-hover#media-table
