@@ -7,10 +7,11 @@
     "css-brunch": "^1.7.0",
     "jade-brunch": "^1.8.1",
     "javascript-brunch": "^1.7.1",
-    "sass-brunch": "^1.9.0"
+    "less-brunch": "^1.8.1"
   },
   "dependencies": {
     "clean-css-brunch": "^1.7.2",
+    "less-brunch": "^1.8.1",
     "uglify-js-brunch": "^1.7.8"
   }
 }

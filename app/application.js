@@ -1,5 +1,7 @@
 "use strict";
 
+require('d3graph');
+
 /**
  * Path with filename and -end of the data base file to read.
  * 
@@ -9,32 +11,27 @@
  */
 var sourceFileName = "data/data.csv";
 
-var yearsChart;
-var quarterChart;
-var lawsChart;
-var legalCount;
-var mediaCount;
-var legalTable;
-var mediaTable;
+var yearsChart, quarterChart, lawsChart;
+var legalCount, mediaCount;
+var legalTable, mediaTable;
+
 var ndxLinks;
-var all;
+
 var locale;
 var formatEuro;
-var legalNameDim;
-var mediaNameDim;
+var legalNameDim, mediaNameDim, legalDim, mediaDim;
+var groupedLegalDim, groupedMediaDim, groupedList;
 var text_filter;
 
 var App = {
-  items: ['Home', 'About', 'Contact'],
 
   init: function init() {
 
     var nav = require('views/nav');
-    var html = nav({ items: App.items });
-    $('body').append(html);
+    $('body').prepend(nav);
 
-    var content = require('views/charts');
-    $('body').append(content);
+	var content = require('views/charts');
+    $('.starter-template').append(content);
 
     require('charts').init(sourceFileName);
   }

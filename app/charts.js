@@ -1,5 +1,7 @@
 exports.init = function(datafile) {
 
+  $("#my-charts").hide(); //hide the charts. They are displayed when the data finishes loading
+
   var q = queue()
     .defer(d3.dsv(";", "text/csv"), datafile);
 
@@ -30,6 +32,36 @@ exports.init = function(datafile) {
 
   q.await(initCharts);
 
+  var addTotal = function(p,v) {
+    ++p.count;
+    p.total += +v.euro;
+    return p;  
+  };
+
+  var removeTotal = function (p, v) {
+    --p.count;
+    p.total -= +v.euro;
+    return p;
+  };
+
+  var initTotal = function(){return {count: 0, total: 0};}
+
+  var filterOutEmptryCont = function(d) { return d.value.count != 0; };
+
+  var remove_empty_bins = function (source_group) {
+      return {
+          all:function () {
+              return source_group.all().filter(filterOutEmptryCont);
+          },
+          top:function (x) {
+              return source_group.top(x).filter(filterOutEmptryCont);
+          },
+          size:function () { 
+              return source_group.all().filter(filterOutEmptryCont).length;
+          }
+      };
+  };
+
   function initCharts(error, rawData) 
   {
     data = require('dataparse').parse(rawData);
@@ -39,6 +71,22 @@ exports.init = function(datafile) {
 
     legalNameDim = ndxLinks.dimension(function(d) {return nodes[+d.source].name;});
     mediaNameDim = ndxLinks.dimension(function(d) {return nodes[+d.target].name;});
+    legalDim = ndxLinks.dimension(function(d) {return +d.source});
+    mediaDim = ndxLinks.dimension(function(d) {return +d.target});
+
+    groupedLegalDim = remove_empty_bins(legalDim.group().reduce(addTotal,removeTotal,initTotal));
+    groupedMediaDim = remove_empty_bins(mediaDim.group().reduce(addTotal,removeTotal,initTotal));
+
+    // groupedLinkDim = remove_empty_bins(legalDim.group().reduce(function(p,v) {
+    //   ++p.count;
+    //   p.links[+v.source] = {target: +v.target,euro: +v.euro};
+    //   return p;
+    // },
+    // function (p, v) {
+    //   --p.count;
+    //   p.links.remove(v.source)
+    //   return p;
+    // },function(){return {count: 0, links: new Array()}}));
 
     text_filter = function(dim, q, tab) {
       tab.filterAll();
@@ -53,11 +101,12 @@ exports.init = function(datafile) {
       dc.redrawAll();
     };
 
-    all = ndxLinks.groupAll();
-
     require('filterCharts');
     require('tables');
+    require('chordChart');
 
     dc.renderAll();
+    $('#dataLoading').hide();
+    $("#my-charts").show();
   }
 }

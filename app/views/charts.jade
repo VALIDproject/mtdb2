@@ -1,40 +1,42 @@
-.container
-  .starter-template
-    h1 Media Transperancy
-      br
-      small An Overview of Public Money spent on Media-Cooperations and -Funding in Austria
-    .row
-      h2 Filter
-      #years-chart.col-sm-4
-        strong Years 
-        a(href="javascript:yearsChart.filterAll();dc.redrawAll();",style="display: none;").reset reset
-        .clearfix
-      #quarter-chart.col-sm-4
-        strong Quarters 
-        a(href="javascript:quarterChart.filterAll();dc.redrawAll();",style="display: none;").reset reset
-        .clearfix  
-      #laws-chart.col-sm-4
-        strong Laws 
-        a(href="javascript:lawsChart.filterAll();dc.redrawAll();",style="display: none;").reset reset
-        .clearfix
-    .row
-      .col-sm-6
-        .row
-          .span12
-            form.custom-search-form.search-form.form-horizontal.pull-right
-              .input-append.span12
-                input(type="text",placeholder="Filter")#legalSearch.search-query.mac-style
-                button(type="submit").btn
-                  i.icon-search
-        span#data-count-legal
-        table.table.table-hover#legal-table
-      .col-sm-6
-        .row
-          .span12
-            form.custom-search-form.search-form.form-horizontal.pull-right
-              .input-append.span12
-                input(type="text",placeholder="Filter")#mediaSearch.search-query.mac-style
-                button(type="submit").btn
-                  i.icon-search
-        span#data-count-media
-        table.table.table-hover#media-table
+h1 Media Transperancy
+  br
+  small An Overview of Public Money spent on Media-Cooperations and -Funding in Austria
+#my-charts
+  .row#my-pie-charts
+    h2 Filter
+    #years-chart.col-sm-4
+      strong Years 
+      a(href="javascript:yearsChart.filterAll();dc.redrawAll();",style="display: none;").reset reset
+      .clearfix
+    #quarter-chart.col-sm-4
+      strong Quarters 
+      a(href="javascript:quarterChart.filterAll();dc.redrawAll();",style="display: none;").reset reset
+      .clearfix  
+    #laws-chart.col-sm-4
+      strong Laws 
+      a(href="javascript:lawsChart.filterAll();dc.redrawAll();",style="display: none;").reset reset
+      .clearfix
+  .row#my-chord
+    h2 Chord Diagramm
+    #chord-chart
+  .row#my-tables
+    .col-sm-6
+      .row
+        .span12
+          form.custom-search-form.search-form.form-horizontal.pull-right
+            .input-append.span12
+              input(type="text",placeholder="Filter")#legalSearch.search-query.mac-style
+              button(type="submit").btn
+                i.icon-search
+      span#data-count-legal
+      table.table.table-hover#legal-table
+    .col-sm-6
+      .row
+        .span12
+          form.custom-search-form.search-form.form-horizontal.pull-right
+            .input-append.span12
+              input(type="text",placeholder="Filter")#mediaSearch.search-query.mac-style
+              button(type="submit").btn
+                i.icon-search
+      span#data-count-media
+      table.table.table-hover#media-table

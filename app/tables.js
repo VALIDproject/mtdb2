@@ -1,49 +1,8 @@
 "use strict";
 
-var legalDim = ndxLinks.dimension(function(d) {return +d.source});
-var mediaDim = ndxLinks.dimension(function(d) {return +d.target});
-
-var addTotal = function(p,v) {
-  ++p.count;
-  p.total += +v.euro;
-  return p;  
-};
-
-var removeTotal = function (p, v) {
-  --p.count;
-  p.total -= +v.euro;
-  return p;
-};
-
-var initTotal = function(){return {count: 0, total: 0};}
-
-function remove_empty_bins(source_group) {
-    return {
-        all:function () {
-            return source_group.all().filter(function(d) {
-                return d.value.count != 0;
-            });
-        },
-        top:function (x) {
-            return source_group.top(x).filter(function(d) {
-                return d.value.count != 0;
-            });
-        },
-        size:function () { 
-            var s = source_group.all().filter(function(d) {
-                return d.value.count != 0;
-            });
-            return s.length;
-        }
-    };
-}
-
-
-
-var groupedLegalDim = remove_empty_bins(legalDim.group().reduce(addTotal,removeTotal,initTotal));
-var groupedMediaDim = remove_empty_bins(mediaDim.group().reduce(addTotal,removeTotal,initTotal));
-
 var tableRank = function (p) { return "source"; }
+
+var all = ndxLinks.groupAll();
 
 legalCount
   .dimension(groupedLegalDim)
