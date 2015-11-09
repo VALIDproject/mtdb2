@@ -7,43 +7,18 @@
   <link rel="stylesheet" href="vendor.css">
 </head>
 <body>
-  <h1>
-    Media Transperancy
-    <small>• A simple demo</small>
-  </h1>
-
-  <div class="row">
-    <h2>Filter</h2>
-    <a class="reset" href="javascript:resetAll();">reset all filters</a>
-    <div class="clearfix"></div>    
-    <div id="years-chart">
-      <strong>Years</strong>
-      <a class="reset" href="javascript:yearsChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
-      <div class="clearfix"></div>
-    </div>
-    <div id="quarter-chart">
-      <strong>Quarters</strong>
-      <a class="reset" href="javascript:quarterChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
-      <div class="clearfix"></div>
-    </div>
-    <div id="laws-chart">
-      <strong>Laws</strong>
-      <a class="reset" href="javascript:lawsChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
-      <div class="clearfix"></div>
-    </div>    
-  </div>
-  
-
   <script src="libraries.js"></script>
   <script src="app.js"></script>
   <script>
   require('application').init();
-  function resetAll() {
-    yearsChart.filterAll();
-    quarterChart.filterAll();
-    lawsChart.filterAll();
-    dc.redrawAll();
-  }      
+
+  $("#legalSearch").on('input', function () {
+    text_filter(legalNameDim, this.value, legalTable);
+  });
+
+  $("#mediaSearch").on('input', function () {
+    text_filter(mediaNameDim, this.value, mediaTable);
+  });  
   </script>
 </body>
 </html>
