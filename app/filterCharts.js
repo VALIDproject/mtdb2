@@ -22,6 +22,10 @@ yearsChart
         label += '(' + Math.floor(d.value / all * 100) + '%)';
     }
     return label;
+  })
+  .on("filtered", function (chart, filter) {
+    // update function for d3
+    drawChords(legalDim);
   });
 
 quarterChart
@@ -38,7 +42,11 @@ quarterChart
         label += '(' + Math.floor(d.value / all * 100) + '%)';
     }
     return label;
-  });      
+  })
+  .on("filtered", function (chart, filter) {
+    // update function for d3
+    drawChords(legalDim);
+  });        
 
 lawsChart
   .width(180).height(180).radius(80)
@@ -54,4 +62,8 @@ lawsChart
         label += '(' + Math.floor(d.value / all * 100) + '%)';
     }
     return label;
-  });
+  })
+  .on("filtered", function (chart, filter) {
+    // update function for d3
+    drawChords(legalDim);
+  });  

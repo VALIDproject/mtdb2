@@ -9,8 +9,7 @@ legalCount
   .group(all)
   .html({
     some: '<strong>%total-count</strong> entries' +
-        ' | <a href=\'javascript:dc.filterAll(); dc.renderAll();\'\'>Reset All</a>',
-    all: 'All records selected. Please click on the graph to apply filters.'
+        ' | <a href=\"javascript:resetSearchBox(\$(\'#legalSearch\'));\">reset</a> | <a href=\'javascript:combineData(legalDim);\'>Combine data</a> | <a href=\'javascript:deleteData(legalDim);\'>Remove data</a>'
   });
 
 mediaCount
@@ -18,8 +17,7 @@ mediaCount
   .group(all)
   .html({
     some: '<strong>%total-count</strong> entries' +
-        ' | <a href=\'javascript:dc.filterAll(); dc.renderAll();\'\'>Reset All</a>',
-    all: 'All records selected. Please click on the graph to apply filters.'
+        ' | <a href=\"javascript:resetSearchBox(\$(\'#mediaSearch\'));updateAll();\">reset</a> | <a href=\'javascript:combineData(mediaDim);\'>Combine data</a> | <a href=\'javascript:deleteData(mediaDim);\'>Remove data</a>'
   });
 
 legalTable
@@ -47,6 +45,10 @@ legalTable
     ])
   .on('renderlet', function (table) {
       table.selectAll('#legal-table').classed('info', true);
+  })
+  .on("filtered", function (chart, filter) {
+    // update function for d3
+    drawChords(legalDim);
   });
 
 mediaTable
@@ -74,4 +76,9 @@ mediaTable
     ])
   .on('renderlet', function (table) {
       table.selectAll('#media-table').classed('info', true);
+  })
+  .on("filtered", function (chart, filter) {
+    // update function for d3
+    drawChords(legalDim);
   });
+  ;

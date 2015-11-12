@@ -21,19 +21,29 @@ var locale;
 var formatEuro;
 var legalNameDim, mediaNameDim, legalDim, mediaDim;
 var groupedLegalDim, groupedMediaDim, groupedList;
-var text_filter;
+
+var textFilter;
+var resetSearchBox;
+
+var drawChords;
+
+var updateAll;
+
+var deleteData;
+
+var combineData;
 
 var App = {
 
   init: function init() {
 
     var nav = require('views/nav');
-    $('body').prepend(nav);
+      $('body').prepend(nav);
 
-	var content = require('views/charts');
-    $('.starter-template').append(content);
+  	var content = require('views/charts');
+      $('.starter-template').append(content);
 
-    require('charts').init(sourceFileName);
+    require('charts').init(sourceFileName);      
   }
 };
 

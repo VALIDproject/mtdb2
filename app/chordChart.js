@@ -57,7 +57,13 @@ var messages = svg.append("text")
   .attr("transform", "translate(10, 10)")
   .text("Updating...");
 
-var drawChords = function (data) {
+drawChords = function (dataDimension) {
+
+  var sortedDim = dataDimension.top(Infinity).sort(function(a,b){
+    return (b.euro - a.euro);
+  });
+
+  data = sortedDim.slice(0,20);
 
   messages.attr("opacity", 1);
   messages.transition().duration(1000).attr("opacity", 0);
@@ -85,7 +91,7 @@ var drawChords = function (data) {
     .on("mouseover", dimChords)
     .on("mouseout", resetChords)
     .text(function (d) {
-      return d._id;
+      return nodes[d._id].name;
     });
 
   groups.select("path")
@@ -169,6 +175,4 @@ var drawChords = function (data) {
   }
 }; // END DRAWCHORDS FUNCTION
 
-drawChords(legalDim.top(100))
-
-//drawChords(links)
+drawChords(legalDim);

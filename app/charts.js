@@ -77,20 +77,9 @@ exports.init = function(datafile) {
     groupedLegalDim = remove_empty_bins(legalDim.group().reduce(addTotal,removeTotal,initTotal));
     groupedMediaDim = remove_empty_bins(mediaDim.group().reduce(addTotal,removeTotal,initTotal));
 
-    // groupedLinkDim = remove_empty_bins(legalDim.group().reduce(function(p,v) {
-    //   ++p.count;
-    //   p.links[+v.source] = {target: +v.target,euro: +v.euro};
-    //   return p;
-    // },
-    // function (p, v) {
-    //   --p.count;
-    //   p.links.remove(v.source)
-    //   return p;
-    // },function(){return {count: 0, links: new Array()}}));
-
-    text_filter = function(dim, q, tab) {
+    textFilter = function(dim, q, tab) {
       tab.filterAll();
-      var re = new RegExp(q, "i")
+      var re = new RegExp(".*"+q, "i")
       if (q != '') {
         dim.filter(function(d) {
             return 0 == d.search(re);
@@ -98,15 +87,66 @@ exports.init = function(datafile) {
       } else {
         dim.filterAll();
       }
-      dc.redrawAll();
+      updateAll();     
     };
+
+    resetSearchBox = function(id){
+      id.val('');
+      id.change();
+      updateAll();
+    }
+
+
+    updateAll = function()
+    {
+      legalTable.filterAll();
+      mediaTable.filterAll();
+      drawChords(legalDim);
+      dc.renderAll();
+    }    
+
+    deleteData = function(dimension)
+    {
+      ndxLinks.remove(dimension);
+      updateAll();
+    }
+
+    combineData = function(dimension)
+    {
+      var addArr = [];
+      dimension.top(Infinity).forEach(function(d){
+        d.source = nodes.length;
+        addArr.push(d);
+      })
+      ndxLinks.remove();
+      nodes.push({gov: 1, name:$("#legalSearch").val(),overall: 1})
+      ndxLinks.add(addArr);
+
+      updateAll();
+    }
 
     require('filterCharts');
     require('tables');
     require('chordChart');
 
     dc.renderAll();
+
     $('#dataLoading').hide();
     $("#my-charts").show();
+
+    $("#legalSearch").on('change', function () {
+      textFilter(legalNameDim, this.value, legalTable);
+    })
+    $("#legalSearch").parent().parent().submit(function () {
+      textFilter(legalNameDim, $("#legalSearch").val(), legalTable);
+      return false;
+    });
+    $("#mediaSearch").on('change', function () {
+      textFilter(mediaNameDim, this.value, mediaTable);
+    });
+    $("#mediaSearch").parent().parent().submit(function () {
+      textFilter(mediaNameDim, $("#mediaSearch").val(), mediaTable);
+      return false;
+    });    
   }
 }
