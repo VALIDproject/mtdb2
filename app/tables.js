@@ -9,7 +9,7 @@ legalCount
   .group(all)
   .html({
     some: '<strong>%total-count</strong> entries' +
-        ' | <a href=\"javascript:resetSearchBox(\$(\'#legalSearch\'));\">reset</a> | <a href=\'javascript:combineData(legalDim);\'>Combine data</a> | <a href=\'javascript:deleteData(legalDim);\'>Remove data</a>'
+        ' <span id=\'legalSearchReset\'>| <a href=\"javascript:resetSearchBox(\$(\'#legalSearch\'));\">reset</a></span> | <a href=\'javascript:combineLegalData();\'>Combine data</a> | <a href=\'javascript:deleteData(legalDim);\'>Remove data</a>'
   });
 
 mediaCount
@@ -17,38 +17,85 @@ mediaCount
   .group(all)
   .html({
     some: '<strong>%total-count</strong> entries' +
-        ' | <a href=\"javascript:resetSearchBox(\$(\'#mediaSearch\'));updateAll();\">reset</a> | <a href=\'javascript:combineData(mediaDim);\'>Combine data</a> | <a href=\'javascript:deleteData(mediaDim);\'>Remove data</a>'
+        ' <span id=\'mediaSearchReset\'>| <a href=\"javascript:resetSearchBox(\$(\'#mediaSearch\'));updateAll();\">reset</a></span> | <a href=\'javascript:combineMediaData();\'>Combine data</a> | <a href=\'javascript:deleteData(mediaDim);\'>Remove data</a>'
   });
 
 legalTable
   .dimension(groupedLegalDim)
   .group(tableRank)
-  .sortBy(function (d) { return d.value.total;})
-  .order(d3.descending)  
+  .sortBy(tableSorting[legalTableSorting])
+  .order(legalTableOrdering[legalTableSorting])  
   .showGroups(false)
   .size(Infinity)
   .columns([
     {
-      label: 'Rechtsträger', 
-      format: function(d){ 
-        return nodes[d.key].name;
-      }
+      format: function(d){ return nodes[d.key]; }
     },
     {
-      label: 'Anzahl an Relationen', 
-      format: function(d){ return d.value.count;}
+      format: function(d){ return d.value.count; }
     },
     {
-      label: 'Summe', 
       format: function(d){ return formatEuro(d.value.total);}
     }
     ])
-  .on('renderlet', function (table) {
-      table.selectAll('#legal-table').classed('info', true);
+  .on('renderlet.t', function (table) {
+      $('#legalAlphabetOrder').click( function () {
+        legalTableSorting = "alphabeth";
+        if(legalTableOrdering[legalTableSorting] == d3.descending)
+        {
+          legalTableOrdering[legalTableSorting] = d3.ascending;
+          legalTableSortingStatus[legalTableSorting] = ordinalAscendingGlyph;
+        }
+        else
+        {
+          legalTableOrdering[legalTableSorting] = d3.descending;
+          legalTableSortingStatus[legalTableSorting] = ordinalDescendingGlyph;          
+        }
+        table
+          .sortBy(tableSorting[legalTableSorting])
+          .order(legalTableOrdering[legalTableSorting])
+          .redraw();
+      });
+
+    $('#legalRelationOrder').click( function () {
+      legalTableSorting = "relation";
+      if(legalTableOrdering[legalTableSorting] == d3.descending)
+      {
+        legalTableOrdering[legalTableSorting] = d3.ascending;
+        legalTableSortingStatus[legalTableSorting] = ordinalAscendingGlyph;
+      }
+      else
+      {
+        legalTableOrdering[legalTableSorting] = d3.descending;
+        legalTableSortingStatus[legalTableSorting] = ordinalDescendingGlyph;          
+      }      
+      table
+        .sortBy(tableSorting[legalTableSorting])
+        .order(legalTableOrdering[legalTableSorting])
+        .redraw();  
+    });
+
+    $('#legalSumOrder').click( function () {
+      legalTableSorting = "sum";
+      if(legalTableOrdering[legalTableSorting] == d3.descending)
+      {
+        legalTableOrdering[legalTableSorting] = d3.ascending;
+        legalTableSortingStatus[legalTableSorting] = ordinalAscendingGlyph;
+      }
+      else
+      {
+        legalTableOrdering[legalTableSorting] = d3.descending;
+        legalTableSortingStatus[legalTableSorting] = ordinalDescendingGlyph;          
+      }      
+      table
+        .sortBy(tableSorting[legalTableSorting])
+        .order(legalTableOrdering[legalTableSorting])
+        .redraw();
+    });  
   })
   .on("filtered", function (chart, filter) {
     // update function for d3
-    drawChords(legalDim);
+    updateAll();
   });
 
 mediaTable
@@ -62,11 +109,11 @@ mediaTable
     {
       label: 'Media', 
       format: function(d){ 
-        return nodes[d.key].name;
+        return nodes[d.key];
       }
     },
     {
-      label: 'Anzahl an Relationen', 
+      label: 'Relationen', 
       format: function(d){ return d.value.count;}
     },
     {
@@ -74,11 +121,7 @@ mediaTable
       format: function(d){ return formatEuro(d.value.total);}
     }
     ])
-  .on('renderlet', function (table) {
-      table.selectAll('#media-table').classed('info', true);
-  })
   .on("filtered", function (chart, filter) {
     // update function for d3
-    drawChords(legalDim);
+    updateAll();
   });
-  ;

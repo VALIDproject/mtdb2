@@ -1,66 +1,28 @@
 exports.init = function(datafile) {
 
+  // require the tree map module for dc.js
+  //require('dcTreeMapChart');
+  require('dc-tooltip-mixin');
+
   $("#my-charts").hide(); //hide the charts. They are displayed when the data finishes loading
 
   var q = queue()
     .defer(d3.dsv(";", "text/csv"), datafile);
 
-  yearsChart = dc.pieChart('#years-chart');
-  quarterChart = dc.pieChart('#quarter-chart');
-  lawsChart = dc.pieChart("#laws-chart");
+  timeBarChart = dc.barChart('#time-bar-chart');
+  lawsBarChart = dc.barChart('#laws-bar-chart');
+  expensesBarChart = dc.barChart('#expenses-bar-chart');
+
   legalCount = dc.dataCount('#data-count-legal');
-  legalTable = dc.dataTable('#legal-table');
-  mediaTable = dc.dataTable("#media-table");
   mediaCount = dc.dataCount('#data-count-media');
 
-  locale = d3.locale({
-    "decimal": ",",
-    "thousands": ".",
-    "grouping": [3],
-    "currency": ["", "€"],
-    "dateTime": "%a %b %e %X %Y",
-    "date": "%m/%d/%Y",
-    "time": "%H:%M:%S",
-    "periods": ["AM", "PM"],
-    "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-    "shortDays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    "shortMonths": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-  });
-
-  formatEuro = locale.numberFormat("$,.2f");
+  legalTable = dc.dataTable('#legal-table');
+  mediaTable = dc.dataTable("#media-table");
+  
+  //legalTreeMap = dc.treemapChart('#legal-tree-map');
+  //mediaTreeMap = dc.treemapChart('#media-tree-map');
 
   q.await(initCharts);
-
-  var addTotal = function(p,v) {
-    ++p.count;
-    p.total += +v.euro;
-    return p;  
-  };
-
-  var removeTotal = function (p, v) {
-    --p.count;
-    p.total -= +v.euro;
-    return p;
-  };
-
-  var initTotal = function(){return {count: 0, total: 0};}
-
-  var filterOutEmptryCont = function(d) { return d.value.count != 0; };
-
-  var remove_empty_bins = function (source_group) {
-      return {
-          all:function () {
-              return source_group.all().filter(filterOutEmptryCont);
-          },
-          top:function (x) {
-              return source_group.top(x).filter(filterOutEmptryCont);
-          },
-          size:function () { 
-              return source_group.all().filter(filterOutEmptryCont).length;
-          }
-      };
-  };
 
   function initCharts(error, rawData) 
   {
@@ -68,85 +30,84 @@ exports.init = function(datafile) {
     nodes = data[0];
     links = data[1];
     ndxLinks = crossfilter(links);
+    binwidth = 1000;
 
-    legalNameDim = ndxLinks.dimension(function(d) {return nodes[+d.source].name;});
-    mediaNameDim = ndxLinks.dimension(function(d) {return nodes[+d.target].name;});
+    var filterOutEmpty = function(d) { return Math.abs(d.value)>1e-6 };
+    var filterOutEmptyTotal = function(d) { return Math.abs(d.value.total)>1e-6 };
+
     legalDim = ndxLinks.dimension(function(d) {return +d.source});
+    legalDim2 = ndxLinks.dimension(function(d) {return +d.source});
+    legalDim3 = ndxLinks.dimension(function(d) {return +d.source});
     mediaDim = ndxLinks.dimension(function(d) {return +d.target});
+    mediaDim2 = ndxLinks.dimension(function(d) {return +d.target});
+    lawsDim = ndxLinks.dimension(function(d) {return +d.law;});
+    timeDim = ndxLinks.dimension(function(d) {return +d.year*10+d.quarter;})
+    spendDim = ndxLinks.dimension(function(d) {return +d.euro;})
+    
+    spendPerTime = remove_empty_bins(timeDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
+    spendPerLaw = remove_empty_bins(lawsDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
+    
+    spendGroup = remove_empty_bins(spendDim.group(function(d) { return Math.floor(d/binwidth); }),filterOutEmpty);
 
-    groupedLegalDim = remove_empty_bins(legalDim.group().reduce(addTotal,removeTotal,initTotal));
-    groupedMediaDim = remove_empty_bins(mediaDim.group().reduce(addTotal,removeTotal,initTotal));
-
-    textFilter = function(dim, q, tab) {
-      tab.filterAll();
-      var re = new RegExp(".*"+q, "i")
-      if (q != '') {
-        dim.filter(function(d) {
-            return 0 == d.search(re);
-        });
-      } else {
-        dim.filterAll();
-      }
-      updateAll();     
-    };
-
-    resetSearchBox = function(id){
-      id.val('');
-      id.change();
-      updateAll();
-    }
-
-
-    updateAll = function()
-    {
-      legalTable.filterAll();
-      mediaTable.filterAll();
-      drawChords(legalDim);
-      dc.renderAll();
-    }    
-
-    deleteData = function(dimension)
-    {
-      ndxLinks.remove(dimension);
-      updateAll();
-    }
-
-    combineData = function(dimension)
-    {
-      var addArr = [];
-      dimension.top(Infinity).forEach(function(d){
-        d.source = nodes.length;
-        addArr.push(d);
-      })
-      ndxLinks.remove();
-      nodes.push({gov: 1, name:$("#legalSearch").val(),overall: 1})
-      ndxLinks.add(addArr);
-
-      updateAll();
-    }
+    groupedSpendDim = remove_empty_bins(spendDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
+    groupedLegalDim = remove_empty_bins(legalDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
+    groupedMediaDim = remove_empty_bins(mediaDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
 
     require('filterCharts');
+    //require('treeMaps');
+    //require('chordChart');
     require('tables');
-    require('chordChart');
 
     dc.renderAll();
+    dc.tooltipMixin(timeBarChart);
+    dc.tooltipMixin(lawsBarChart);
 
     $('#dataLoading').hide();
     $("#my-charts").show();
+    $('#legalSearchReset').hide();
+    $('#mediaSearchReset').hide();
 
     $("#legalSearch").on('change', function () {
-      textFilter(legalNameDim, this.value, legalTable);
+      textFilter(legalDim2, this.value, legalTable);
     })
-    $("#legalSearch").parent().parent().submit(function () {
-      textFilter(legalNameDim, $("#legalSearch").val(), legalTable);
+
+    $("#legalSearchForm").submit(function () {
+      textFilter(legalDim2, $("#legalSearch").val(), legalTable);
       return false;
     });
+
+    $('#legalSearch').on('change' , function() {
+      if(this.value != '')
+      {
+        $('#legalSearchReset').show();
+      }
+      else
+      {
+        $('#legalSearchReset').hide();
+      }
+    }); 
+
     $("#mediaSearch").on('change', function () {
-      textFilter(mediaNameDim, this.value, mediaTable);
+      textFilter(mediaDim2, this.value, mediaTable);  
     });
-    $("#mediaSearch").parent().parent().submit(function () {
-      textFilter(mediaNameDim, $("#mediaSearch").val(), mediaTable);
+
+    $("#mediaSearchForm").submit(function () {
+      textFilter(mediaDim2, $("#mediaSearch").val(), mediaTable);
       return false;
+    });
+
+    $('#mediaSearch').on('change' , function() {
+      if( this.value != ''){
+        $('#mediaSearchReset').show(); 
+      }
+      else{
+        $('#mediaSearchReset').hide();
+      }
     });    
+
+    $(window).on('resize', function(){
+      rescaleAll();
+      updateAll();
+    }); 
   }
 }

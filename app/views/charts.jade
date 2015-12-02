@@ -2,41 +2,66 @@ h1 Media Transperancy
   br
   small An Overview of Public Money spent on Media-Cooperations and -Funding in Austria
 #my-charts
-  .row#my-pie-charts
+.row#my-bar-charts
     h2 Filter
-    #years-chart.col-sm-4
+    #time-bar-chart.col-sm-6
       strong Years 
-      a(href="javascript:yearsChart.filterAll();dc.redrawAll();",style="display: none;").reset reset
+      a(href="javascript:timeBarChart.filterAll();updateAll();",style="display: none;").reset reset
       .clearfix
-    #quarter-chart.col-sm-4
-      strong Quarters 
-      a(href="javascript:quarterChart.filterAll();dc.redrawAll();",style="display: none;").reset reset
-      .clearfix  
-    #laws-chart.col-sm-4
-      strong Laws 
-      a(href="javascript:lawsChart.filterAll();dc.redrawAll();",style="display: none;").reset reset
+    #laws-bar-chart.col-sm-3
+      strong Legal Background 
+      a(href="javascript:lawsBarChart.filterAll();updateAll();",style="display: none;").reset reset
       .clearfix
-  .row#my-chord
-    h2 Chord Diagramm
-    #chord-chart
+    #expenses-bar-chart.col-sm-3
+      strong Expenses 
+      small (in million euros) 
+      a(href="javascript:expensesBarChart.filterAll();updateAll();",style="display: none;").reset reset
+      .clearfix      
   .row#my-tables
-    .col-sm-6
+    .col-sm-5
       .row
         .span12
-          form.custom-search-form.search-form.form-horizontal.pull-right
+          form.custom-search-form.search-form.form-horizontal.pull-right#legalSearchForm
             .input-append.span12
               input(type="text",placeholder="Filter Rechtsträger")#legalSearch.search-query.mac-style
               button.btn
-                i.icon-search
+                span.glyphicon.glyphicon-search
       span#data-count-legal
-      table.table.table-hover#legal-table
-    .col-sm-6
+      .table-responsive
+        table.table.table-hover.my-data-table#legal-table
+          th Rechtsträger 
+            button#legalAlphabetOrder.btn
+            span.glyphicon.glyphicon-sort-by-alphabet
+          th Relationen 
+            button#legalRelationOrder.btn
+            span.glyphicon.glyphicon-sort-by-order
+          th Summe 
+            button#legalSumOrder.btn
+            span.glyphicon.glyphicon-sort-by-order                  
+    .col-sm-2
+      strong Chord Chart
+      .clearfix
+      #chord-chart
+    .col-sm-5
       .row
         .span12
-          form.custom-search-form.search-form.form-horizontal.pull-right
+          form.custom-search-form.search-form.form-horizontal.pull-right#mediaSearchForm
             .input-append.span12
               input(type="text",placeholder="Filter Media")#mediaSearch.search-query.mac-style
               button.btn
-                i.icon-search
+                span.glyphicon.glyphicon-search
       span#data-count-media
-      table.table.table-hover#media-table
+      .table-responsive
+        table.table.table-hover.my-data-table#media-table
+//  .row#my-treeMaps
+//    h2 Tree Maps
+//    .col-sm-6
+//      strong Rechtsträger
+//      a(href="javascript:legalTreeMap.filterAll();updateAll();",style="display: none;").reset reset
+//      .clearfix
+//      #legal-tree-map  
+//    .col-sm-6
+//      strong Media
+//      a(href="javascript:mediaTreeMap.filterAll();updateAll();",style="display: none;").reset reset
+//      .clearfix
+//      #media-tree-map        

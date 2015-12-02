@@ -14,8 +14,8 @@ var chord = d3.layout.chord()
 var matrix = require('matrixFactory').chordMatrix()
   .layout(chord)
   .filter(function (item, r, c) {
-    return (item.source === r.name && item.target === c.name) ||
-           (item.source === c.name && item.target === r.name);
+    return (item.source === r && item.target === c) ||
+           (item.source === c && item.target === r);
   })
   .reduce(function (items, r, c) {
     var value;
@@ -26,7 +26,7 @@ var matrix = require('matrixFactory').chordMatrix()
         if (r === c) {
           return m + n.euro;
         } else {
-          return m + (n.source === r.name ? n.euro: n.euro);
+          return m + (n.source === r ? n.euro: n.euro);
         }
       }, 0);
     }
@@ -91,7 +91,7 @@ drawChords = function (dataDimension) {
     .on("mouseover", dimChords)
     .on("mouseout", resetChords)
     .text(function (d) {
-      return nodes[d._id].name;
+      return nodes[d._id];
     });
 
   groups.select("path")
@@ -175,4 +175,4 @@ drawChords = function (dataDimension) {
   }
 }; // END DRAWCHORDS FUNCTION
 
-drawChords(legalDim);
+drawChords(legalDim3);

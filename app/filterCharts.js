@@ -1,69 +1,91 @@
 "use strict";
 
-var yearDim  = ndxLinks.dimension(function(d) {return +d.year;});
-var quarterDim  = ndxLinks.dimension(function(d) {return +d.quarter;});
-var lawsDim = ndxLinks.dimension(function(d) {return +d.law;});
-
-var spendPerYear = yearDim.group().reduceSum(function(d) {return +d.euro;});
-var spendPerQuarter = quarterDim.group().reduceSum(function(d) {return +d.euro;});
-var spendPerLaw = lawsDim.group().reduceSum(function(d) {return +d.euro;});
-
-yearsChart
-  .width(180).height(180).radius(80)
-  .dimension(yearDim)
-  .group(spendPerYear)
-  .label(function (d) {
-    var label = d.key;
-    if (yearsChart.hasFilter() && !yearsChart.hasFilter(d.key)) {
-        return label + '(0%)';
-    }
-    var all = d3.sum(spendPerYear.all(),function(d) {return d.value;});
-    if (all) {
-        label += '(' + Math.floor(d.value / all * 100) + '%)';
-    }
-    return label;
+timeBarChart
+  .width(function(){return $("#time-bar-chart").width();})
+  .height(200)
+  .margins({top: 10, right: 10, bottom: 30, left: 80})
+  .gap(10)
+  .dimension(timeDim)
+  .group(spendPerTime)
+  .renderHorizontalGridLines(true)
+  .x(d3.scale.ordinal())
+  .xUnits(dc.units.ordinal)
+  .elasticX(true)
+  .elasticY(true)
+  .colorAccessor(function(d, i){
+    return Math.floor(d.key/10);
+  })
+  .title(function (d) {
+    return Math.floor(d.key/10) +" Q"+d.key%10 +": "+ formatEuro(d.value);
   })
   .on("filtered", function (chart, filter) {
     // update function for d3
-    drawChords(legalDim);
+    updateAllNonDC();
   });
 
-quarterChart
-  .width(180).height(180).radius(80)
-  .dimension(quarterDim)
-  .group(spendPerQuarter)
-  .label(function (d) {
-    var label = d.key;
-    if (quarterChart.hasFilter() && !quarterChart.hasFilter(d.key)) {
-        return label + '(0%)';
-    }
-    var all = d3.sum(spendPerQuarter.all(),function(d) {return d.value;});
-    if (all) {
-        label += '(' + Math.floor(d.value / all * 100) + '%)';
-    }
-    return label;
-  })
-  .on("filtered", function (chart, filter) {
-    // update function for d3
-    drawChords(legalDim);
-  });        
+timeBarChart.yAxis().tickFormat(function (v) {
+  return formatGuV(v);
+});    
+timeBarChart.xAxis().tickFormat(function (v) {
+  return Math.floor(v/10) +"Q"+v%10;
+});
 
-lawsChart
-  .width(180).height(180).radius(80)
+lawsBarChart
+  .width(function(){return $("#laws-bar-chart").width();})
+  .height(200)
+  .margins({top: 10, right: 10, bottom: 30, left: 80})
+  .gap(5)
   .dimension(lawsDim)
   .group(spendPerLaw)
-  .label(function (d) {
-    var label = d.key;
-    if (lawsChart.hasFilter() && !lawsChart.hasFilter(d.key)) {
-        return label + '(0%)';
-    }
-    var all = d3.sum(spendPerLaw.all(),function(d) {return d.value;});
-    if (all) {
-        label += '(' + Math.floor(d.value / all * 100) + '%)';
-    }
-    return label;
+  .x(d3.scale.ordinal())
+  .xUnits(dc.units.ordinal)
+  .elasticX(true)
+  .elasticY(true)
+  .renderHorizontalGridLines(true)
+  .title(function (d) {
+    return formatEuro(d.value);
   })
   .on("filtered", function (chart, filter) {
     // update function for d3
-    drawChords(legalDim);
-  });  
+    updateAllNonDC();
+  });
+
+lawsBarChart.xAxis().tickFormat(function (d) {
+  return "§" + d;
+});
+lawsBarChart.yAxis().tickFormat(function (v) {
+  return formatGuV(v);
+});
+
+expensesBarChart
+  .width(function(){return $("#expenses-bar-chart").width();})
+  .height(200)
+  .margins({top: 10, right: 10, bottom: 50, left: 40})
+  .gap(2)
+  .dimension(spendDim)
+  .group(spendGroup)
+  .transitionDuration(500)
+  .round(dc.round.floor)
+  .alwaysUseRounding(true)
+  .x(d3.scale.linear().domain([0,1]))
+  .xUnits(dc.units.fp.precision(binwidth))
+  .elasticX(true) // overrides the x domain
+  .elasticY(true)
+  .renderHorizontalGridLines(true)
+  .title(function (d) {
+    return formatEuro(d.value);
+  })
+  .on("renderlet.d", function(chart){
+    chart.selectAll("g.x text")
+      .attr('dx', '-32')
+      .attr('dy', '-7')
+      .attr('transform', "rotate(-65)");
+  })
+  .on("filtered", function (chart, filter) {
+    // update function for d3
+    updateAllNonDC();
+  });
+
+expensesBarChart.xAxis().tickFormat(function (v) {
+    return formatGuV(v*binwidth);
+});
