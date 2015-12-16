@@ -7,18 +7,15 @@
   <link rel="stylesheet" href="vendor.css">
 </head>
 <body>
+  <div class="container">
+    <div class="starter-template">
+      <div id="dataLoading"><div class="row"><div class="loading"></div></div><div class="row"><h1>Loading Data<br/><small>This can take several seconds...</small></h1></div></div>
+    </div> <!-- starter-template -->
+  </div> <!-- container -->
   <script src="libraries.js"></script>
   <script src="app.js"></script>
   <script>
-  require('application').init();
-
-  $("#legalSearch").on('input', function () {
-    text_filter(legalNameDim, this.value, legalTable);
-  });
-
-  $("#mediaSearch").on('input', function () {
-    text_filter(mediaNameDim, this.value, mediaTable);
-  });  
+  require('application').init();  
   </script>
 </body>
 </html>
