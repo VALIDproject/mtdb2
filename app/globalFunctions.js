@@ -60,13 +60,15 @@ updateAll = function()
 
 updateAllNonDC = function()
 {
-  //drawChords(legalDim);
+  drawChords(legalDim);
 }
 
 rescaleAll = function()
 {
   timeBarChart.rescale();
   lawsBarChart.rescale();
+  expensesBarChart.rescale();
+  resizeChordChart();
 };
 
 deleteData = function(dimension)
@@ -168,10 +170,10 @@ mediaTableSorting = "sum";
 legalTableOrdering = {
   alphabeth : d3.descending,
   relation : d3.descending,
-  sum : d3.ascending
+  sum : d3.descending
 };
 mediaTableOrdering = {
   alphabeth : d3.descending,
   relation : d3.descending,
-  sum : d3.ascending
+  sum : d3.descending
 };

@@ -42,20 +42,22 @@ exports.init = function(datafile) {
     mediaDim2 = ndxLinks.dimension(function(d) {return +d.target});
     lawsDim = ndxLinks.dimension(function(d) {return +d.law;});
     timeDim = ndxLinks.dimension(function(d) {return +d.year*10+d.quarter;})
-    spendDim = ndxLinks.dimension(function(d) {return +d.euro;})
+    spendDim = ndxLinks.dimension(function(d) {return Math.floor(+d.euro/binwidth);})
     
     spendPerTime = remove_empty_bins(timeDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
     spendPerLaw = remove_empty_bins(lawsDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
     
-    spendGroup = remove_empty_bins(spendDim.group(function(d) { return Math.floor(d/binwidth); }),filterOutEmpty);
+    //spendGroup = remove_empty_bins(spendDim.group(function(d) { return +d.euro; }),filterOutEmpty);
+    spendGroup = remove_empty_bins(spendDim.group().reduceCount(function(d) { return +d.euro; }),filterOutEmpty);
 
-    groupedSpendDim = remove_empty_bins(spendDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
+
+    //groupedSpendDim = remove_empty_bins(spendDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
     groupedLegalDim = remove_empty_bins(legalDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
     groupedMediaDim = remove_empty_bins(mediaDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
 
     require('filterCharts');
     //require('treeMaps');
-    //require('chordChart');
+    require('chordChart');
     require('tables');
 
     dc.renderAll();
@@ -103,6 +105,116 @@ exports.init = function(datafile) {
       else{
         $('#mediaSearchReset').hide();
       }
+    });
+
+    function legalTableOnClickUpdate(table, orderId) {
+      var glyph = orderId.children().first();
+      glyph.removeClass();
+      glyph.addClass( "glyphicon " + legalTableSortingStatus[legalTableSorting] );
+      table
+        .order(legalTableOrdering[legalTableSorting])
+        .sortBy(tableSorting[legalTableSorting])
+        .redraw();      
+    }
+
+    function mediaTableOnClickUpdate(table, orderId) {
+      var glyph = orderId.children().first();
+      glyph.removeClass();
+      glyph.addClass( "glyphicon " + mediaTableSortingStatus[mediaTableSorting] );
+      table
+        .order(mediaTableOrdering[mediaTableSorting])
+        .sortBy(tableSorting[mediaTableSorting])
+        .redraw();      
+    }    
+
+    $('#legalAlphabetOrder').click( function () {
+      legalTableSorting = "alphabeth";
+      if(legalTableOrdering[legalTableSorting] == d3.descending)
+      {
+        legalTableOrdering[legalTableSorting] = d3.ascending;
+        legalTableSortingStatus[legalTableSorting] = ordinalAscendingGlyph;
+      }
+      else
+      {
+        legalTableOrdering[legalTableSorting] = d3.descending;
+        legalTableSortingStatus[legalTableSorting] = ordinalDescendingGlyph;          
+      }
+      legalTableOnClickUpdate(legalTable,$(this))
+    });
+
+    $('#legalRelationOrder').click( function () {
+      legalTableSorting = "relation";
+      if(legalTableOrdering[legalTableSorting] == d3.descending)
+      {
+        legalTableOrdering[legalTableSorting] = d3.ascending;
+        legalTableSortingStatus[legalTableSorting] = numericAscendingGlyph;
+      }
+      else
+      {
+        legalTableOrdering[legalTableSorting] = d3.descending;
+        legalTableSortingStatus[legalTableSorting] = numericDescendingGlyph;          
+      }      
+      legalTableOnClickUpdate(legalTable,$(this))
+    });
+
+    $('#legalSumOrder').click( function () {
+      legalTableSorting = "sum";
+      if(legalTableOrdering[legalTableSorting] == d3.descending)
+      {
+        legalTableOrdering[legalTableSorting] = d3.ascending;
+        legalTableSortingStatus[legalTableSorting] = numericAscendingGlyph;
+      }
+      else
+      {
+        legalTableOrdering[legalTableSorting] = d3.descending;
+        legalTableSortingStatus[legalTableSorting] = numericDescendingGlyph;          
+      }      
+      legalTableOnClickUpdate(legalTable,$(this))
+    });
+
+    $('#mediaAlphabetOrder').click( function () {
+      mediaTableSorting = "alphabeth";
+      if(mediaTableOrdering[mediaTableSorting] == d3.descending)
+      {
+        mediaTableOrdering[mediaTableSorting] = d3.ascending;
+        mediaTableSortingStatus[mediaTableSorting] = ordinalAscendingGlyph;
+      }
+      else
+      {
+        mediaTableOrdering[mediaTableSorting] = d3.descending;
+        mediaTableSortingStatus[mediaTableSorting] = ordinalDescendingGlyph;          
+      }
+      mediaTableOnClickUpdate(mediaTable,$(this))
+    });
+
+    $('#mediaRelationOrder').click( function () {
+      mediaTableSorting = "relation";
+      if(mediaTableOrdering[mediaTableSorting] == d3.descending)
+      {
+        mediaTableOrdering[mediaTableSorting] = d3.ascending;
+        mediaTableSortingStatus[mediaTableSorting] = numericAscendingGlyph;
+      }
+      else
+      {
+        mediaTableOrdering[mediaTableSorting] = d3.descending;
+        mediaTableSortingStatus[mediaTableSorting] = numericDescendingGlyph;          
+      }      
+      mediaTableOnClickUpdate(mediaTable,$(this))  
+    });
+
+    $('#mediaSumOrder').click( function () {
+      mediaTableSorting = "sum";
+      if(mediaTableOrdering[mediaTableSorting] == d3.descending)
+      {
+        mediaTableOrdering[mediaTableSorting] = d3.ascending;
+        mediaTableSortingStatus[mediaTableSorting] = numericAscendingGlyph;
+      }
+      else
+      {
+        mediaTableOrdering[mediaTableSorting] = d3.descending;
+        mediaTableSortingStatus[mediaTableSorting] = numericDescendingGlyph;          
+      }      
+      mediaTableOnClickUpdate(mediaTable,$(this))
     });    
 
     $(window).on('resize', function(){

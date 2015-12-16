@@ -13,12 +13,11 @@ h1 Media Transperancy
       a(href="javascript:lawsBarChart.filterAll();updateAll();",style="display: none;").reset reset
       .clearfix
     #expenses-bar-chart.col-sm-3
-      strong Expenses 
-      small (in million euros) 
+      strong Expenses
       a(href="javascript:expensesBarChart.filterAll();updateAll();",style="display: none;").reset reset
       .clearfix      
   .row#my-tables
-    .col-sm-5
+    .col-sm-3
       .row
         .span12
           form.custom-search-form.search-form.form-horizontal.pull-right#legalSearchForm
@@ -29,20 +28,22 @@ h1 Media Transperancy
       span#data-count-legal
       .table-responsive
         table.table.table-hover.my-data-table#legal-table
-          th Rechtsträger 
-            button#legalAlphabetOrder.btn
-            span.glyphicon.glyphicon-sort-by-alphabet
-          th Relationen 
-            button#legalRelationOrder.btn
-            span.glyphicon.glyphicon-sort-by-order
-          th Summe 
-            button#legalSumOrder.btn
-            span.glyphicon.glyphicon-sort-by-order                  
-    .col-sm-2
-      strong Chord Chart
+          thead
+            th(data-col="a").data-table-col Rechtsträger 
+              button#legalAlphabetOrder.btn
+                span.glyphicon.glyphicon-sort-by-alphabet
+            th(data-col="b").data-table-col Relationen 
+              button#legalRelationOrder.btn
+                span.glyphicon.glyphicon-sort-by-order-alt
+            th(data-col="c").data-table-col Summe 
+              button#legalSumOrder.btn
+                span.glyphicon.glyphicon-sort-by-order                  
+    .col-sm-6
+      strong Chord Chart 
+      a(href="javascript:legalDim3.filterAll();updateAll();").reset reset
       .clearfix
       #chord-chart
-    .col-sm-5
+    .col-sm-3
       .row
         .span12
           form.custom-search-form.search-form.form-horizontal.pull-right#mediaSearchForm
@@ -53,6 +54,16 @@ h1 Media Transperancy
       span#data-count-media
       .table-responsive
         table.table.table-hover.my-data-table#media-table
+          thead
+            th(data-col="a").data-table-col Media 
+              button#mediaAlphabetOrder.btn
+                span.glyphicon.glyphicon-sort-by-alphabet
+            th(data-col="b").data-table-col Relationen 
+              button#mediaRelationOrder.btn
+                span.glyphicon.glyphicon-sort-by-order-alt
+            th(data-col="c").data-table-col Summe 
+              button#mediaSumOrder.btn
+                span.glyphicon.glyphicon-sort-by-order        
 //  .row#my-treeMaps
 //    h2 Tree Maps
 //    .col-sm-6

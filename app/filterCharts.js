@@ -60,7 +60,7 @@ lawsBarChart.yAxis().tickFormat(function (v) {
 expensesBarChart
   .width(function(){return $("#expenses-bar-chart").width();})
   .height(200)
-  .margins({top: 10, right: 10, bottom: 50, left: 40})
+  .margins({top: 10, right: 10, bottom: 60, left: 40})
   .gap(2)
   .dimension(spendDim)
   .group(spendGroup)
@@ -68,12 +68,11 @@ expensesBarChart
   .round(dc.round.floor)
   .alwaysUseRounding(true)
   .x(d3.scale.linear().domain([0,1]))
-  .xUnits(dc.units.fp.precision(binwidth))
   .elasticX(true) // overrides the x domain
   .elasticY(true)
   .renderHorizontalGridLines(true)
   .title(function (d) {
-    return formatEuro(d.value);
+    return formatEuro(d.value*binwidth);
   })
   .on("renderlet.d", function(chart){
     chart.selectAll("g.x text")

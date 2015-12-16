@@ -1,4 +1,4 @@
-var size = [750, 750]; // SVG SIZE WIDTH, HEIGHT
+var size = [800, 800]; // SVG SIZE WIDTH, HEIGHT
 var marg = [50, 50, 50, 50]; // TOP, RIGHT, BOTTOM, LEFT
 var dims = []; // USABLE DIMENSIONS
 dims[0] = size[0] - marg[1] - marg[3]; // WIDTH
@@ -14,8 +14,8 @@ var chord = d3.layout.chord()
 var matrix = require('matrixFactory').chordMatrix()
   .layout(chord)
   .filter(function (item, r, c) {
-    return (item.source === r && item.target === c) ||
-           (item.source === c && item.target === r);
+    return (item.source === r.name && item.target === c.name) ||
+           (item.source === c.name && item.target === r.name);
   })
   .reduce(function (items, r, c) {
     var value;
@@ -26,7 +26,7 @@ var matrix = require('matrixFactory').chordMatrix()
         if (r === c) {
           return m + n.euro;
         } else {
-          return m + (n.source === r ? n.euro: n.euro);
+          return m + (n.source === r.name ? n.euro: n.euro);
         }
       }, 0);
     }
@@ -58,12 +58,14 @@ var messages = svg.append("text")
   .text("Updating...");
 
 drawChords = function (dataDimension) {
+  
+  var numChords = 20;
 
   var sortedDim = dataDimension.top(Infinity).sort(function(a,b){
     return (b.euro - a.euro);
   });
 
-  data = sortedDim.slice(0,20);
+  var data = sortedDim.slice(0,numChords);
 
   messages.attr("opacity", 1);
   messages.transition().duration(1000).attr("opacity", 0);
@@ -74,7 +76,7 @@ drawChords = function (dataDimension) {
     .update()
 
   var groups = container.selectAll("g.group")
-    .data(matrix.groups(), function (d) { return d._id; });
+    .data(matrix.groups(), function (d) { return +d._id; });
   
   var gEnter = groups.enter()
     .append("g")
@@ -82,7 +84,7 @@ drawChords = function (dataDimension) {
 
   gEnter.append("path")
     .style("pointer-events", "none")
-    .style("fill", function (d) { return colors(d._id); })
+    .style("fill", function (d) { return colors(d.index); })
     .attr("d", arc);
 
   gEnter.append("text")
@@ -123,7 +125,7 @@ drawChords = function (dataDimension) {
   chords.enter().append("path")
     .attr("class", "chord")
     .style("fill", function (d) {
-      return colors(d.source._id);
+      return colors(d.source.index);
     })
     .attr("d", path)
     .on("mouseover", chordMouseover)
@@ -137,7 +139,9 @@ drawChords = function (dataDimension) {
   function groupClick(d) {
     d3.event.preventDefault();
     d3.event.stopPropagation();
-    //$scope.addFilter(d._id);
+    dimChords(d);
+    console.log(matrix.read(d));
+    updateAll();
     resetChords();
   }
 
@@ -175,4 +179,13 @@ drawChords = function (dataDimension) {
   }
 }; // END DRAWCHORDS FUNCTION
 
+resizeChordChart = function() {
+  var _width = $("#chord-chart").width();
+  svg.attr({
+    width: _width,
+    height: _width / (size[0] / size[1])
+  });
+}
+
 drawChords(legalDim3);
+resizeChordChart();

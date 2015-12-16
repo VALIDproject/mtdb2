@@ -47,6 +47,7 @@ var textFilter;
 var resetSearchBox;
 
 var drawChords;
+var resizeChordChart;
 
 var updateAll;
 var rescaleAll;

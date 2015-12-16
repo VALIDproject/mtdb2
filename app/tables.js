@@ -24,104 +24,62 @@ legalTable
   .dimension(groupedLegalDim)
   .group(tableRank)
   .sortBy(tableSorting[legalTableSorting])
-  .order(legalTableOrdering[legalTableSorting])  
+  .order(legalTableOrdering[legalTableSorting]) 
   .showGroups(false)
   .size(Infinity)
   .columns([
-    {
-      format: function(d){ return nodes[d.key]; }
-    },
-    {
-      format: function(d){ return d.value.count; }
-    },
-    {
-      format: function(d){ return formatEuro(d.value.total);}
-    }
+    function(d){ return nodes[d.key]; },
+    function(d){ return d.value.count; },
+    function(d){ return formatEuro(d.value.total);}
     ])
-  .on('renderlet.t', function (table) {
-      $('#legalAlphabetOrder').click( function () {
-        legalTableSorting = "alphabeth";
-        if(legalTableOrdering[legalTableSorting] == d3.descending)
-        {
-          legalTableOrdering[legalTableSorting] = d3.ascending;
-          legalTableSortingStatus[legalTableSorting] = ordinalAscendingGlyph;
-        }
-        else
-        {
-          legalTableOrdering[legalTableSorting] = d3.descending;
-          legalTableSortingStatus[legalTableSorting] = ordinalDescendingGlyph;          
-        }
-        table
-          .sortBy(tableSorting[legalTableSorting])
-          .order(legalTableOrdering[legalTableSorting])
-          .redraw();
-      });
+  .on("renderlet.d", function(table){
 
-    $('#legalRelationOrder').click( function () {
-      legalTableSorting = "relation";
-      if(legalTableOrdering[legalTableSorting] == d3.descending)
-      {
-        legalTableOrdering[legalTableSorting] = d3.ascending;
-        legalTableSortingStatus[legalTableSorting] = ordinalAscendingGlyph;
-      }
-      else
-      {
-        legalTableOrdering[legalTableSorting] = d3.descending;
-        legalTableSortingStatus[legalTableSorting] = ordinalDescendingGlyph;          
-      }      
-      table
-        .sortBy(tableSorting[legalTableSorting])
-        .order(legalTableOrdering[legalTableSorting])
-        .redraw();  
-    });
+    var x = d3.scale.linear()
+          .domain([0, d3.max(groupedLegalDim.all(), function(d) { return d.value.total; })])
+          .range(["0%", "100%"]);
 
-    $('#legalSumOrder').click( function () {
-      legalTableSorting = "sum";
-      if(legalTableOrdering[legalTableSorting] == d3.descending)
-      {
-        legalTableOrdering[legalTableSorting] = d3.ascending;
-        legalTableSortingStatus[legalTableSorting] = ordinalAscendingGlyph;
-      }
-      else
-      {
-        legalTableOrdering[legalTableSorting] = d3.descending;
-        legalTableSortingStatus[legalTableSorting] = ordinalDescendingGlyph;          
-      }      
-      table
-        .sortBy(tableSorting[legalTableSorting])
-        .order(legalTableOrdering[legalTableSorting])
-        .redraw();
-    });  
-  })
-  .on("filtered", function (chart, filter) {
-    // update function for d3
-    updateAll();
+
+    table.selectAll('td._0').classed("text-left", true);
+    table.selectAll('td._1').classed("text-right", true);    
+    table.selectAll('td._2')
+      .classed("text-right", true)
+      .append("div")
+        .attr("class", "inlinebar")
+        .style("width", "0%")
+        .transition()
+        .duration(1000)
+          .style("width", function(d) { 
+            return x(Math.abs(d.value.total));
+          });
   });
 
 mediaTable
   .dimension(groupedMediaDim)
   .group(tableRank)
   .showGroups(false)
-  .sortBy(function (d) { return d.value.total;})
-  .order(d3.descending)  
+  .sortBy(tableSorting[mediaTableSorting])
+  .order(mediaTableOrdering[mediaTableSorting])  
   .size(Infinity)
   .columns([
-    {
-      label: 'Media', 
-      format: function(d){ 
-        return nodes[d.key];
-      }
-    },
-    {
-      label: 'Relationen', 
-      format: function(d){ return d.value.count;}
-    },
-    {
-      label: 'Summe', 
-      format: function(d){ return formatEuro(d.value.total);}
-    }
+    function(d){ return nodes[d.key]; },
+    function(d){ return d.value.count;},
+    function(d){ return formatEuro(d.value.total);}
     ])
-  .on("filtered", function (chart, filter) {
-    // update function for d3
-    updateAll();
-  });
+  .on("renderlet.d", function(table){
+    var x = d3.scale.linear()
+          .domain([0, d3.max(groupedMediaDim.all(), function(d) { return d.value.total; })])
+          .range(["0%", "100%"]);    
+
+    table.selectAll('td._0').classed("text-left", true);
+    table.selectAll('td._1').classed("text-right", true);
+    table.selectAll('td._2')
+      .classed("text-right", true)
+      .append("div")
+        .attr("class", "inlinebar")
+        .style("width", "0%")
+        .transition()
+        .duration(1000)
+          .style("width", function(d) { 
+            return x(Math.abs(d.value.total));
+          });
+  });  
