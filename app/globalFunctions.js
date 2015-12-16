@@ -51,12 +51,12 @@ resetSearchBox = function(id,tableType){
   id.change();
   if(tableType == "legal")
   {
-    legalTableFilter = -1;
+    legalTableFilter = new Array();  
     legalDim.filterAll();
   }
   else
   {
-    mediaTableFilter = -1;  
+    mediaTableFilter = new Array();  
     mediaDim.filterAll();
   }
   updateAll();
@@ -188,6 +188,5 @@ mediaTableOrdering = {
   sum : d3.descending
 };
 
-legalTableFilter = -1;
-
-mediaTableFilter = -1;
+legalTableFilter = new Array();
+mediaTableFilter = new Array();

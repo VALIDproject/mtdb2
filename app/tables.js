@@ -4,9 +4,6 @@ var tableRank = function (p) { return "source"; }
 
 var all = ndxLinks.groupAll();
 
-legalTableFilter = -1;
-mediaTableFilter = -1;
-
 legalCount
   .dimension(groupedLegalDim)
   .group(all)
@@ -57,33 +54,44 @@ legalTable
 
     table.selectAll('.dc-table-row')
       .classed("dc-table-row-filtered", function(d) {
-        return d.key == legalTableFilter;
+        return  legalTableFilter.indexOf(d.key) > -1 ? true : false;
       })    
       .on("click", function (d){
-        if(legalTableFilter == d.key) {
-          legalDim.filterAll();
-          legalTableFilter = -1;
+        var filterIndex = legalTableFilter.indexOf(d.key);
+        if(filterIndex > -1) {
+          if(legalTableFilter.length > 1) {
+            legalTableFilter.pop(filterIndex);
+            legalDim.filterFunction(function(d){
+              return legalTableFilter.indexOf(d) > -1;
+            })
+          }
+          else{
+            legalDim.filterAll();
+            legalTableFilter = new Array();
+          } 
         }
         else {
-          legalTableFilter = d.key;
-          legalDim.filter(legalTableFilter);
+          legalTableFilter.push(d.key);
+          legalDim.filterFunction(function(d){
+            return legalTableFilter.indexOf(d) > -1;
+          });
         }
         updateAll();
       })
       .on("mouseover", function (d){
-        if(legalTableFilter < 0) {
+        if(legalTableFilter.length == 0) {
           legalDim.filter(d.key);
           mediaTable.redraw();
           mediaCount.redraw();
         }
       })
       .on("mouseout", function (){
-        if(legalTableFilter < 0) {
+        if(legalTableFilter.length == 0) {
           legalDim.filterAll();
           mediaTable.redraw();
           mediaCount.redraw();
         }
-      });        
+      });
   });
 
 mediaTable
@@ -117,28 +125,39 @@ mediaTable
           });
     table.selectAll('.dc-table-row')
       .classed("dc-table-row-filtered", function(d) {
-        return d.key == mediaTableFilter;
+        return mediaTableFilter.indexOf(d.key) > -1 ? true : false;
       })
       .on("click", function (d){
-        if(mediaTableFilter == d.key) {
-          mediaDim.filterAll();
-          mediaTableFilter = -1;
+        var filterIndex = mediaTableFilter.indexOf(d.key);
+        if(filterIndex > -1) {
+          if(mediaTableFilter.length > 1) {
+            mediaTableFilter.pop(filterIndex);
+            mediaDim.filterFunction(function(d){
+              return mediaTableFilter.indexOf(d) > -1;
+            })
+          }
+          else{
+            mediaDim.filterAll();
+            mediaTableFilter = new Array();
+          } 
         }
         else {
-          mediaTableFilter = d.key;
-          mediaDim.filter(mediaTableFilter);
+          mediaTableFilter.push(d.key);
+          mediaDim.filterFunction(function(d){
+            return mediaTableFilter.indexOf(d) > -1;
+          });
         }
         updateAll();
       })
       .on("mouseover", function (d){
-        if(mediaTableFilter < 0) {
+        if(mediaTableFilter.length == 0) {
           mediaDim.filter(d.key);
           legalTable.redraw();
           legalCount.redraw();
         }
       })
       .on("mouseout", function (){
-       if(mediaTableFilter < 0) {
+       if(mediaTableFilter.length == 0) {
           mediaDim.filterAll();
           legalTable.redraw();
           legalCount.redraw();

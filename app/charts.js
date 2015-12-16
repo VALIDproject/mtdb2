@@ -32,8 +32,8 @@ exports.init = function(datafile) {
     ndxLinks = crossfilter(links);
     binwidth = 1000;
 
-    var filterOutEmpty = function(d) { return Math.abs(d.value)>1e-6 };
-    var filterOutEmptyTotal = function(d) { return Math.abs(d.value.total)>1e-6 };
+    var filterOutEmpty = function(d) { return Math.abs(d.value)>1e-3 };
+    var filterOutEmptyTotal = function(d) { return Math.abs(d.value.total)>1e-3 };
 
     legalDim = ndxLinks.dimension(function(d) {return +d.source});
     legalDim2 = ndxLinks.dimension(function(d) {return +d.source});
@@ -46,12 +46,8 @@ exports.init = function(datafile) {
     
     spendPerTime = remove_empty_bins(timeDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
     spendPerLaw = remove_empty_bins(lawsDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
-    
-    //spendGroup = remove_empty_bins(spendDim.group(function(d) { return +d.euro; }),filterOutEmpty);
     spendGroup = remove_empty_bins(spendDim.group().reduceCount(function(d) { return +d.euro; }),filterOutEmpty);
 
-
-    //groupedSpendDim = remove_empty_bins(spendDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
     groupedLegalDim = remove_empty_bins(legalDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
     groupedMediaDim = remove_empty_bins(mediaDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
 
