@@ -46,9 +46,19 @@ textFilter = function(dim, q, tab) {
   updateAll();     
 };
 
-resetSearchBox = function(id){
+resetSearchBox = function(id,tableType){
   id.val('');
   id.change();
+  if(tableType == "legal")
+  {
+    legalTableFilter = -1;
+    legalDim.filterAll();
+  }
+  else
+  {
+    mediaTableFilter = -1;  
+    mediaDim.filterAll();
+  }
   updateAll();
 };
 
@@ -177,3 +187,7 @@ mediaTableOrdering = {
   relation : d3.descending,
   sum : d3.descending
 };
+
+legalTableFilter = -1;
+
+mediaTableFilter = -1;

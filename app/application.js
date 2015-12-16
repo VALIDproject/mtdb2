@@ -80,6 +80,9 @@ var legalTableOrdering;
 var mediaTableSorting;
 var mediaTableOrdering;
 
+var legalTableFilter;
+var mediaTableFilter;
+
 require('globalFunctions');
 
 var App = {

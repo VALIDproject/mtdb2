@@ -68,6 +68,7 @@ expensesBarChart
   .round(dc.round.floor)
   .alwaysUseRounding(true)
   .x(d3.scale.linear().domain([0,1]))
+  .xUnits(dc.units.fp.precision(1))
   .elasticX(true) // overrides the x domain
   .elasticY(true)
   .renderHorizontalGridLines(true)
