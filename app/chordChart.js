@@ -81,28 +81,35 @@ drawChords = function (dataDimension) {
         euro : 0 // this needs to get added up
       };
 
-  legalGroup.top(Infinity).forEach(function(d){
-      for(var i = 0; i < sortedDim.length; i++)
-      {
+  legalGroup.top(Infinity).forEach( function(d) {
+      for(var i = 0; i < sortedDim.length; i++) {
         s = sortedDim[i];
-        if(s.source > d.key)
-          break;
         if(s.source == d.key)
         {
           if(numChords <= 0)
           {
-            rest.euro += s.euro;        
+            var c = 0;
+            if(sources.indexOf(s.source) >= 0) {
+              s.target = targetRestId;
+              c++;
+            }
+            if(sources.indexOf(s.target) >= 0) {
+              s.source = sourceRestId;
+              c++;
+            }
+            if(c > 0)
+              data.push(s);
+            if(c < 2)
+              rest.euro += s.euro;        
           }
           else
           {
             data.push(s);
-            if(sources.indexOf(s.source) < 0)
-            {
+            if(sources.indexOf(s.source) < 0) {
               sources.push(s.source);
               numChords--;
             }
-            if(sources.indexOf(s.target) < 0)
-            {
+            if(sources.indexOf(s.target) < 0) {
               sources.push(s.target);
               numChords--;
             }
