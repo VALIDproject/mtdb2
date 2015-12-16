@@ -117,6 +117,16 @@ combineMediaData = function()
   updateAll();
 };
 
+chordTooltipUpdate = function (data)
+{
+  //var string = "von " + nodes[+data.sname] + " nach " + nodes[+data.tname] + ": " + formatEuro((data.svalue) + "/" + formatEuro((data.stotal);
+  //console.log(string);
+  $("#ttLegal").text(nodes[+data.sname]);
+  $("#ttMedia").text(nodes[+data.tname]);
+  $("#ttFrom").text(formatEuro(data.svalue));
+  $("#ttTo").text(formatEuro(data.stotal));
+};
+
 remove_empty_bins = function (source_group,filterFunction) {
   return {
     all:function () {

@@ -47,6 +47,7 @@ exports.init = function(datafile) {
     spendPerTime = remove_empty_bins(timeDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
     spendPerLaw = remove_empty_bins(lawsDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
     spendGroup = remove_empty_bins(spendDim.group().reduceCount(function(d) { return +d.euro; }),filterOutEmpty);
+    legalGroup = remove_empty_bins(legalDim3.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
 
     groupedLegalDim = remove_empty_bins(legalDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
     groupedMediaDim = remove_empty_bins(mediaDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);

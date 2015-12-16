@@ -57,15 +57,62 @@ var messages = svg.append("text")
   .attr("transform", "translate(10, 10)")
   .text("Updating...");
 
+sourceRestId = nodes.length;
+nodes.push("Sonstige Medien");
+targetRestId = nodes.length;
+nodes.push("Sonstige Rechtsträger");
+
 drawChords = function (dataDimension) {
   
-  var numChords = 20;
+  var numChords = 13;
+  var sources = new Array();
 
   var sortedDim = dataDimension.top(Infinity).sort(function(a,b){
     return (b.euro - a.euro);
   });
 
-  var data = sortedDim.slice(0,numChords);
+  var data = new Array();
+  var rest = {
+        source : sourceRestId, 
+        target : targetRestId,
+        quarter : -1, // irrelevant
+        year : -1,// irrelevant
+        law : -1,// irrelevant
+        euro : 0 // this needs to get added up
+      };
+
+  legalGroup.top(Infinity).forEach(function(d){
+      for(var i = 0; i < sortedDim.length; i++)
+      {
+        s = sortedDim[i];
+        if(s.source > d.key)
+          break;
+        if(s.source == d.key)
+        {
+          if(numChords <= 0)
+          {
+            rest.euro += s.euro;        
+          }
+          else
+          {
+            data.push(s);
+            if(sources.indexOf(s.source) < 0)
+            {
+              sources.push(s.source);
+              numChords--;
+            }
+            if(sources.indexOf(s.target) < 0)
+            {
+              sources.push(s.target);
+              numChords--;
+            }
+          }
+        }
+      }
+  });
+
+  if(numChords <= 0)
+    data.push(rest);
 
   messages.attr("opacity", 1);
   messages.transition().duration(1000).attr("opacity", 0);
@@ -150,7 +197,7 @@ drawChords = function (dataDimension) {
     d3.event.stopPropagation();
     dimChords(d);
     d3.select("#tooltip").style("opacity", 1);
-    //$scope.updateTooltip(matrix.read(d));
+    chordTooltipUpdate(matrix.read(d));
   }
 
   function hideTooltip() {

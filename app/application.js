@@ -48,6 +48,9 @@ var resetSearchBox;
 
 var drawChords;
 var resizeChordChart;
+var chordTooltipUpdate;
+var sourceRestId;
+var targetRestId;
 
 var updateAll;
 var rescaleAll;
