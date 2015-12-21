@@ -21,22 +21,28 @@ exports.parse = function(data) {
         if (d.EURO > 10000000) // Filter unrealistic values for Austria
           return;
 
-        if (nodes[i] == d.RECHTSTRGER)
+        if (nodes[i].name == d.RECHTSTRGER)
           ri = i;
 
-        if (nodes[i] == d.MEDIUM_MEDIENINHABER)
+        if (nodes[i].name == d.MEDIUM_MEDIENINHABER)
           mi = i;
       }
 
       if (ri == -1)
       {// Create new entry
-        nodes.push(d.RECHTSTRGER);
+        nodes.push({
+          name: d.RECHTSTRGER,
+          gov: 1
+        });
         ri = nodes.length - 1;
       }
 
       if (mi == -1)
       {// Create new entry
-        nodes.push(d.MEDIUM_MEDIENINHABER);
+        nodes.push({
+          name: d.MEDIUM_MEDIENINHABER,
+          gov: 0
+        });
         mi = nodes.length - 1;
       }
 

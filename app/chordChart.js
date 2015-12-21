@@ -58,14 +58,14 @@ var messages = svg.append("text")
   .text("Updating...");
 
 sourceRestId = nodes.length;
-nodes.push("Sonstige Medien");
+nodes.push({name:"Sonstige Rechtsträger",gov:1});
 targetRestId = nodes.length;
-nodes.push("Sonstige Rechtsträger");
+nodes.push({name:"Sonstige Medien",gov:0});
 
 drawChords = function (dataDimension) {
   
   var numChords = 13;
-  var sources = new Array();
+  var entities = new Array();
 
   var sortedDim = dataDimension.top(Infinity).sort(function(a,b){
     return (b.euro - a.euro);
@@ -80,45 +80,45 @@ drawChords = function (dataDimension) {
         law : -1,// irrelevant
         euro : 0 // this needs to get added up
       };
+  var useRest = false;
 
-  legalGroup.top(Infinity).forEach( function(d) {
-      for(var i = 0; i < sortedDim.length; i++) {
-        s = sortedDim[i];
-        if(s.source == d.key)
-        {
-          if(numChords <= 0)
-          {
-            var c = 0;
-            if(sources.indexOf(s.source) >= 0) {
-              s.target = targetRestId;
-              c++;
-            }
-            if(sources.indexOf(s.target) >= 0) {
-              s.source = sourceRestId;
-              c++;
-            }
-            if(c > 0)
-              data.push(s);
-            if(c < 2)
-              rest.euro += s.euro;        
+  for(var i = 0; i < sortedDim.length; i++) {
+    s = sortedDim[i]; //reference!
+
+    var iS = entities.indexOf(s.source) >= 0;
+    var iT = entities.indexOf(s.target) >= 0;
+
+    if(numChords <= 0) {
+      if(!(iS && iT)) {
+        rest.euro += s.euro;
+        if(iS || iT) {
+          var dS = jQuery.extend(true, {}, s); //deep copy!
+          if(iS) {
+            dS.target = targetRestId;
           }
-          else
-          {
-            data.push(s);
-            if(sources.indexOf(s.source) < 0) {
-              sources.push(s.source);
-              numChords--;
-            }
-            if(sources.indexOf(s.target) < 0) {
-              sources.push(s.target);
-              numChords--;
-            }
+          else {
+            dS.source = sourceRestId;
           }
+          data.push(dS);     
+        } else {
+          useRest = true;
         }
+      } else {
+        data.push(s);
       }
-  });
+    }
+    else {
+      data.push(s);
+      if(!iS)
+        entities.push(s.source);
+      if(!iT)
+        entities.push(s.target);
+      if(!iS || !iT)
+        numChords--;
+    }
+  }
 
-  if(numChords <= 0)
+  if(useRest)
     data.push(rest);
 
   messages.attr("opacity", 1);
@@ -147,7 +147,7 @@ drawChords = function (dataDimension) {
     .on("mouseover", dimChords)
     .on("mouseout", resetChords)
     .text(function (d) {
-      return nodes[d._id];
+      return nodes[d._id].name;
     });
 
   groups.select("path")
@@ -165,7 +165,8 @@ drawChords = function (dataDimension) {
     })
     .attr("text-anchor", function (d) {
       return d.angle > Math.PI ? "end" : "begin";
-    });
+    })
+    .attr("class", function(d) { return nodes[d._id].gov == 1 ? "chordLabelGov" : "chordLabelNonGov"; });
 
   groups.exit().select("text").attr("fill", "orange");
   groups.exit().select("path").remove();
@@ -194,8 +195,21 @@ drawChords = function (dataDimension) {
     d3.event.preventDefault();
     d3.event.stopPropagation();
     dimChords(d);
-    console.log(matrix.read(d));
-    updateAll();
+    entry = matrix.read(d);
+    id = +entry.gname;
+    if(nodes[id].gov == 1 && id != sourceRestId) {
+      if(legalTableFilter.indexOf(id) < 0)
+      {
+        legalTableFilter.push(id);
+        legalDim.filterFunction(function(x){return legalTableFilter.indexOf(x) > -1;});      
+        updateAll();
+      }
+    } else if(id != targetRestId){
+      if(mediaTableFilter.indexOf(id) < 0)
+        mediaTableFilter.push(id);
+        mediaDim.filterFunction(function(x){return mediaTableFilter.indexOf(x) > -1;});     
+        updateAll();
+    }
     resetChords();
   }
 
@@ -241,5 +255,5 @@ resizeChordChart = function() {
   });
 }
 
-drawChords(legalDim3);
+drawChords(legalDim);
 resizeChordChart();

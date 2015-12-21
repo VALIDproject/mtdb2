@@ -24,7 +24,7 @@ timeBarChart
   });
 
 timeBarChart.yAxis().tickFormat(function (v) {
-  return formatGuV(v);
+  return formatGuV(v,spendPerTime.top(1)[0].value,spendPerTime.bottom(1)[0].value);
 });    
 timeBarChart.xAxis().tickFormat(function (v) {
   return Math.floor(v/10) +"Q"+v%10;
@@ -54,7 +54,7 @@ lawsBarChart.xAxis().tickFormat(function (d) {
   return "§" + d;
 });
 lawsBarChart.yAxis().tickFormat(function (v) {
-  return formatGuV(v);
+  return formatGuV(v,spendPerLaw.top(1)[0].value,spendPerLaw.bottom(1)[0].value);
 });
 
 expensesBarChart
@@ -87,5 +87,5 @@ expensesBarChart
   });
 
 expensesBarChart.xAxis().tickFormat(function (v) {
-    return formatGuV(v*binwidth);
+    return formatGuV(v*binwidth,spendDim.top(1)[0].euro,spendDim.bottom(1)[0].euro);
 });

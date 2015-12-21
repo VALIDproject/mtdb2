@@ -8,16 +8,14 @@ legalCount
   .dimension(groupedLegalDim)
   .group(all)
   .html({
-    some: '<strong>%total-count</strong> entries' +
-        ' <span id=\'legalSearchReset\'>| <a href=\"javascript:resetSearchBox(\$(\'#legalSearch\'),\'legal\');\">reset</a></span> | <a href=\'javascript:combineLegalData();\'>Combine data</a> | <a href=\'javascript:deleteData(legalDim);\'>Remove data</a>'
+    some: '<strong>%total-count</strong> entries'
   });
 
 mediaCount
   .dimension(groupedMediaDim)
   .group(all)
   .html({
-    some: '<strong>%total-count</strong> entries' +
-        ' <span id=\'mediaSearchReset\'>| <a href=\"javascript:resetSearchBox(\$(\'#mediaSearch\'),\'media\');\">reset</a></span> | <a href=\'javascript:combineMediaData();\'>Combine data</a> | <a href=\'javascript:deleteData(mediaDim);\'>Remove data</a>'
+    some: '<strong>%total-count</strong> entries'
   });
 
 legalTable
@@ -28,7 +26,7 @@ legalTable
   .showGroups(false)
   .size(Infinity)
   .columns([
-    function(d){ return nodes[d.key]; },
+    function(d){ return nodes[d.key].name; },
     function(d){ return d.value.count; },
     function(d){ return formatEuro(d.value.total);}
     ])
@@ -102,7 +100,7 @@ mediaTable
   .order(mediaTableOrdering[mediaTableSorting])  
   .size(Infinity)
   .columns([
-    function(d){ return nodes[d.key]; },
+    function(d){ return nodes[d.key].name; },
     function(d){ return d.value.count;},
     function(d){ return formatEuro(d.value.total);}
     ])

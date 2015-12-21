@@ -1,7 +1,14 @@
+@tooltip-background: #303030;
+@tooltip-font-color: #F0F0F0;
+@gov-color: #26ABAB;
+@non-gov-color: #AB2626;
+@combine-background: #556B2F;
+@remove-background: #8B0000;
+
 #tooltip {
   border: 1px solid #000000;
-  background: #303030;
-  color: #F0F0F0;
+  background: @tooltip-background;
+  color: @tooltip-font-color;
   border-radius: 1em;
   padding: 1em;
   pointer-events: none;
@@ -10,7 +17,7 @@
   width: 100%;
   border-radius: 6px;
   opacity: 0;
-  bottom: 10%;
+  bottom: 40%;
   box-shadow: 5px 5px 2.5px #666;
 }
 
@@ -35,4 +42,60 @@ input[type="radio"] {
 
 aside {
   margin: 0px;
+}
+
+.chordLabelNonGov
+{
+  fill: @non-gov-color;
+  font-style: italic;
+}
+
+.chordLabelGov
+{
+  fill: @gov-color;
+  font-weight: bold;
+}
+
+#combine-blocks
+{
+  position: relative;
+  right: auto;
+  display: inline-block;
+  font-weight: 300;
+  color: #fff;
+  text-align: center;
+  line-height: inherit;
+}
+#combine-blocks .tag 
+{
+  margin: 5px;
+  padding: 5px;
+  box-shadow: 2px 2px 1px #666;
+  min-width: 3em;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  white-space:nowrap;
+}
+
+#combine-blocks button{
+  border: 0;
+  background: none;
+  /** belows styles are working good */
+  padding: 5px;
+  /* IE7-8 doesn't have border-radius, so don't indent the padding */
+  margin-bottom: 0;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;  
+}
+
+#combine-blocks .combine
+{
+  background: @combine-background;
+}
+
+#combine-blocks .remove
+{
+  background: @remove-background;
 }

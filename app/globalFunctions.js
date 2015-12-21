@@ -15,21 +15,33 @@ locale = d3.locale({
 
 formatEuro = locale.numberFormat("$,.2f");
 formatBigEuro = locale.numberFormat("$,d");
-var formatBigWithoutEuro = locale.numberFormat(",d");
-formatGuV = function(d){
+var formatBigWithoutEuro = locale.numberFormat(",.1f");
+
+var getUnit = function(d){
   var t = Math.floor(d/1000);
   var m = Math.floor(t/1000);
-  if(m > 0)
-  {
-    return formatBigWithoutEuro(m) + " Mil. €";
-  }
+  if (m > 0)
+    return 2;
   else if(t > 0)
-  {
-    return formatBigWithoutEuro(t) + " Tsd.  €";
-  }
+    return 1;
   else
+    return 0; 
+}
+
+formatGuV = function(d,max,min){
+  var m = getUnit(min);
+  var n = getUnit(max);
+  var u = m;
+  if(n > m + 1)
+    u = n;
+  switch(getUnit(max))
   {
-    return formatBigEuro(d);
+    case 0: 
+      return formatBigEuro(d);
+    case 1:
+      return formatBigWithoutEuro(d/1000) + " Tsd. €";
+    case 2:
+      return formatBigWithoutEuro(d/1000000) + " Mil. €";
   }
 }
 
@@ -38,7 +50,7 @@ textFilter = function(dim, q, tab) {
   var re = new RegExp(".*"+q, "i")
   if (q != '') {
     dim.filterFunction(function(d) {
-        return 0 == nodes[d].search(re);
+        return 0 == nodes[d].name.search(re);
     });
   } else {
     dim.filterAll();
@@ -46,9 +58,29 @@ textFilter = function(dim, q, tab) {
   updateAll();     
 };
 
+showMediaSelectionInteraction = function()
+{
+  if( $("#mediaSearch").val().length > 0 || mediaTableFilter.length > 0){
+    $('#mediaSearchReset').show(); 
+  }
+  else{
+    $('#mediaSearchReset').hide();
+  }
+};
+
+showLegalSelectionInteraction = function()
+{
+  if( $("#legalSearch").val().length > 0  || legalTableFilter.length > 0){
+    $('#legalSearchReset').show(); 
+  }
+  else{
+    $('#legalSearchReset').hide();
+  }
+};
+
 resetSearchBox = function(id,tableType){
   id.val('');
-  id.change();
+  id.submit();
   if(tableType == "legal")
   {
     legalTableFilter = new Array();  
@@ -70,7 +102,17 @@ updateAll = function()
 
 updateAllNonDC = function()
 {
+  showLegalSelectionInteraction();
+  showMediaSelectionInteraction();
+  showTags();
   drawChords(legalDim);
+}
+
+filterAll = function()
+{
+  dc.filterAll();
+  legalTableFilter = new Array();
+  mediaTableFilter = new Array();
 }
 
 rescaleAll = function()
@@ -81,50 +123,181 @@ rescaleAll = function()
   resizeChordChart();
 };
 
+combinedObj = new Array();
+
+function hashString (s) {
+  var hash = 0, i, chr, len;
+  if (s.length === 0) return hash;
+  for (i = 0, len = s.length; i < len; i++) {
+    chr   = s.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
+
+var getCombinedObjHash = function(hash) {
+  hash = hashString(hash);
+  for (var i = combinedObj.length - 1; i >= 0; i--) {
+    if(combinedObj[i].name == hash) {
+      return getCombinedObjHash(hash + Math.floor(Math.random() * 10));
+    }
+  }
+  return hash;
+}
+
 deleteData = function(dimension)
 {
-  ndxLinks.remove(dimension);
-  updateAll();
+  var combinedName = prompt("Name of the combined data",
+    dimension == legalDim ? nodes[dimension.top(1)[0].source].name : nodes[dimension.top(1)[0].target].name);
+  if(combinedName)
+  {
+    
+    var addArr = [];
+    dimension.top(Infinity).forEach(function(d){
+      var dD = jQuery.extend(true, {}, d); //deep copy!
+      addArr.push(dD);    
+    });
+
+    ndxLinks.remove(dimension);
+    if(dimension == legalDim) {
+      legalTableFilter = new Array();
+    }
+    else {
+      mediaTableFilter = new Array();
+    }
+    dimension.filterAll();
+
+    combinedObj.push({
+      id: getCombinedObjHash(combinedName),
+      name: combinedName,
+      added: [],
+      removed: addArr,
+      type: "remove"
+    });  
+
+    updateAll();
+  }
 };
 
-combineLegalData = function()
+combineData = function(dimension)
 {
-  var addArr = [];
-  legalDim.top(Infinity).forEach(function(d){
-    d.source = nodes.length;
-    addArr.push(d);
-  })
-  ndxLinks.remove();
-  // TODO combination name
-  nodes.push($("#legalSearch").val())
-  ndxLinks.add(addArr);
+  var combinedName = prompt("Name of the combined data",
+    dimension == legalDim ? nodes[dimension.top(1)[0].source].name : nodes[dimension.top(1)[0].target].name);
+  if(combinedName)
+  {
+    var addArr = [];
+    var newArr = [];
+    var newId = nodes.length;
+    var isLegal = dimension == legalDim;
+    var filter = isLegal ? legalTableFilter : mediaTableFilter;
 
-  updateAll();
+    dimension.top(Infinity).forEach(function(d){
+      var dD = jQuery.extend(true, {}, d); //deep copy!
+      addArr.push(dD);
+      var dN = jQuery.extend(true, {}, d); //deep copy!
+      if(isLegal)
+        dN.source = newId;
+      else
+        dN.target = newId;
+      newArr.push(dN);
+    });
+
+    ndxLinks.remove();
+    nodes.push({name: combinedName, gov: isLegal});
+    ndxLinks.add(newArr);
+
+    filter = new Array();
+    dimension.filterAll();
+    filter.push(newId);  
+    dimension.filterFunction(function(d){
+      return filter.indexOf(d) > -1;
+    });
+
+    combinedObj.push({
+      id: getCombinedObjHash(combinedName),
+      name: combinedName,
+      added: newArr,
+      removed: addArr,
+      type: "combine"
+    });
+
+    updateAll();
+  }
 };
 
-combineMediaData = function()
+showTags = function()
 {
-  var addArr = [];
-  mediaDim.top(Infinity).forEach(function(d){
-    d.target = nodes.length;
-    addArr.push(d);
-  })
-  ndxLinks.remove();
-  // TODO combination name
-  nodes.push($("#mediaSearch").val())
-  ndxLinks.add(addArr);
+  var div = $("#combine-blocks");
+  div.empty();
+  var id = 0;
+  combinedObj.forEach(function(d){
+    var h = " <span class=\"tag "+d.type+"\">"+d.name+"<button class=\"btn\" onClick=\"javascript:resolveCombineData(\'"+id+"\')\"><span class=\"glyphicon glyphicon-remove\"></span></button></span> ";
+    div.append(h);
+    id++;
+  });
+}
 
+resolveCombineData = function(id) 
+{
+  filterAll();
+  var obj = jQuery.extend(true, {}, combinedObj[+id]); //deep copy!
+  combinedObj.splice(+id, 1); // remove element
+  // create filter to delete the added ones
+  if(obj.added.length > 0)
+  {
+    sourceArr = obj.added.map(function(x){return x.source;});
+    targetArr = obj.added.map(function(x){return x.target;});
+    lawsArr = obj.added.map(function(x){return x.law;});
+    timeArr = obj.added.map(function(x){return +x.year*10+x.quarter;});
+    moneyArr = obj.added.map(function(x){return Math.floor(+x.euro/binwidth);});
+
+    legalDim.filterFunction(function(d){
+      return sourceArr.indexOf(d) > -1;
+    });
+    mediaDim.filterFunction(function(d){
+      return targetArr.indexOf(d) > -1;
+    });
+    lawsDim.filterFunction(function(d){
+      return lawsArr.indexOf(d) > -1;
+    });
+    timeDim.filterFunction(function(d){
+      return timeArr.indexOf(d) > -1;
+    });
+    spendDim.filterFunction(function(d){
+      return moneyArr.indexOf(d) > -1;
+    });    
+    ndxLinks.remove();
+    legalDim.filterAll();
+    mediaDim.filterAll();
+    lawsDim.filterAll();
+    timeDim.filterAll();
+    spendDim.filterAll();
+  }
+
+  // add the deleted ones:
+  ndxLinks.add(obj.removed);
   updateAll();
-};
+}
 
 chordTooltipUpdate = function (data)
 {
   //var string = "von " + nodes[+data.sname] + " nach " + nodes[+data.tname] + ": " + formatEuro((data.svalue) + "/" + formatEuro((data.stotal);
-  //console.log(string);
-  $("#ttLegal").text(nodes[+data.sname]);
-  $("#ttMedia").text(nodes[+data.tname]);
-  $("#ttFrom").text(formatEuro(data.svalue));
-  $("#ttTo").text(formatEuro(data.stotal));
+  //console.log(data);
+  if(nodes[+data.sname].gov == 1)
+  {
+    $("#ttLegal").text(nodes[+data.sname].name);
+    $("#ttMedia").text(nodes[+data.tname].name);
+    $("#ttFrom").text(formatEuro(data.svalue));
+    $("#ttTo").text(formatEuro(data.stotal));    
+  }
+  else
+  {
+    $("#ttLegal").text(nodes[+data.tname].name);
+    $("#ttMedia").text(nodes[+data.sname].name);
+    $("#ttFrom").text(formatEuro(data.tvalue));
+    $("#ttTo").text(formatEuro(data.ttotal));    
+  }
 };
 
 remove_empty_bins = function (source_group,filterFunction) {
@@ -179,7 +352,7 @@ mediaTableSortingStatus = {
 };
 
 tableSorting = {
-  alphabeth : function (d) {return nodes[d.key];},
+  alphabeth : function (d) {return nodes[d.key].name;},
   relation  : function (d) {return d.value.count;},
   sum       : function (d) {return d.value.total;}
 };

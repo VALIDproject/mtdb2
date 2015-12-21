@@ -37,7 +37,6 @@ exports.init = function(datafile) {
 
     legalDim = ndxLinks.dimension(function(d) {return +d.source});
     legalDim2 = ndxLinks.dimension(function(d) {return +d.source});
-    legalDim3 = ndxLinks.dimension(function(d) {return +d.source});
     mediaDim = ndxLinks.dimension(function(d) {return +d.target});
     mediaDim2 = ndxLinks.dimension(function(d) {return +d.target});
     lawsDim = ndxLinks.dimension(function(d) {return +d.law;});
@@ -47,7 +46,6 @@ exports.init = function(datafile) {
     spendPerTime = remove_empty_bins(timeDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
     spendPerLaw = remove_empty_bins(lawsDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
     spendGroup = remove_empty_bins(spendDim.group().reduceCount(function(d) { return +d.euro; }),filterOutEmpty);
-    legalGroup = remove_empty_bins(legalDim3.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
 
     groupedLegalDim = remove_empty_bins(legalDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
     groupedMediaDim = remove_empty_bins(mediaDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
@@ -66,42 +64,14 @@ exports.init = function(datafile) {
     $('#legalSearchReset').hide();
     $('#mediaSearchReset').hide();
 
-    $("#legalSearch").on('change', function () {
-      textFilter(legalDim2, this.value, legalTable);
-    })
-
     $("#legalSearchForm").submit(function () {
       textFilter(legalDim2, $("#legalSearch").val(), legalTable);
       return false;
     });
 
-    $('#legalSearch').on('change' , function() {
-      if(this.value != '')
-      {
-        $('#legalSearchReset').show();
-      }
-      else
-      {
-        $('#legalSearchReset').hide();
-      }
-    }); 
-
-    $("#mediaSearch").on('change', function () {
-      textFilter(mediaDim2, this.value, mediaTable);  
-    });
-
     $("#mediaSearchForm").submit(function () {
       textFilter(mediaDim2, $("#mediaSearch").val(), mediaTable);
       return false;
-    });
-
-    $('#mediaSearch').on('change' , function() {
-      if( this.value != ''){
-        $('#mediaSearchReset').show(); 
-      }
-      else{
-        $('#mediaSearchReset').hide();
-      }
     });
 
     function legalTableOnClickUpdate(table, orderId) {

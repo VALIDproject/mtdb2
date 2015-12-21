@@ -27,7 +27,8 @@ var links;
  * 
  * @type {array}
  * @alias nodes
- * @property {string} the name of the id. this can be a legal entity or a media owner
+ * @property {string} nodes.name the name of the id. this can be a legal entity or a media owner
+ * @property {bool} nodes.gov eighter it is a legal entity or not
  */
 var nodes;
 
@@ -45,6 +46,8 @@ var binwidth;
 
 var textFilter;
 var resetSearchBox;
+var showMediaSelectionInteraction;
+var showLegalSelectionInteraction;
 
 var drawChords;
 var resizeChordChart;
@@ -54,11 +57,13 @@ var targetRestId;
 
 var updateAll;
 var rescaleAll;
+var filterAll;
 
 var deleteData;
-
-var combineLegalData;
-var combineMediaData;
+var combineData;
+var combinedObj;
+var resolveCombineData;
+var showTags;
 
 var locale;
 var formatEuro;
