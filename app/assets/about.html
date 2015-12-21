@@ -2,22 +2,26 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Media transparency</title>
+  <title>Media transparency - About</title>
   <link rel="stylesheet" href="app.css">
   <link rel="stylesheet" href="vendor.css">
 </head>
 <body>
   <div class="container">
     <div class="starter-template">
-      <div id="dataLoading"><div class="row"><div class="loading"></div></div><div class="row"><h1>Loading Data<br/><small>This can take several seconds...</small></h1></div></div>
     </div> <!-- starter-template -->
   </div> <!-- container -->
   <script src="libraries.js"></script>
   <script src="app.js"></script>
   <script>
-  require('application').init();  
-  $('.navbar-nav li').siblings('li').removeClass('active');
-  $('.navbar-nav').children().first().addClass('active');
+    var nav = require('views/nav');
+      $('body').prepend(nav);
+
+    var content = require('views/about');
+      $('.starter-template').append(content);
+
+    $('.navbar-nav li').siblings('li').removeClass('active');
+    $('.navbar-nav li:nth-child(2)').addClass('active');    
   </script>
 </body>
 </html>
