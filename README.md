@@ -23,9 +23,7 @@
 
 ```brunch watch --server```
 
-The standard port for thr brunch server is 3333
-
-```http://localhost:3333/```
+The standard port for the brunch server is 3333 (```localhost:3333```)
 
 ### release build
 
