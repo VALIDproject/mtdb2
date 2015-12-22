@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Media transparency - Contact</title>
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="vendor.css">
+</head>
+<body>
+  <div class="container">
+    <div class="starter-template">
+    </div> <!-- starter-template -->
+  </div> <!-- container -->
+  <script src="libraries.js"></script>
+  <script src="app.js"></script>
+  <script>
+    var nav = require('views/nav');
+      $('body').prepend(nav);
+
+    var content = require('views/contact');
+      $('.starter-template').append(content);
+
+    $('.navbar-nav li').siblings('li').removeClass('active');
+    $('.navbar-nav li:nth-child(3)').addClass('active');    
+  </script>
+</body>
+</html>

@@ -16,6 +16,8 @@
   <script src="app.js"></script>
   <script>
   require('application').init();  
+  $('.navbar-nav li').siblings('li').removeClass('active');
+  $('.navbar-nav').children().first().addClass('active');
   </script>
 </body>
 </html>
