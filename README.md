@@ -98,8 +98,10 @@ formated.
 ## Examples
 
 ### Dashboard
+(Click on the image to go the the video)
 
-![](slides/Dashboard.JPG)
+
+[![Click on the image to go the the video](slides/Dashboard.JPG)](https://youtu.be/04bdq54m_H8)
 
 ### Filters
 
