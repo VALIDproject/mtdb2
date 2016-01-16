@@ -110,9 +110,11 @@ updateAllNonDC = function()
 
 filterAll = function()
 {
-  dc.filterAll();
   legalTableFilter = new Array();
   mediaTableFilter = new Array();
+  legalDim.filterAll();
+  mediaDim.filterAll();
+  dc.filterAll();
 }
 
 rescaleAll = function()

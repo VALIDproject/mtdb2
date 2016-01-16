@@ -3,7 +3,7 @@
 timeBarChart
   .width(function(){return $("#time-bar-chart").width();})
   .height(200)
-  .margins({top: 10, right: 10, bottom: 30, left: 80})
+  .margins({top: 10, right: 10, bottom: 60, left: 80})
   .gap(10)
   .dimension(timeDim)
   .group(spendPerTime)
@@ -21,19 +21,26 @@ timeBarChart
   .on("filtered", function (chart, filter) {
     // update function for d3
     updateAllNonDC();
+  })
+  .on("renderlet.d", function(chart){
+    chart.selectAll("g.x text")
+      .attr('dx', '-28')
+      .attr('dy', '-6')
+      .attr('transform', "rotate(-90)");
   });
 
+timeBarChart.yAxis().ticks(4);
 timeBarChart.yAxis().tickFormat(function (v) {
   return formatGuV(v,spendPerTime.top(1)[0].value,spendPerTime.bottom(1)[0].value);
 });    
 timeBarChart.xAxis().tickFormat(function (v) {
-  return Math.floor(v/10) +"Q"+v%10;
+  return Math.floor(v/10) +" Q"+v%10;
 });
 
 lawsBarChart
   .width(function(){return $("#laws-bar-chart").width();})
   .height(200)
-  .margins({top: 10, right: 10, bottom: 30, left: 80})
+  .margins({top: 10, right: 10, bottom: 60, left: 80})
   .gap(5)
   .dimension(lawsDim)
   .group(spendPerLaw)
@@ -53,6 +60,7 @@ lawsBarChart
 lawsBarChart.xAxis().tickFormat(function (d) {
   return "§" + d;
 });
+lawsBarChart.yAxis().ticks(4);
 lawsBarChart.yAxis().tickFormat(function (v) {
   return formatGuV(v,spendPerLaw.top(1)[0].value,spendPerLaw.bottom(1)[0].value);
 });
@@ -78,7 +86,7 @@ expensesBarChart
   .on("renderlet.d", function(chart){
     chart.selectAll("g.x text")
       .attr('dx', '-32')
-      .attr('dy', '-7')
+      .attr('dy', '-5')
       .attr('transform', "rotate(-65)");
   })
   .on("filtered", function (chart, filter) {
@@ -89,3 +97,7 @@ expensesBarChart
 expensesBarChart.xAxis().tickFormat(function (v) {
     return formatGuV(v*binwidth,spendDim.top(1)[0].euro,spendDim.bottom(1)[0].euro);
 });
+
+expensesBarChart.yAxis().ticks(4);
+expensesBarChart.yAxis().tickFormat(d3.format("d"))
+    .tickSubdivide(0);
