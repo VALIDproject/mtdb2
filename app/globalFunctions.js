@@ -148,11 +148,10 @@ var getCombinedObjHash = function(hash) {
 
 deleteData = function(dimension)
 {
-  var combinedName = prompt("Name of the combined data",
+  var combinedName = prompt("Name of the removed data",
     dimension == legalDim ? nodes[dimension.top(1)[0].source].name : nodes[dimension.top(1)[0].target].name);
   if(combinedName)
   {
-    
     var addArr = [];
     dimension.top(Infinity).forEach(function(d){
       var dD = jQuery.extend(true, {}, d); //deep copy!
@@ -300,23 +299,23 @@ chordTooltipUpdate = function (data)
   }
 };
 
-remove_empty_bins = function (source_group,filterFunction) {
+removeEmptyBins = function (sourceGroup,filterFunction) {
   return {
     all:function () {
-      return source_group.all().filter(filterFunction);
+      return sourceGroup.all().filter(filterFunction);
     },
     top: function(n) {
-        return source_group.top(Infinity)
+        return sourceGroup.top(Infinity)
             .filter(filterFunction)
             .slice(0, n);
     },
     bottom: function(n) {
-        return source_group.top(Infinity)
+        return sourceGroup.top(Infinity)
             .filter(filterFunction)
             .slice(-n);
     },
     size:function () { 
-      return source_group.all().filter(filterFunction).length;
+      return sourceGroup.all().filter(filterFunction).length;
     }
   };
 };
@@ -341,18 +340,18 @@ ordinalAscendingGlyph = "glyphicon-sort-by-alphabet";
 ordinalDescendingGlyph = "glyphicon-sort-by-alphabet-alt";
 
 legalTableSortingStatus = {
-  alphabeth : ordinalAscendingGlyph,
+  alphabet : ordinalAscendingGlyph,
   relation : numericAscendingGlyph,
   sum : numericDescendingGlyph
 };
 mediaTableSortingStatus = {
-  alphabeth : ordinalAscendingGlyph,
+  alphabet : ordinalAscendingGlyph,
   relation : numericAscendingGlyph,
   sum : numericDescendingGlyph
 };
 
 tableSorting = {
-  alphabeth : function (d) {return nodes[d.key].name;},
+  alphabet : function (d) {return nodes[d.key].name;},
   relation  : function (d) {return d.value.count;},
   sum       : function (d) {return d.value.total;}
 };
@@ -361,12 +360,12 @@ legalTableSorting = "sum";
 mediaTableSorting = "sum";
 
 legalTableOrdering = {
-  alphabeth : d3.descending,
+  alphabet : d3.descending,
   relation : d3.descending,
   sum : d3.descending
 };
 mediaTableOrdering = {
-  alphabeth : d3.descending,
+  alphabet : d3.descending,
   relation : d3.descending,
   sum : d3.descending
 };

@@ -43,12 +43,12 @@ exports.init = function(datafile) {
     timeDim = ndxLinks.dimension(function(d) {return +d.year*10+d.quarter;})
     spendDim = ndxLinks.dimension(function(d) {return Math.floor(+d.euro/binwidth);})
     
-    spendPerTime = remove_empty_bins(timeDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
-    spendPerLaw = remove_empty_bins(lawsDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
-    spendGroup = remove_empty_bins(spendDim.group().reduceCount(function(d) { return +d.euro; }),filterOutEmpty);
+    spendPerTime = removeEmptyBins(timeDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
+    spendPerLaw = removeEmptyBins(lawsDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
+    spendGroup = removeEmptyBins(spendDim.group().reduceCount(function(d) { return +d.euro; }),filterOutEmpty);
 
-    groupedLegalDim = remove_empty_bins(legalDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
-    groupedMediaDim = remove_empty_bins(mediaDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
+    groupedLegalDim = removeEmptyBins(legalDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
+    groupedMediaDim = removeEmptyBins(mediaDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
 
     require('filterCharts');
     //require('treeMaps');
@@ -95,7 +95,7 @@ exports.init = function(datafile) {
     }    
 
     $('#legalAlphabetOrder').click( function () {
-      legalTableSorting = "alphabeth";
+      legalTableSorting = "alphabet";
       if(legalTableOrdering[legalTableSorting] == d3.descending)
       {
         legalTableOrdering[legalTableSorting] = d3.ascending;
@@ -140,7 +140,7 @@ exports.init = function(datafile) {
     });
 
     $('#mediaAlphabetOrder').click( function () {
-      mediaTableSorting = "alphabeth";
+      mediaTableSorting = "alphabet";
       if(mediaTableOrdering[mediaTableSorting] == d3.descending)
       {
         mediaTableOrdering[mediaTableSorting] = d3.ascending;
