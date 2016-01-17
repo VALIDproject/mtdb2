@@ -1,25 +1,7 @@
-@tooltip-background: #303030;
-@tooltip-font-color: #F0F0F0;
 @gov-color: #26ABAB;
 @non-gov-color: #AB2626;
 @combine-background: #556B2F;
 @remove-background: #8B0000;
-
-#tooltip {
-  border: 1px solid #000000;
-  background: @tooltip-background;
-  color: @tooltip-font-color;
-  border-radius: 1em;
-  padding: 1em;
-  pointer-events: none;
-  z-index: 1000;
-  position: absolute;
-  width: 100%;
-  border-radius: 6px;
-  opacity: 0;
-  bottom: 100%;
-  box-shadow: 5px 5px 2.5px #666;
-}
 
 path.chord {
   -webkit-backface-visibility: hidden;
@@ -76,6 +58,7 @@ aside {
   -moz-border-radius: 4px;
   border-radius: 4px;
   white-space:nowrap;
+  display: inline-block;
 }
 
 #combine-blocks button{
@@ -99,3 +82,44 @@ aside {
 {
   background: @remove-background;
 }
+
+.tooltip {
+  border: 1px solid #000000;
+  background: @tooltip-background;
+  color: @tooltip-font-color;
+  border-radius: 1em;
+  padding: 1em;
+  pointer-events: none;
+  z-index: 1000;
+  position: fixed;
+  border-radius: 6px;
+  box-shadow: 5px 5px 2.5px #666;
+  font-size: 80%  
+}
+
+.tooltip #tag-tooltip {
+
+}
+
+#tooltip #chord-tooltip {
+  position: absolute;
+  width: 100%;
+  opacity: 0;
+  bottom: 100%;
+}
+
+#tag-tooltip table td{
+  text-align: left;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+#tag-tooltip table th{
+  font-weight: bold;
+  padding-bottom: 0.5em;
+}
+
+#tag-tooltip table td.num{
+  text-align: right;
+}
+

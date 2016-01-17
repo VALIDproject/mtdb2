@@ -78,16 +78,18 @@ showLegalSelectionInteraction = function()
   }
 };
 
-resetSearchBox = function(id,tableType){
-  id.val('');
-  id.submit();
+resetSearchBox = function(tableType){
+
+  
   if(tableType == "legal")
   {
+    $('#legalSearch').val('').submit();    
     legalTableFilter = new Array();  
     legalDim.filterAll();
   }
   else
   {
+    $('#mediaSearch').val('').submit();       
     mediaTableFilter = new Array();  
     mediaDim.filterAll();
   }
@@ -208,12 +210,7 @@ combineData = function(dimension)
     nodes.push({name: combinedName, gov: isLegal});
     ndxLinks.add(newArr);
 
-    filter = new Array();
-    dimension.filterAll();
-    filter.push(newId);  
-    dimension.filterFunction(function(d){
-      return filter.indexOf(d) > -1;
-    });
+    resetSearchBox(isLegal ? "legal" : "media");
 
     combinedObj.push({
       id: getCombinedObjHash(combinedName),
@@ -227,20 +224,51 @@ combineData = function(dimension)
   }
 };
 
+var showTagTooltip = function(d,x,y)
+{
+  tagTooltip.empty();
+  var str = "<table><tr><th>Rechtsträger</th><th>Media</th><th>Quartal</th><th>Summe</th></tr>";
+  if(d.type == "combine"){
+    d.removed.forEach(function(id){
+      str += "<tr><td> "+shortenLongName(nodes[id.source].name)+"</td><td>"+shortenLongName(nodes[id.target].name)+"</td><td>"+ id.year +" Q"+id.quarter +"</td><td class='num'>"+ formatEuro(id.euro) +"</td></tr>";
+    });
+    
+  }
+  else {
+    d.removed.forEach(function(id){
+      str += "<tr><td> "+shortenLongName(nodes[id.source].name)+"</td><td>"+shortenLongName(nodes[id.target].name)+"</td><td>"+ id.year +" Q"+id.quarter +"</td><td class='num'>"+ formatEuro(id.euro) +"</td></tr>";
+    });
+  }
+  tagTooltip.append(str + "</table>");
+  tagTooltip.css({'top':y+12});
+  tagTooltip.show();
+}
+
+var hideTagTooltip = function()
+{
+  tagTooltip.hide();
+}
+
 showTags = function()
 {
   var div = $("#combine-blocks");
   div.empty();
   var id = 0;
   combinedObj.forEach(function(d){
-    var h = " <span class=\"tag "+d.type+"\">"+d.name+"<button class=\"btn\" onClick=\"javascript:resolveCombineData(\'"+id+"\')\"><span class=\"glyphicon glyphicon-remove\"></span></button></span> ";
-    div.append(h);
+    var h = $("<span class=\"tag "+d.type+"\">"+shortenLongName(d.name)+"<button class=\"btn\" onClick=\"javascript:resolveCombineData(\'"+id+"\')\"><span class=\"glyphicon glyphicon-remove\"></span></button></span>")
+      .hover(function(e){
+        showTagTooltip(d,e.clientX,e.clientY);
+      },function(e){
+        hideTagTooltip();
+      })
+      .appendTo(div);
     id++;
   });
 }
 
 resolveCombineData = function(id) 
 {
+  tagTooltip.hide();
   filterAll();
   var obj = jQuery.extend(true, {}, combinedObj[+id]); //deep copy!
   combinedObj.splice(+id, 1); // remove element
@@ -335,6 +363,13 @@ removeTotal = function (p, v) {
 };
 
 initTotal = function(){return {count: 0, total: 0};}
+
+shortenLongName = function(name)
+{
+  if (name.length > 30)
+    name = name.substr(0, 20) + "..." + name.substr(-7);
+  return name;
+}
 
 numericAscendingGlyph = "glyphicon-sort-by-order";
 numericDescendingGlyph = "glyphicon-sort-by-order-alt";

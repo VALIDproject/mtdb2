@@ -412,6 +412,15 @@ var legalTableFilter;
  */
 var mediaTableFilter;
 
+/** shotens a long string to shorter representation
+ * @func
+ * @param {string} the long input string
+ * @return {string} a shorter representation of that string
+ */
+var shortenLongName;
+
+var tagTooltip;
+
 require('globalFunctions');
 
 var App = {

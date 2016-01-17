@@ -147,7 +147,7 @@ drawChords = function (dataDimension) {
     .on("mouseover", dimChords)
     .on("mouseout", resetChords)
     .text(function (d) {
-      return nodes[d._id].name;
+      return shortenLongName(nodes[d._id].name);
     });
 
   groups.select("path")
@@ -204,7 +204,7 @@ drawChords = function (dataDimension) {
         legalDim.filterFunction(function(x){return legalTableFilter.indexOf(x) > -1;});      
         updateAll();
       }
-    } else if(id != targetRestId){
+    } else if(nodes[id].gov == 0 && id != targetRestId){
       if(mediaTableFilter.indexOf(id) < 0)
         mediaTableFilter.push(id);
         mediaDim.filterFunction(function(x){return mediaTableFilter.indexOf(x) > -1;});     
@@ -217,14 +217,14 @@ drawChords = function (dataDimension) {
     d3.event.preventDefault();
     d3.event.stopPropagation();
     dimChords(d);
-    d3.select("#tooltip").style("opacity", 1);
+    d3.select("#chord-tooltip").style("opacity", 1);
     chordTooltipUpdate(matrix.read(d));
   }
 
   function hideTooltip() {
     d3.event.preventDefault();
     d3.event.stopPropagation();
-    d3.select("#tooltip").style("opacity", 0);
+    d3.select("#chord-tooltip").style("opacity", 0);
     resetChords();
   }
 

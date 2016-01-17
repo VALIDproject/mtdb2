@@ -59,6 +59,8 @@ exports.init = function(datafile) {
     dc.tooltipMixin(timeBarChart);
     dc.tooltipMixin(lawsBarChart);
 
+    tagTooltip = $("#tag-tooltip");
+
     $('#dataLoading').hide();
     $("#my-charts").show();
     $('#legalSearchReset').hide();

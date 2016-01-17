@@ -2,7 +2,7 @@
 a(href="javascript:filterAll();updateAll();").reset reset all filters
 .clearfix
 #chord-chart
-fieldset#tooltip.row.secondary
+fieldset.tooltip#chord-tooltip.row.secondary
   .large-12.columns
     span von
     h4#ttLegal
@@ -11,7 +11,8 @@ fieldset#tooltip.row.secondary
     h4#ttMedia
   .large-12.columns
     span#ttFrom
-    span /
+    span  / 
     span#ttTo
 .clearfix
+.tooltip#tag-tooltip(style="display: none;")
 #combine-blocks
