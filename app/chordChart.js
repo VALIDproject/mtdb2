@@ -33,11 +33,11 @@ var matrix = require('matrixFactory').chordMatrix()
     return {value: value, data: items};
   });
 
-var innerRadius = (dims[1] / 2) - 100;
+var innerRadius = (dims[1] / 2) - 150;
 
 var arc = d3.svg.arc()
   .innerRadius(innerRadius)
-  .outerRadius(innerRadius + 20);
+  .outerRadius(innerRadius + 10);
 
 var path = d3.svg.chord()
   .radius(innerRadius);
@@ -160,7 +160,7 @@ drawChords = function (dataDimension) {
     .attr("transform", function (d) {
       d.angle = (d.startAngle + d.endAngle) / 2;
       var r = "rotate(" + (d.angle * 180 / Math.PI - 90) + ")";
-      var t = " translate(" + (innerRadius + 26) + ")";
+      var t = " translate(" + (innerRadius + 14) + ")";
       return r + t + (d.angle > Math.PI ? " rotate(180)" : " rotate(0)"); 
     })
     .attr("text-anchor", function (d) {

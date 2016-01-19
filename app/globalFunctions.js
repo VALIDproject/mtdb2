@@ -79,8 +79,6 @@ showLegalSelectionInteraction = function()
 };
 
 resetSearchBox = function(tableType){
-
-  
   if(tableType == "legal")
   {
     $('#legalSearch').val('').submit();    
@@ -106,6 +104,8 @@ updateAllNonDC = function()
 {
   showLegalSelectionInteraction();
   showMediaSelectionInteraction();
+  legalTablePaging.update();
+  mediaTablePaging.update();
   showTags();
   drawChords(legalDim);
 }
@@ -409,3 +409,47 @@ mediaTableOrdering = {
 
 legalTableFilter = new Array();
 mediaTableFilter = new Array();
+
+TablePaging = function(table,ofs,pag,parentID)
+{
+  this._ofs = ofs;
+  this._pag = pag;
+  this._table = table;
+  this._parentId = parentID;
+}
+
+TablePaging.prototype.display = function () {
+  d3.select(this._parentId+" #begin")
+    .text(this._ofs); // or 0
+  d3.select(this._parentId+" #end")
+    .text(this._ofs+this._pag-1);
+  d3.select(this._parentId+" #last")
+    .attr('disabled', this._ofs-this._pag<0 ? 'true' : null);
+  if(this._parentId == "#legal-paging"){
+    d3.select(this._parentId+" #next")
+      .attr('disabled', this._ofs+this._pag>=groupedLegalDim.all().length ? 'true' : null);    
+  }
+  else{
+    d3.select(this._parentId+" #next")
+      .attr('disabled', this._ofs+this._pag>=groupedMediaDim.all().length ? 'true' : null);    
+  }    
+  
+};
+
+TablePaging.prototype.update = function() {
+  this._table.beginSlice(this._ofs); // or this._ofs
+  this._table.endSlice(this._ofs+this._pag);
+  this.display();
+};
+
+TablePaging.prototype.next = function() {
+  this._ofs += this._pag;
+  this.update();
+  this._table.redraw();
+};
+
+TablePaging.prototype.last = function() {
+  this._ofs -= this._pag;
+  this.update();
+  this._table.redraw();
+};

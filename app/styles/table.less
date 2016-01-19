@@ -16,7 +16,13 @@
 
 .table > thead > tr > th
 {
-  min-width: 120px;
+  font-size: 80%;
+  min-width: 50px;
+}
+
+.table > tbody > tr > td
+{
+  font-size: 80%;
 }
 
 .inlinebar
@@ -25,7 +31,41 @@
   background: @default-bar-background;
 }
 
+.inlinesparkline
+{
+  height: 15px;
+  width: 100%;
+}
+
+.inlinesparkline .sparklinecontainer
+{
+  float: left;
+  height: 100%;
+  margin-left: 1px;
+  position: relative;
+  display: inline;  
+}
+
+.inlinesparkline .sparklinecontainer div
+{
+    min-height: 1px;
+    background: blue;
+    bottom: 0px;
+    position: absolute;
+    width: 100%;
+}
+
 .dc-table-row-filtered
 {
   background: @filtered-table-row-background;
+}
+
+.paging
+{
+  font-size: 80%;
+}
+
+.paging .btn {
+  margin-left: 2px;
+  margin-right: 2px;
 }

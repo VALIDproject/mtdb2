@@ -3,7 +3,7 @@
     .span12
       form.custom-search-form.search-form.form-horizontal.pull-right#legalSearchForm
         .input-append.span12
-          input(type="text",placeholder="Filter Rechtsträger")#legalSearch.search-query.mac-style
+          input(type="text",placeholder="Filter Rechtsträger",title="Durchsuche die Tabelle nach einem Wort")#legalSearch.search-query.mac-style
           button.btn
             span.glyphicon.glyphicon-search
   span#data-count-legal
@@ -14,26 +14,32 @@
     | |
     a(href="javascript:deleteData(legalDim);") remove
     strong  selection
-  .table-responsive
-    table.table.table-hover.my-data-table#legal-table
-      thead
-        th(data-col="a").data-table-col Rechtsträger 
-          button#legalAlphabetOrder.btn
-            span.glyphicon.glyphicon-sort-by-alphabet
-        th(data-col="b").data-table-col Relationen 
-          button#legalRelationOrder.btn
-            span.glyphicon.glyphicon-sort-by-order-alt
-        th(data-col="c").data-table-col Summe 
-          button#legalSumOrder.btn
-            span.glyphicon.glyphicon-sort-by-order                  
+  table.table.table-hover.my-data-table#legal-table
+    thead
+      th(data-col="a").data-table-col Rechtsträger 
+        button(title="Nach dem Alphabet sortieren")#legalAlphabetOrder.btn
+          span.glyphicon.glyphicon-sort-by-alphabet
+      th(data-col="c").data-table-col Summe 
+        button(title="Nach der Summe an transferiertem Geld sortieren")#legalSumOrder.btn
+          span.glyphicon.glyphicon-sort-by-order
+      th(data-col="b",title="Relationen").data-table-col #
+        button(title="Nach der Anzahl der Relationen sortieren")#legalRelationOrder.btn
+          span.glyphicon.glyphicon-sort-by-order-alt    
+  .paging#legal-paging
+    | Showing 
+    span#begin
+    | - 
+    span#end
+    button(onclick="javscript:legalTablePaging.last();").btn#last last
+    button(onclick="javscript:legalTablePaging.next();").btn#next next
 .col-sm-6
   include chordChart.jade   
-.col-sm-3
+.col-sm-3#media-table-column
   .row
     .span12
       form.custom-search-form.search-form.form-horizontal.pull-right#mediaSearchForm
         .input-append.span12
-          input(type="text",placeholder="Filter Media")#mediaSearch.search-query.mac-style
+          input(type="text",placeholder="Filter Media",title="Durchsuche die Tabelle nach einem Wort")#mediaSearch.search-query.mac-style
           button.btn
             span.glyphicon.glyphicon-search
   span#data-count-media
@@ -44,15 +50,22 @@
     | |
     a(href="javascript:deleteData(mediaDim);") remove
     strong  selection
-  .table-responsive
-    table.table.table-hover.my-data-table#media-table
-      thead
-        th(data-col="a").data-table-col Media 
-          button#mediaAlphabetOrder.btn
-            span.glyphicon.glyphicon-sort-by-alphabet
-        th(data-col="b").data-table-col Relationen 
-          button#mediaRelationOrder.btn
-            span.glyphicon.glyphicon-sort-by-order-alt
-        th(data-col="c").data-table-col Summe 
-          button#mediaSumOrder.btn
-            span.glyphicon.glyphicon-sort-by-order
+  table.table.table-hover.my-data-table#media-table
+    thead
+      th(data-col="a").data-table-col Media 
+        button(title="Nach dem Alphabet sortieren")#mediaAlphabetOrder.btn
+          span.glyphicon.glyphicon-sort-by-alphabet
+      th(data-col="c").data-table-col Summe 
+        button(title="Nach der Summe an transferiertem Geld sortieren")#mediaSumOrder.btn
+          span.glyphicon.glyphicon-sort-by-order      
+      th(data-col="b",title="Relationen").data-table-col #
+        button(title="Nach der Anzahl der Relationen sortieren")#mediaRelationOrder.btn
+          span.glyphicon.glyphicon-sort-by-order-alt
+  .paging#media-paging
+      | Showing 
+      span#begin
+      | - 
+      span#end
+      button(onclick="javscript:mediaTablePaging.last();").btn#last last
+      button(onclick="javscript:mediaTablePaging.next();").btn#next next
+  #sparkline-tooltip.myTooltip(style="opacity:0")

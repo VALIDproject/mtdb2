@@ -18,6 +18,9 @@ exports.init = function(datafile) {
 
   legalTable = dc.dataTable('#legal-table');
   mediaTable = dc.dataTable("#media-table");
+
+  legalTablePaging = new TablePaging(legalTable,0,10,"#legal-paging");
+  mediaTablePaging = new TablePaging(mediaTable,0,10,"#media-paging");
   
   //legalTreeMap = dc.treemapChart('#legal-tree-map');
   //mediaTreeMap = dc.treemapChart('#media-tree-map');
@@ -50,16 +53,18 @@ exports.init = function(datafile) {
     groupedLegalDim = removeEmptyBins(legalDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
     groupedMediaDim = removeEmptyBins(mediaDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
 
+    quarterNames = spendPerTime.all().map(function(d){return d.key});
+
+    tagTooltip = $("#tag-tooltip");
+    sparklineTooltip = d3.selectAll("#sparkline-tooltip");
+
     require('filterCharts');
-    //require('treeMaps');
     require('chordChart');
     require('tables');
 
     dc.renderAll();
     dc.tooltipMixin(timeBarChart);
     dc.tooltipMixin(lawsBarChart);
-
-    tagTooltip = $("#tag-tooltip");
 
     $('#dataLoading').hide();
     $("#my-charts").show();

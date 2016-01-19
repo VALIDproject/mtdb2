@@ -179,6 +179,12 @@ var spendPerLaw;
  */
 var binwidth;
 
+/** The names of the quarters
+ * @type {array}
+ * @see numQuarters
+ */
+var quarterNames;
+
 /** Filter a {@link https://github.com/square/crossfilter/wiki/API-Reference#wiki-dimension|crossfilter.dimension} for a string
  * @func textFilter
  * @param {crossfilter.dimension} dim - The dimension to filter
@@ -420,6 +426,12 @@ var mediaTableFilter;
 var shortenLongName;
 
 var tagTooltip;
+
+var sparklineTooltip;
+
+var TablePaging;
+var legalTablePaging;
+var mediaTablePaging;
 
 require('globalFunctions');
 
