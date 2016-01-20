@@ -107,7 +107,6 @@ var tableRenderlet = function(table,dim){
     })    
     .on("click", function (d){
       var filterIndex = tableFilter.indexOf(d.key);
-      console.debug(filterIndex,d.key,tableFilter);
       if(filterIndex > -1) {
         if(tableFilter.length > 1) {
           tableFilter.pop(filterIndex);

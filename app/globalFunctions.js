@@ -81,13 +81,15 @@ showLegalSelectionInteraction = function()
 resetSearchBox = function(tableType){
   if(tableType == "legal")
   {
-    $('#legalSearch').val('').submit();    
+    $('#legalSearch').val('');
+    legalDim2.filterAll(); 
     legalTableFilter = new Array();  
     legalDim.filterAll();
   }
   else
   {
-    $('#mediaSearch').val('').submit();       
+    $('#mediaSearch').val('');
+    mediaDim2.filterAll();      
     mediaTableFilter = new Array();  
     mediaDim.filterAll();
   }
@@ -112,10 +114,8 @@ updateAllNonDC = function()
 
 filterAll = function()
 {
-  legalTableFilter = new Array();
-  mediaTableFilter = new Array();
-  legalDim.filterAll();
-  mediaDim.filterAll();
+  resetSearchBox("legal");
+  resetSearchBox("media");
   dc.filterAll();
 }
 
