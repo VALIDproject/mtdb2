@@ -9,7 +9,8 @@ if (!dc.tooltipMixin) {
         var selector = 'rect.bar,circle.dot,g.pie-slice path,circle.bubble,g.row rect';
         var svg = _chart.svg();
         var tip = d3.tip()
-          .attr('class', 'tip')
+          .attr('class', 'myTooltip')
+          .attr('id','filter-tooltip')
           .html(function (d) {
             if (d.data) {
               return _chart.title()(d.data);

@@ -12,9 +12,9 @@ timeBarChart
   .xUnits(dc.units.ordinal)
   .elasticX(true)
   .elasticY(true)
-  .colorAccessor(function(d, i){
-    return Math.floor(d.key/10);
-  })
+  // .colorAccessor(function(d, i){
+  //   return Math.floor(d.key/10);
+  // })
   .title(function (d) {
     return Math.floor(d.key/10) +" Q"+d.key%10 +": "+ formatEuro(d.value);
   })

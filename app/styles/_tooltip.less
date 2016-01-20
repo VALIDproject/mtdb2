@@ -1,0 +1,44 @@
+.myTooltip {
+  border: 1px solid @tooltip-border-color;
+  background: @tooltip-background;
+  color: @tooltip-font-color;
+  border-radius: 1em;
+  padding: 1em;
+  pointer-events: none;
+  z-index: 1000;
+  position: fixed;
+  border-radius: 6px;
+  box-shadow: 5px 5px 2.5px @tooltip-box-shadow-color;
+  font-size: 80%;
+}
+
+#filter-tooltip {
+  font-size: 90%;
+  opacity: !0.9; 
+}
+
+#tag-tooltip{
+  font-size: 75%;
+}
+
+#chord-tooltip{
+  position: absolute;
+  width: 100%;
+  opacity: 0;
+  bottom: 100%;
+}
+
+#tag-tooltip table td{
+  text-align: left;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+#tag-tooltip table th{
+  font-weight: bold;
+  padding-bottom: 0.5em;
+}
+
+#tag-tooltip table td.num{
+  text-align: right;
+}

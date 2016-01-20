@@ -121,7 +121,7 @@ drawChords = function (dataDimension) {
   if(useRest)
     data.push(rest);
 
-  messages.attr("opacity", 1);
+  messages.attr("opacity", 0.9);
   messages.transition().duration(1000).attr("opacity", 0);
 
   matrix.data(data)
@@ -217,7 +217,7 @@ drawChords = function (dataDimension) {
     d3.event.preventDefault();
     d3.event.stopPropagation();
     dimChords(d);
-    d3.select("#chord-tooltip").style("opacity", 1);
+    d3.select("#chord-tooltip").style("opacity", 0.9);
     chordTooltipUpdate(matrix.read(d));
   }
 

@@ -1,10 +1,3 @@
-@gov-color: #26ABAB;
-@non-gov-color: #AB2626;
-@combine-background: #556B2F;
-@remove-background: #8B0000;
-@tooltip-background: #303030;
-@tooltip-font-color: #F0F0F0;
-
 path.chord {
   -webkit-backface-visibility: hidden;
   fill-opacity: .67;
@@ -31,13 +24,13 @@ aside {
 
 .chordLabelNonGov
 {
-  fill: @non-gov-color;
+  fill: @chord-non-gov-color;
   font-style: italic;
 }
 
 .chordLabelGov
 {
-  fill: @gov-color;
+  fill: @chord-gov-color;
   font-weight: bold;
 }
 
@@ -47,7 +40,7 @@ aside {
   right: auto;
   display: inline-block;
   font-weight: 300;
-  color: #fff;
+  color: @default-bg;
   text-align: center;
   line-height: inherit;
 }
@@ -78,51 +71,10 @@ aside {
 
 #combine-blocks .combine
 {
-  background: @combine-background;
+  background: @tag-combine-background;
 }
 
 #combine-blocks .remove
 {
-  background: @remove-background;
+  background: @tag-remove-background;
 }
-
-.myTooltip {
-  border: 1px solid #000000;
-  background: @tooltip-background;
-  color: @tooltip-font-color;
-  border-radius: 1em;
-  padding: 1em;
-  pointer-events: none;
-  z-index: 1000;
-  position: fixed;
-  border-radius: 6px;
-  box-shadow: 5px 5px 2.5px #666;
-  font-size: 80%; 
-}
-
-#tag-tooltip{
-  font-size: 75%;
-}
-
-#chord-tooltip{
-  position: absolute;
-  width: 100%;
-  opacity: 0;
-  bottom: 100%;
-}
-
-#tag-tooltip table td{
-  text-align: left;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-}
-
-#tag-tooltip table th{
-  font-weight: bold;
-  padding-bottom: 0.5em;
-}
-
-#tag-tooltip table td.num{
-  text-align: right;
-}
-

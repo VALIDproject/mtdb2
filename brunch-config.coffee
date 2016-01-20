@@ -5,9 +5,9 @@ module.exports = config:
         'libraries.js': /^(?!app\/)/
         'app.js': /^app\//
     stylesheets: 
-      joinTo:
+      joinTo: 
         'vendor.css': /^(bower_components|vendor)\//
-        'app.css': /^app\//
+        'app.css': /app\/styles\/.*\.less$/
     templates: 
       joinTo: 
         'app.js'
