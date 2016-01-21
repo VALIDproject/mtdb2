@@ -207,7 +207,7 @@ combineData = function(dimension)
     });
 
     ndxLinks.remove();
-    nodes.push({name: combinedName, gov: isLegal});
+    nodes.push({name: combinedName, gov: isLegal, comb: 1});
     ndxLinks.add(newArr);
 
     resetSearchBox(isLegal ? "legal" : "media");

@@ -107,6 +107,12 @@ var tableRenderlet = function(table,dim){
   table.selectAll('.dc-table-row')
     .classed("dc-table-row-filtered", function(d) {
       return  tableFilter.indexOf(d.key) > -1 ? true : false;
+    })
+    .classed("dc-table-row-combined", function(d) {
+      return nodes[d.key].comb;
+    })
+    .attr("title", function(d) {
+      return nodes[d.key].comb ? "This entry is combined." : "";
     })    
     .on("click", function (d){
       var filterIndex = tableFilter.indexOf(d.key);

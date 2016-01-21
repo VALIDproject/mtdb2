@@ -32,7 +32,8 @@ exports.parse = function(data) {
       {// Create new entry
         nodes.push({
           name: d.RECHTSTRGER,
-          gov: 1
+          gov: 1,
+          comb: 0
         });
         ri = nodes.length - 1;
       }
@@ -41,7 +42,8 @@ exports.parse = function(data) {
       {// Create new entry
         nodes.push({
           name: d.MEDIUM_MEDIENINHABER,
-          gov: 0
+          gov: 0,
+          comb: 0
         });
         mi = nodes.length - 1;
       }
