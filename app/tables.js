@@ -34,6 +34,9 @@ var tableRenderlet = function(table,dim){
     tableFilter = mediaTableFilter;
   }
 
+  if(groupedDim.all().length == 0)
+    return;
+
   var quarterSum = [];
 
   table.selectAll('td._1').each(function(d,i) {

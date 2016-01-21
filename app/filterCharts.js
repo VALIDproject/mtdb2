@@ -1,5 +1,33 @@
 "use strict";
 
+var showTimeBarTooltip = function(d){
+  var text = timeBarChart.title()(d.data);
+  filterTooltip
+    .transition()
+    .duration(200)      
+    .style("opacity", .9)
+    .style("left", (d3.event.pageX + 5) + "px")     
+    .style("top", (d3.event.pageY - 35) + "px");
+  filterTooltip.html(text);
+}
+
+var showLawsBarTooltip = function(d){
+  var text = lawsBarChart.title()(d.data);
+  filterTooltip
+    .transition()
+    .duration(200)      
+    .style("opacity", .9)
+    .style("left", (d3.event.pageX + 5) + "px")     
+    .style("top", (d3.event.pageY - 35) + "px");
+  filterTooltip.html(text);
+}
+
+var hideBarTooltip = function(d){
+    filterTooltip.transition()
+    .duration(500)
+    .style("opacity", 0);  
+}
+
 timeBarChart
   .width(function(){return $("#time-bar-chart").width();})
   .height(200)
@@ -23,10 +51,15 @@ timeBarChart
     updateAllNonDC();
   })
   .on("renderlet.d", function(chart){
+    chart.selectAll('rect.bar')
+      .on('mouseover', showTimeBarTooltip)
+      .on('mouseleave', hideBarTooltip);
     chart.selectAll("g.x text")
       .attr('dx', '-28')
       .attr('dy', '-6')
       .attr('transform', "rotate(-90)");
+    // remove standard tooltip
+    chart.selectAll('title').remove();    
   });
 
 timeBarChart.yAxis().ticks(4);
@@ -55,6 +88,13 @@ lawsBarChart
   .on("filtered", function (chart, filter) {
     // update function for d3
     updateAllNonDC();
+  })
+  .on("renderlet.d", function(chart){
+    chart.selectAll('rect.bar')
+      .on('mouseover', showLawsBarTooltip)
+      .on('mouseleave', hideBarTooltip);
+    // remove standard tooltip
+    chart.selectAll('title').remove();       
   });
 
 lawsBarChart.xAxis().tickFormat(function (d) {
@@ -95,7 +135,10 @@ expensesBarChart
   });
 
 expensesBarChart.xAxis().tickFormat(function (v) {
-    return formatGuV(v*binwidth,spendDim.top(1)[0].euro,spendDim.bottom(1)[0].euro);
+    if(spendDim.top(1)[0])
+      return formatGuV(v*binwidth,spendDim.top(1)[0].euro,spendDim.bottom(1)[0].euro);
+    else
+      return "";
 });
 
 expensesBarChart.yAxis().ticks(4);

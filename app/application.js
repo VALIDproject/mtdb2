@@ -429,6 +429,8 @@ var tagTooltip;
 
 var sparklineTooltip;
 
+var filterTooltip;
+
 var TablePaging;
 var legalTablePaging;
 var mediaTablePaging;

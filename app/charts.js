@@ -1,9 +1,5 @@
 exports.init = function(datafile) {
 
-  // require the tree map module for dc.js
-  //require('dcTreeMapChart');
-  require('dc-tooltip-mixin');
-
   $("#my-charts").hide(); //hide the charts. They are displayed when the data finishes loading
 
   var q = queue()
@@ -21,9 +17,6 @@ exports.init = function(datafile) {
 
   legalTablePaging = new TablePaging(legalTable,0,10,"#legal-paging");
   mediaTablePaging = new TablePaging(mediaTable,0,10,"#media-paging");
-  
-  //legalTreeMap = dc.treemapChart('#legal-tree-map');
-  //mediaTreeMap = dc.treemapChart('#media-tree-map');
 
   q.await(initCharts);
 
@@ -57,14 +50,13 @@ exports.init = function(datafile) {
 
     tagTooltip = $("#tag-tooltip");
     sparklineTooltip = d3.selectAll("#sparkline-tooltip");
+    filterTooltip = d3.selectAll("#filter-tooltip");
 
     require('filterCharts');
     require('chordChart');
     require('tables');
 
     dc.renderAll();
-    dc.tooltipMixin(timeBarChart);
-    dc.tooltipMixin(lawsBarChart);
 
     $('#dataLoading').hide();
     $("#my-charts").show();
