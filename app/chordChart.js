@@ -137,14 +137,16 @@ drawChords = function (dataDimension) {
     .attr("class", "group");
 
   gEnter.append("path")
-    .style("pointer-events", "none")
-    .style("fill", function (d) { return colors(d.index); })
-    .attr("d", arc);
+    .attr("class", function (d) { return nodes[d._id].gov == 1 ? "chordLabelGov" : "chordLabelNonGov"; })
+    .attr("d", arc)
+    .on("click", groupClick)
+    .on("mouseover", textMouseover)
+    .on("mouseout", resetChords);
 
   gEnter.append("text")
     .attr("dy", ".35em")
     .on("click", groupClick)
-    .on("mouseover", dimChords)
+    .on("mouseover", textMouseover)
     .on("mouseout", resetChords)
     .text(function (d) {
       return shortenLongName(nodes[d._id].name);
@@ -184,7 +186,7 @@ drawChords = function (dataDimension) {
     })
     .attr("d", path)
     .on("mouseover", chordMouseover)
-    .on("mouseout", hideTooltip);
+    .on("mouseout", resetChords);
 
   chords.transition().duration(2000)
     .attrTween("d", matrix.chordTween(path));
@@ -217,20 +219,22 @@ drawChords = function (dataDimension) {
     d3.event.preventDefault();
     d3.event.stopPropagation();
     dimChords(d);
-    d3.select("#chord-tooltip").style("opacity", 0.9);
+    chordTooltip.style("opacity", 0.9);
     chordTooltipUpdate(matrix.read(d));
   }
 
-  function hideTooltip() {
+  function textMouseover(d) {
     d3.event.preventDefault();
     d3.event.stopPropagation();
-    d3.select("#chord-tooltip").style("opacity", 0);
-    resetChords();
-  }
+    dimChords(d);
+    chordTooltip.style("opacity", 0.9);
+    chordTooltipUpdate(matrix.read(d));
+  }  
 
   function resetChords() {
     d3.event.preventDefault();
     d3.event.stopPropagation();
+    chordTooltip.style("opacity", 0);
     container.selectAll("path.chord").style("opacity",0.9);
   }
 

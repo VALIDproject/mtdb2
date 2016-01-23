@@ -49,8 +49,9 @@ exports.init = function(datafile) {
     quarterNames = spendPerTime.all().map(function(d){return d.key});
 
     tagTooltip = $("#tag-tooltip");
-    sparklineTooltip = d3.selectAll("#sparkline-tooltip");
-    filterTooltip = d3.selectAll("#filter-tooltip");
+    sparklineTooltip = d3.select("#sparkline-tooltip");
+    filterTooltip = d3.select("#filter-tooltip");
+    chordTooltip = d3.select("#chord-tooltip");
 
     require('filterCharts');
     require('chordChart');

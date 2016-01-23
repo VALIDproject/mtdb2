@@ -152,9 +152,22 @@ var getCombinedObjHash = function(hash) {
 
 deleteData = function(dimension)
 {
-  var combinedName = prompt("Name of the removed data",
-    dimension == legalDim ? nodes[dimension.top(1)[0].source].name : nodes[dimension.top(1)[0].target].name);
-  if(combinedName)
+// check if there are combined sources or targets involved:
+  var bOk = true;
+  var combinedName;
+  dimension.top(Infinity).forEach(function(d){
+    if(nodes[d.source].comb == 1 || nodes[d.target].comb == 1)
+      bOk = false;
+  });  
+
+  if(bOk) {
+    combinedName = prompt("Name der gelöschten Daten",
+      dimension == legalDim ? nodes[dimension.top(1)[0].source].name : nodes[dimension.top(1)[0].target].name);    
+  }
+  else { 
+    alert("Kombinierte Daten können nicht gelöscht werden.");
+  }
+  if(bOk && combinedName)
   {
     var addArr = [];
     dimension.top(Infinity).forEach(function(d){
@@ -185,9 +198,23 @@ deleteData = function(dimension)
 
 combineData = function(dimension)
 {
-  var combinedName = prompt("Name of the combined data",
-    dimension == legalDim ? nodes[dimension.top(1)[0].source].name : nodes[dimension.top(1)[0].target].name);
-  if(combinedName)
+  // check if there are combined sources or targets involved:
+  var bOk = true;
+  var combinedName;
+  dimension.top(Infinity).forEach(function(d){
+    if(nodes[d.source].comb == 1 || nodes[d.target].comb == 1)
+      bOk = false;
+  });
+
+  if(bOk) {
+    combinedName = prompt("Name der kombinierten Daten",
+      dimension == legalDim ? nodes[dimension.top(1)[0].source].name : nodes[dimension.top(1)[0].target].name);
+  }
+  else {
+    alert("Schonmal kombinierte Daten können nicht nochmal zusammengefügt werden.");
+  }
+ 
+  if(bOk && combinedName)
   {
     var addArr = [];
     var newArr = [];
@@ -311,21 +338,35 @@ resolveCombineData = function(id)
 
 chordTooltipUpdate = function (data)
 {
-  //var string = "von " + nodes[+data.sname] + " nach " + nodes[+data.tname] + ": " + formatEuro((data.svalue) + "/" + formatEuro((data.stotal);
-  //console.log(data);
-  if(nodes[+data.sname].gov == 1)
+  if(data.gname)
   {
-    $("#ttLegal").text(nodes[+data.sname].name);
-    $("#ttMedia").text(nodes[+data.tname].name);
-    $("#ttFrom").text(formatEuro(data.svalue));
-    $("#ttTo").text(formatEuro(data.stotal));    
+    $("#ttLegal").prev().hide();
+    $("#ttLegal").text(nodes[+data.gname].name);
+    $("#ttMedia").prev().hide();
+    $("#ttMedia").text("");
+    $("#ttFrom").text(formatEuro(data.gvalue));
+    $("#ttTo").text(formatEuro(data.mtotal));        
   }
   else
   {
-    $("#ttLegal").text(nodes[+data.tname].name);
-    $("#ttMedia").text(nodes[+data.sname].name);
-    $("#ttFrom").text(formatEuro(data.tvalue));
-    $("#ttTo").text(formatEuro(data.ttotal));    
+    if(nodes[+data.sname].gov == 1)
+    {
+      $("#ttLegal").prev().show();
+      $("#ttLegal").text(nodes[+data.sname].name);
+      $("#ttMedia").prev().show();
+      $("#ttMedia").text(nodes[+data.tname].name);
+      $("#ttFrom").text(formatEuro(data.svalue));
+      $("#ttTo").text(formatEuro(data.stotal));    
+    }
+    else
+    {
+      $("#ttLegal").prev().show();
+      $("#ttLegal").text(nodes[+data.tname].name);
+      $("#ttMedia").prev().show();
+      $("#ttMedia").text(nodes[+data.sname].name);
+      $("#ttFrom").text(formatEuro(data.tvalue));
+      $("#ttTo").text(formatEuro(data.ttotal));    
+    }
   }
 };
 

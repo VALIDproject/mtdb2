@@ -431,6 +431,8 @@ var sparklineTooltip;
 
 var filterTooltip;
 
+var chordTooltip;
+
 var TablePaging;
 var legalTablePaging;
 var mediaTablePaging;
