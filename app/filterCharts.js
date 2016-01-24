@@ -38,7 +38,7 @@ timeBarChart
   .renderHorizontalGridLines(true)
   .x(d3.scale.ordinal())
   .xUnits(dc.units.ordinal)
-  .elasticX(true)
+  //.elasticX(true)
   .elasticY(true)
   // .colorAccessor(function(d, i){
   //   return Math.floor(d.key/10);
@@ -109,7 +109,7 @@ expensesBarChart
   .width(function(){return $("#expenses-bar-chart").width();})
   .height(200)
   .margins({top: 10, right: 10, bottom: 60, left: 40})
-  .gap(2)
+  .gap(1)
   .dimension(spendDim)
   .group(spendGroup)
   .transitionDuration(500)
@@ -122,6 +122,11 @@ expensesBarChart
   .renderHorizontalGridLines(true)
   .title(function (d) {
     return formatEuro(d.value*binwidth);
+  })
+  .filterPrinter(function (filters) {
+      var filter = filters[0], s = '';
+      s += formatGuV(filter[0]*binwidth,filter[0]*binwidth,filter[0]*binwidth) + ' - ' + formatGuV(filter[1]*binwidth,filter[1]*binwidth,filter[1]*binwidth);
+      return s;
   })
   .on("renderlet.d", function(chart){
     chart.selectAll("g.x text")
@@ -138,7 +143,7 @@ expensesBarChart.xAxis().tickFormat(function (v) {
     if(spendDim.top(1)[0])
       return formatGuV(v*binwidth,spendDim.top(1)[0].euro,spendDim.bottom(1)[0].euro);
     else
-      return "";
+      return formatGuV(v*binwidth,v*binwidth,v*binwidth);
 });
 
 expensesBarChart.yAxis().ticks(4);

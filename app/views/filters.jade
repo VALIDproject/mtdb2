@@ -1,16 +1,18 @@
 #time-bar-chart.col-sm-4
-  strong Years 
+  strong Quartale 
   span.chart-unit 
   a(href="javascript:timeBarChart.filterAll();updateAll();",style="display: none;").reset reset
   .clearfix
 #laws-bar-chart.col-sm-3
-  strong Legal Background 
+  strong Rechtlicher Hintergrund 
   span.chart-unit 
   a(href="javascript:lawsBarChart.filterAll();updateAll();",style="display: none;").reset reset
   .clearfix
 #expenses-bar-chart.col-sm-5
-  strong Expenses 
+  strong Ausgaben 
   span.chart-unit 
-  a(href="javascript:expensesBarChart.filterAll();updateAll();",style="display: none;").reset reset
+  span.reset(style="display: none;")
+    | Filter: 
+    span.filter
   .clearfix
 #filter-tooltip.myTooltip
