@@ -345,7 +345,7 @@ chordTooltipUpdate = function (data)
     $("#ttMedia").prev().hide();
     $("#ttMedia").text("");
     $("#ttFrom").text(formatEuro(data.gvalue));
-    $("#ttTo").text(formatEuro(data.mtotal));        
+    $("#ttTo").text(formatEuro(data.mtotal/2));        
   }
   else
   {
