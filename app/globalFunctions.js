@@ -345,24 +345,26 @@ chordTooltipUpdate = function (data)
     $("#ttMedia").prev().hide();
     $("#ttMedia").text("");
     $("#ttFrom").text(formatEuro(data.gvalue));
-    $("#ttTo").text(formatEuro(data.mtotal/2));        
+    $("#ttTo").prev().hide();
+    $("#ttTo").hide();      
   }
   else
   {
+    $("#ttLegal").prev().show();
+    $("#ttMedia").prev().show();
+    $("#ttTo").prev().show();
+    $("#ttTo").show();
+
     if(nodes[+data.sname].gov == 1)
     {
-      $("#ttLegal").prev().show();
       $("#ttLegal").text(nodes[+data.sname].name);
-      $("#ttMedia").prev().show();
       $("#ttMedia").text(nodes[+data.tname].name);
       $("#ttFrom").text(formatEuro(data.svalue));
       $("#ttTo").text(formatEuro(data.stotal));    
     }
     else
     {
-      $("#ttLegal").prev().show();
       $("#ttLegal").text(nodes[+data.tname].name);
-      $("#ttMedia").prev().show();
       $("#ttMedia").text(nodes[+data.sname].name);
       $("#ttFrom").text(formatEuro(data.tvalue));
       $("#ttTo").text(formatEuro(data.ttotal));    
