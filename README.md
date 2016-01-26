@@ -101,17 +101,17 @@ formated.
 (Click on the image to go the the video)
 
 
-[![Click on the image to go the the video](slides/Dashboard.JPG)](https://youtu.be/04bdq54m_H8)
+[![Click on the image to go the the video](documentation/slides/Dashboard.JPG)](https://youtu.be/04bdq54m_H8)
 
 ### Filters
 
-![](slides/Years.PNG)
-![](slides/Legal-Background.PNG)
-![](slides/Expenses.PNG)
+![](documentation/slides/Years.PNG)
+![](documentation/slides/Legal-Background.PNG)
+![](documentation/slides/Expenses.PNG)
 
 ### Flow Visualization
 
-![](slides/Wien.PNG)
+![](documentation/slides/Wien.PNG)
 
 ## Install
 
