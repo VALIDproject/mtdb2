@@ -24,12 +24,17 @@
 
 #legal-table thead > tr
 {
-  background: @gov-color
+  background: @gov-color;
 }
 
 #media-table thead > tr
 {
-  background: @media-color
+  background: @media-color;
+}
+
+.sorted
+{
+  color: @default-bg;
 }
 
 .inlinebar
@@ -62,6 +67,11 @@
     width: 100%;
 }
 
+.inlinesparkline .sparklinecontainer .sparklinenull
+{
+  background: @sparkline-null-background;
+}
+
 .dc-table-row-filtered
 {
   background: @filtered-table-row-background;
@@ -70,7 +80,7 @@
 .dc-table-row-combined:after
 {
   font-family: 'Glyphicons Halflings';
-  content: "\e081";
+  content: @combine-glyph-unicode;
   color: @combined-table-row-color;
   padding-top: 1em;
   padding-left: 0.5em;

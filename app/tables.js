@@ -89,7 +89,12 @@ var tableRenderlet = function(table,dim){
         .transition()
         .duration(1000)      
         .style("height", function(x,j) { 
-          return xSum(Math.abs(quarterSum[j][quarterNames[i]]));
+          var height = Math.abs(quarterSum[j][quarterNames[i]]);
+          return xSum(height);
+        })
+        .attr("class", function(x,j) { 
+          var height = Math.abs(quarterSum[j][quarterNames[i]]);
+          return height == 0 ? "sparklinenull" : null;
         });
   }
       
@@ -112,13 +117,13 @@ var tableRenderlet = function(table,dim){
       return nodes[d.key].comb;
     })
     .attr("title", function(d) {
-      return nodes[d.key].comb ? "This entry is combined." : "";
+      return nodes[d.key].comb ? "Dieser Eintrag ist kombiniert worden. Um zu sehen aus welchen Einträgen schaue dir das Tooltip über dem Tag unter dem Chord Diagramm an." : "";
     })    
     .on("click", function (d){
       var filterIndex = tableFilter.indexOf(d.key);
       if(filterIndex > -1) {
         if(tableFilter.length > 1) {
-          tableFilter.pop(filterIndex);
+          tableFilter.splice(filterIndex, 1);
           dim.filterFunction(function(d){
             return tableFilter.indexOf(d) > -1;
           })
@@ -160,14 +165,14 @@ legalCount
   .dimension(groupedLegalDim)
   .group(all)
   .html({
-    some: '<strong>%total-count</strong> entries'
+    some: '<strong>%total-count</strong> Einträge'
   });
 
 mediaCount
   .dimension(groupedMediaDim)
   .group(all)
   .html({
-    some: '<strong>%total-count</strong> entries'
+    some: '<strong>%total-count</strong> Einträge'
   });
 
 legalTable

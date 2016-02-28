@@ -8,12 +8,12 @@
             span.glyphicon.glyphicon-search
   span#data-count-legal
   div#legalSearchReset
-    a(href="javascript:resetSearchBox('legal');",title="Setzt den Filter aus der Textbox und aus der Tabelle zurück") reset
+    strong Auswahl 
+    a(href="javascript:resetSearchBox('legal');",title="Setzt den Filter aus der Textbox und aus der Tabelle zurück") zurücksetzten
     | |
-    a(href="javascript:combineData(legalDim);",title="Fügt alle momentan ausgewählten Einträge in der Tabelle zu einem Eintrag zusammen") combine
+    a(href="javascript:combineData(legalDim);",title="Fügt alle momentan ausgewählten Einträge in der Tabelle zu einem Eintrag zusammen") kombinieren
     | |
-    a(href="javascript:deleteData(legalDim);",title="Löscht alle momentan ausgewählten Einträge aus der Tabelle") remove
-    strong  selection
+    a(href="javascript:deleteData(legalDim);",title="Löscht alle momentan ausgewählten Einträge aus der Tabelle") löschen
   table.table.table-hover.my-data-table#legal-table
     thead
       th(data-col="a").data-table-col Rechtsträger 
@@ -21,17 +21,18 @@
           span.glyphicon.glyphicon-sort-by-alphabet
       th(data-col="c").data-table-col Summe 
         button(title="Nach der Summe an transferiertem Geld sortieren")#legalSumOrder.btn
-          span.glyphicon.glyphicon-sort-by-order
+          span.glyphicon.glyphicon-sort-by-order-alt.sorted
       th(data-col="b",title="Relationen").data-table-col #
         button(title="Nach der Anzahl der Relationen sortieren")#legalRelationOrder.btn
           span.glyphicon.glyphicon-sort-by-order-alt    
   .paging#legal-paging
-    | Showing 
+    | Zeige 
     span#begin
-    | - 
+    | -
     span#end
-    button(onclick="javscript:legalTablePaging.last();").btn#last last
-    button(onclick="javscript:legalTablePaging.next();").btn#next next
+    |  
+    button(onclick="javscript:legalTablePaging.last();").btn#last vorige
+    button(onclick="javscript:legalTablePaging.next();").btn#next nächste
 .col-sm-6
   include chordChart.jade   
 .col-sm-3#media-table-column
@@ -44,12 +45,12 @@
             span.glyphicon.glyphicon-search
   span#data-count-media
   div#mediaSearchReset
-    a(href="javascript:resetSearchBox('media');",title="Setzt den Filter aus der Textbox und aus der Tabelle zurück") reset
+    strong Auswahl 
+    a(href="javascript:resetSearchBox('media');",title="Setzt den Filter aus der Textbox und aus der Tabelle zurück") zurücksetzten
     | |
-    a(href="javascript:combineData(mediaDim);",title="Fügt alle momentan ausgewählten Einträge in der Tabelle zu einem Eintrag zusammen") combine
+    a(href="javascript:combineData(mediaDim);",title="Fügt alle momentan ausgewählten Einträge in der Tabelle zu einem Eintrag zusammen") kombinieren
     | |
-    a(href="javascript:deleteData(mediaDim);",title="Löscht alle momentan ausgewählten Einträge aus der Tabelle") remove
-    strong  selection
+    a(href="javascript:deleteData(mediaDim);",title="Löscht alle momentan ausgewählten Einträge aus der Tabelle") löschen
   table.table.table-hover.my-data-table#media-table
     thead
       th(data-col="a").data-table-col Media 
@@ -57,15 +58,16 @@
           span.glyphicon.glyphicon-sort-by-alphabet
       th(data-col="c").data-table-col Summe 
         button(title="Nach der Summe an transferiertem Geld sortieren")#mediaSumOrder.btn
-          span.glyphicon.glyphicon-sort-by-order      
+          span.glyphicon.glyphicon-sort-by-order-alt.sorted
       th(data-col="b",title="Relationen").data-table-col #
         button(title="Nach der Anzahl der Relationen sortieren")#mediaRelationOrder.btn
           span.glyphicon.glyphicon-sort-by-order-alt
   .paging#media-paging
-      | Showing 
+      | Zeige 
       span#begin
-      | - 
+      | -
       span#end
-      button(onclick="javscript:mediaTablePaging.last();").btn#last last
-      button(onclick="javscript:mediaTablePaging.next();").btn#next next
+      |  
+      button(onclick="javscript:mediaTablePaging.last();").btn#last vorige
+      button(onclick="javscript:mediaTablePaging.next();").btn#next nächste
   #sparkline-tooltip.myTooltip(style="opacity:0")

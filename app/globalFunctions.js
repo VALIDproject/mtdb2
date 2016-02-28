@@ -422,12 +422,12 @@ ordinalDescendingGlyph = "glyphicon-sort-by-alphabet-alt";
 legalTableSortingStatus = {
   alphabet : ordinalAscendingGlyph,
   relation : numericAscendingGlyph,
-  sum : numericDescendingGlyph
+  sum : numericAscendingGlyph
 };
 mediaTableSortingStatus = {
   alphabet : ordinalAscendingGlyph,
   relation : numericAscendingGlyph,
-  sum : numericDescendingGlyph
+  sum : numericAscendingGlyph
 };
 
 tableSorting = {
@@ -441,12 +441,12 @@ mediaTableSorting = "sum";
 
 legalTableOrdering = {
   alphabet : d3.descending,
-  relation : d3.descending,
+  relation : d3.ascending,
   sum : d3.descending
 };
 mediaTableOrdering = {
   alphabet : d3.descending,
-  relation : d3.descending,
+  relation : d3.ascending,
   sum : d3.descending
 };
 
@@ -462,21 +462,25 @@ TablePaging = function(table,ofs,pag,parentID)
 }
 
 TablePaging.prototype.display = function () {
+  var iNext = this._ofs+this._pag;
+  var iCountAll;
+  if(this._parentId == "#legal-paging"){
+    iCountAll = groupedLegalDim.all().length;
+  } 
+  else{
+    iCountAll = groupedMediaDim.all().length;
+  }
+  var bDisabled = iNext>=iCountAll;
+  iNext = bDisabled ? iCountAll : iNext;
+
   d3.select(this._parentId+" #begin")
-    .text(this._ofs); // or 0
+    .text(this._ofs+1); // or 0
   d3.select(this._parentId+" #end")
-    .text(this._ofs+this._pag-1);
+    .text(iNext);
   d3.select(this._parentId+" #last")
     .attr('disabled', this._ofs-this._pag<0 ? 'true' : null);
-  if(this._parentId == "#legal-paging"){
-    d3.select(this._parentId+" #next")
-      .attr('disabled', this._ofs+this._pag>=groupedLegalDim.all().length ? 'true' : null);    
-  }
-  else{
-    d3.select(this._parentId+" #next")
-      .attr('disabled', this._ofs+this._pag>=groupedMediaDim.all().length ? 'true' : null);    
-  }    
-  
+  d3.select(this._parentId+" #next")
+    .attr('disabled', bDisabled ? 'true' : null);
 };
 
 TablePaging.prototype.update = function() {

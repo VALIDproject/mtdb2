@@ -74,10 +74,17 @@ exports.init = function(datafile) {
       return false;
     });
 
+    function lastGlyphUpdate(table)
+    {
+      var lastglyph = $(table + " .sorted");
+      lastglyph.removeClass("sorted");
+    }
+
     function legalTableOnClickUpdate(table, orderId) {
+      lastGlyphUpdate("#legal-table");
       var glyph = orderId.children().first();
       glyph.removeClass();
-      glyph.addClass( "glyphicon " + legalTableSortingStatus[legalTableSorting] );
+      glyph.addClass( "sorted glyphicon " + legalTableSortingStatus[legalTableSorting] );
       table
         .order(legalTableOrdering[legalTableSorting])
         .sortBy(tableSorting[legalTableSorting])
@@ -85,9 +92,10 @@ exports.init = function(datafile) {
     }
 
     function mediaTableOnClickUpdate(table, orderId) {
+      lastGlyphUpdate("#media-table");
       var glyph = orderId.children().first();
       glyph.removeClass();
-      glyph.addClass( "glyphicon " + mediaTableSortingStatus[mediaTableSorting] );
+      glyph.addClass( "sorted glyphicon " + mediaTableSortingStatus[mediaTableSorting] );
       table
         .order(mediaTableOrdering[mediaTableSorting])
         .sortBy(tableSorting[mediaTableSorting])
