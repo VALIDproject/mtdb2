@@ -29,7 +29,9 @@ exports.init = function(datafile) {
     binwidth = 1000;
 
     var filterOutEmpty = function(d) { return Math.abs(d.value)>1e-3 };
-    var filterOutEmptyTotal = function(d) { return Math.abs(d.value.total)>1e-3 };
+    var filterOutEmptyTotal = function(d) { 
+      return Math.abs(d.value.total)>1e-3;
+    };
 
     legalDim = ndxLinks.dimension(function(d) {return +d.source});
     legalDim2 = ndxLinks.dimension(function(d) {return +d.source});
@@ -38,15 +40,17 @@ exports.init = function(datafile) {
     lawsDim = ndxLinks.dimension(function(d) {return +d.law;});
     timeDim = ndxLinks.dimension(function(d) {return +d.year*10+d.quarter;})
     spendDim = ndxLinks.dimension(function(d) {return Math.floor(+d.euro/binwidth);})
-    
+
     spendPerTime = removeEmptyBins(timeDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
     spendPerLaw = removeEmptyBins(lawsDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
-    spendGroup = removeEmptyBins(spendDim.group().reduceCount(function(d) { return +d.euro; }),filterOutEmpty);
+    //spendGroup = removeEmptyBins(spendDim.group().reduceCount(function(d) { return +d.euro; }),filterOutEmpty);
+    spendGroup = removeEmptyBins(spendDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
+
+    quarterNames = spendPerTime.all().map(function(d){return d.key});
+    halfQuarter = quarterNames[Math.floor(quarterNames.length/2)];
 
     groupedLegalDim = removeEmptyBins(legalDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
     groupedMediaDim = removeEmptyBins(mediaDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
-
-    quarterNames = spendPerTime.all().map(function(d){return d.key});
 
     tagTooltip = $("#tag-tooltip");
     sparklineTooltip = d3.select("#sparkline-tooltip");
@@ -100,97 +104,79 @@ exports.init = function(datafile) {
         .order(mediaTableOrdering[mediaTableSorting])
         .sortBy(tableSorting[mediaTableSorting])
         .redraw();      
-    }    
+    }
+
+    function changeOrderingState(legal, ordinal, orderId)
+    {
+      if(legal)
+      {
+        if(legalTableOrdering[legalTableSorting] == d3.descending)
+            {
+              legalTableOrdering[legalTableSorting] = d3.ascending;
+              legalTableSortingStatus[legalTableSorting] = ordinal ? ordinalAscendingGlyph : numericAscendingGlyph;;
+            }
+            else
+            {
+              legalTableOrdering[legalTableSorting] = d3.descending;
+              legalTableSortingStatus[legalTableSorting] = ordinal ? ordinalDescendingGlyph : numericDescendingGlyph;;          
+            }      
+            legalTableOnClickUpdate(legalTable,orderId)
+      }
+      else
+      {
+        if(mediaTableOrdering[mediaTableSorting] == d3.descending)
+        {
+          mediaTableOrdering[mediaTableSorting] = d3.ascending;
+          mediaTableSortingStatus[mediaTableSorting] = ordinal ? ordinalAscendingGlyph : numericAscendingGlyph;
+        }
+        else
+        {
+          mediaTableOrdering[mediaTableSorting] = d3.descending;
+          mediaTableSortingStatus[mediaTableSorting] = ordinal ? ordinalDescendingGlyph : numericDescendingGlyph;
+        }
+        mediaTableOnClickUpdate(mediaTable,orderId)
+      }
+    }
 
     $('#legalAlphabetOrder').click( function () {
       legalTableSorting = "alphabet";
-      if(legalTableOrdering[legalTableSorting] == d3.descending)
-      {
-        legalTableOrdering[legalTableSorting] = d3.ascending;
-        legalTableSortingStatus[legalTableSorting] = ordinalAscendingGlyph;
-      }
-      else
-      {
-        legalTableOrdering[legalTableSorting] = d3.descending;
-        legalTableSortingStatus[legalTableSorting] = ordinalDescendingGlyph;          
-      }
-      legalTableOnClickUpdate(legalTable,$(this))
-    });
+      changeOrderingState(true,true,$(this));
+    });    
 
     $('#legalRelationOrder').click( function () {
       legalTableSorting = "relation";
-      if(legalTableOrdering[legalTableSorting] == d3.descending)
-      {
-        legalTableOrdering[legalTableSorting] = d3.ascending;
-        legalTableSortingStatus[legalTableSorting] = numericAscendingGlyph;
-      }
-      else
-      {
-        legalTableOrdering[legalTableSorting] = d3.descending;
-        legalTableSortingStatus[legalTableSorting] = numericDescendingGlyph;          
-      }      
-      legalTableOnClickUpdate(legalTable,$(this))
+      changeOrderingState(true,false,$(this));
     });
 
     $('#legalSumOrder').click( function () {
       legalTableSorting = "sum";
-      if(legalTableOrdering[legalTableSorting] == d3.descending)
-      {
-        legalTableOrdering[legalTableSorting] = d3.ascending;
-        legalTableSortingStatus[legalTableSorting] = numericAscendingGlyph;
-      }
-      else
-      {
-        legalTableOrdering[legalTableSorting] = d3.descending;
-        legalTableSortingStatus[legalTableSorting] = numericDescendingGlyph;          
-      }      
-      legalTableOnClickUpdate(legalTable,$(this))
+      changeOrderingState(true,false,$(this));
+    });
+
+    $('#legalTrendOrder').click( function () {
+      legalTableSorting = "trend";
+      changeOrderingState(true,false,$(this));
     });
 
     $('#mediaAlphabetOrder').click( function () {
       mediaTableSorting = "alphabet";
-      if(mediaTableOrdering[mediaTableSorting] == d3.descending)
-      {
-        mediaTableOrdering[mediaTableSorting] = d3.ascending;
-        mediaTableSortingStatus[mediaTableSorting] = ordinalAscendingGlyph;
-      }
-      else
-      {
-        mediaTableOrdering[mediaTableSorting] = d3.descending;
-        mediaTableSortingStatus[mediaTableSorting] = ordinalDescendingGlyph;          
-      }
-      mediaTableOnClickUpdate(mediaTable,$(this))
+      changeOrderingState(false,true,$(this));
     });
 
     $('#mediaRelationOrder').click( function () {
       mediaTableSorting = "relation";
-      if(mediaTableOrdering[mediaTableSorting] == d3.descending)
-      {
-        mediaTableOrdering[mediaTableSorting] = d3.ascending;
-        mediaTableSortingStatus[mediaTableSorting] = numericAscendingGlyph;
-      }
-      else
-      {
-        mediaTableOrdering[mediaTableSorting] = d3.descending;
-        mediaTableSortingStatus[mediaTableSorting] = numericDescendingGlyph;          
-      }      
-      mediaTableOnClickUpdate(mediaTable,$(this))  
+      changeOrderingState(false,false,$(this));
     });
 
     $('#mediaSumOrder').click( function () {
       mediaTableSorting = "sum";
-      if(mediaTableOrdering[mediaTableSorting] == d3.descending)
-      {
-        mediaTableOrdering[mediaTableSorting] = d3.ascending;
-        mediaTableSortingStatus[mediaTableSorting] = numericAscendingGlyph;
-      }
-      else
-      {
-        mediaTableOrdering[mediaTableSorting] = d3.descending;
-        mediaTableSortingStatus[mediaTableSorting] = numericDescendingGlyph;          
-      }      
-      mediaTableOnClickUpdate(mediaTable,$(this))
-    });    
+      changeOrderingState(false,false,$(this));
+    });
+
+    $('#mediaTrendOrder').click( function () {
+      mediaTableSorting = "trend";
+      changeOrderingState(false,false,$(this));
+    });        
 
     $(window).on('resize', function(){
       rescaleAll();

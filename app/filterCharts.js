@@ -112,6 +112,7 @@ expensesBarChart
   .gap(1)
   .dimension(spendDim)
   .group(spendGroup)
+  .valueAccessor(function(d) {return d.value.count;})
   .transitionDuration(500)
   .round(dc.round.floor)
   .alwaysUseRounding(true)
@@ -121,7 +122,7 @@ expensesBarChart
   .elasticY(true)
   .renderHorizontalGridLines(true)
   .title(function (d) {
-    return formatEuro(d.value*binwidth);
+    return formatEuro(d.value.total*binwidth);
   })
   .filterPrinter(function (filters) {
       var filter = filters[0], s = '';

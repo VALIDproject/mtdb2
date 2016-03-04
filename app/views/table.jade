@@ -16,15 +16,18 @@
     a(href="javascript:deleteData(legalDim);",title="Löscht alle momentan ausgewählten Einträge aus der Tabelle") löschen
   table.table.table-hover.my-data-table#legal-table
     thead
-      th(data-col="a").data-table-col Rechtsträger 
+      th(data-col="a").data-table-col._1 Rechtsträger
         button(title="Nach dem Alphabet sortieren")#legalAlphabetOrder.btn
           span.glyphicon.glyphicon-sort-by-alphabet
-      th(data-col="c").data-table-col Summe 
+      th(data-col="c").data-table-col._2 Summe
         button(title="Nach der Summe an transferiertem Geld sortieren")#legalSumOrder.btn
           span.glyphicon.glyphicon-sort-by-order-alt.sorted
-      th(data-col="b",title="Relationen").data-table-col #
+      th(data-col="b",title="Relationen").data-table-col._3 #
         button(title="Nach der Anzahl der Relationen sortieren")#legalRelationOrder.btn
-          span.glyphicon.glyphicon-sort-by-order-alt    
+          span.glyphicon.glyphicon-sort-by-order-alt
+      th(data-col="d").data-table-col._4 Trend
+        button(title="Nach dem Trend sortieren")#legalTrendOrder.btn
+          span.glyphicon.glyphicon-sort-by-order-alt
   .paging#legal-paging
     | Zeige 
     span#begin
@@ -53,15 +56,18 @@
     a(href="javascript:deleteData(mediaDim);",title="Löscht alle momentan ausgewählten Einträge aus der Tabelle") löschen
   table.table.table-hover.my-data-table#media-table
     thead
-      th(data-col="a").data-table-col Media 
+      th(data-col="a").data-table-col._1 Media 
         button(title="Nach dem Alphabet sortieren")#mediaAlphabetOrder.btn
           span.glyphicon.glyphicon-sort-by-alphabet
-      th(data-col="c").data-table-col Summe 
+      th(data-col="c").data-table-col._2 Summe 
         button(title="Nach der Summe an transferiertem Geld sortieren")#mediaSumOrder.btn
           span.glyphicon.glyphicon-sort-by-order-alt.sorted
-      th(data-col="b",title="Relationen").data-table-col #
+      th(data-col="b",title="Relationen").data-table-col._3 #
         button(title="Nach der Anzahl der Relationen sortieren")#mediaRelationOrder.btn
           span.glyphicon.glyphicon-sort-by-order-alt
+      th(data-col="d",title="Veränderung der Summe der Transaktionen von der ersten Hälfte der Quartale zur Zweiten").data-table-col._4 Trend
+        button(title="Nach dem Trend sortieren")#mediaTrendOrder.btn
+          span.glyphicon.glyphicon-sort-by-order-alt      
   .paging#media-paging
       | Zeige 
       span#begin

@@ -15,6 +15,7 @@ locale = d3.locale({
 
 formatEuro = locale.numberFormat("$,.2f");
 formatBigEuro = locale.numberFormat("$,d");
+formatPercent = locale.numberFormat("%");
 var formatBigWithoutEuro = locale.numberFormat(",.1f");
 
 var getUnit = function(d){
@@ -394,24 +395,72 @@ removeEmptyBins = function (sourceGroup,filterFunction) {
 };
 
 addTotal = function(p,v) {
-  ++p.count;
+  if(!p.sources[v.source])
+  {
+    p.sources[v.source] = 1;
+    ++p.sources.count
+  }
+  if(!p.targets[v.target])
+  {
+    p.targets[v.target] = 1;  
+    ++p.targets.count
+  }
+  p.sources[v.source]++;
+  p.targets[v.target]++;
+  p.count = Math.max(p.sources.count,p.targets.count);
   p.total += +v.euro;
+  if(+v.year*10+v.quarter < halfQuarter)
+  {
+    p.trendBefore += +v.euro;
+  }
+  else
+  {
+    p.trendAfter += +v.euro;
+  }
+  p.trend = (p.trendAfter-p.trendBefore)/p.total;
   return p;  
 };
 
 removeTotal = function (p, v) {
-  --p.count;
+  if(p.sources[v.source] > 1)
+    --p.sources[v.source];
+  else{
+    delete p.sources[v.source];
+    --p.sources.count;
+  }
+   
+  if(p.targets[v.target] > 1)
+    --p.targets[v.target];
+  else{
+    delete p.targets[v.target];
+    --p.targets.count;
+  }
+  p.count = Math.max(p.sources.count,p.targets.count);
   p.total -= +v.euro;
+  if(+v.year*10+v.quarter < halfQuarter)
+  {
+    p.trendBefore -= +v.euro;
+  }
+  else
+  {
+    p.trendAfter -= +v.euro;
+  }
+  p.trend = (p.trendAfter-p.trendBefore)/p.total; 
   return p;
 };
 
-initTotal = function(){return {count: 0, total: 0};}
+initTotal = function(){return {count: 0, total: 0, trend: 0, trendAfter: 0, trendBefore: 0, sources: {count: 0}, targets: {count: 0}};}
+
+function ItlShortenLongName(name,iTo)
+{
+  if (name.length > iTo)
+    name = name.substr(0, iTo-10) + "..." + name.substr(-7);
+  return name;
+}
 
 shortenLongName = function(name)
 {
-  if (name.length > 30)
-    name = name.substr(0, 20) + "..." + name.substr(-7);
-  return name;
+  return ItlShortenLongName(name,30);
 }
 
 numericAscendingGlyph = "glyphicon-sort-by-order";
@@ -420,34 +469,39 @@ ordinalAscendingGlyph = "glyphicon-sort-by-alphabet";
 ordinalDescendingGlyph = "glyphicon-sort-by-alphabet-alt";
 
 legalTableSortingStatus = {
-  alphabet : ordinalAscendingGlyph,
-  relation : numericAscendingGlyph,
-  sum : numericAscendingGlyph
+  alphabet  : ordinalAscendingGlyph,
+  relation  : numericAscendingGlyph,
+  sum       : numericAscendingGlyph,
+  trend     : numericAscendingGlyph
 };
 mediaTableSortingStatus = {
-  alphabet : ordinalAscendingGlyph,
-  relation : numericAscendingGlyph,
-  sum : numericAscendingGlyph
+  alphabet  : ordinalAscendingGlyph,
+  relation  : numericAscendingGlyph,
+  sum       : numericAscendingGlyph,
+  trend     : numericAscendingGlyph
 };
 
 tableSorting = {
-  alphabet : function (d) {return nodes[d.key].name;},
+  alphabet  : function (d) {return nodes[d.key].name;},
   relation  : function (d) {return d.value.count;},
-  sum       : function (d) {return d.value.total;}
+  sum       : function (d) {return d.value.total;},
+  trend     : function (d) {return d.value.trend}
 };
 
 legalTableSorting = "sum";
 mediaTableSorting = "sum";
 
 legalTableOrdering = {
-  alphabet : d3.descending,
-  relation : d3.ascending,
-  sum : d3.descending
+  alphabet  : d3.descending,
+  relation  : d3.ascending,
+  sum       : d3.descending,
+  trend     : d3.ascending
 };
 mediaTableOrdering = {
-  alphabet : d3.descending,
-  relation : d3.ascending,
-  sum : d3.descending
+  alphabet  : d3.descending,
+  relation  : d3.ascending,
+  sum       : d3.descending,
+  trend     : d3.ascending
 };
 
 legalTableFilter = new Array();

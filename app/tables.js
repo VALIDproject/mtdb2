@@ -23,7 +23,8 @@ var hideSparklineTooltip = function()
 var tableRenderlet = function(table,dim){
   var groupedDim;
   var tableFilter;
-  if(dim == legalDim)
+  var isLegalDim = dim == legalDim;
+  if(isLegalDim)
   {
     groupedDim = groupedLegalDim;
     tableFilter = legalTableFilter;
@@ -65,8 +66,13 @@ var tableRenderlet = function(table,dim){
   }
 
   var xCount = d3.scale.linear()
-    .domain([0, d3.max(groupedDim.all(), function(d) { return d.value.count; })])
-    .range(["0%", "100%"]);    
+      .domain([0, d3.max(groupedDim.all(), function(d) { return d.value.count; })])
+      .range(["0%", "100%"]);
+
+  var xTrend = d3.scale.linear()
+      .domain([-1,1])
+      .range(["-100%", "100%"]);  
+       
   var xSum = d3.scale.linear().domain([0, max]).range(["0%", "100%"]);
 
   table.selectAll('td._0').classed("text-left", true);
@@ -97,17 +103,32 @@ var tableRenderlet = function(table,dim){
           return height == 0 ? "sparklinenull" : null;
         });
   }
-      
-  table.selectAll('td._2')
+
+  var countColumn = table.selectAll('td._2')
     .classed("text-right", true)
     .append("div")
-      .attr("class", "inlinebar")
+      .classed("inlinebar",true)
       .style("width", "0%")
       .transition()
       .duration(1000)
         .style("width", function(d) { 
           return xCount(Math.abs(d.value.count));
-        });    
+        });
+
+  var trendColumn = table.selectAll('td._3')
+    .classed("percent text-center", true)
+    .append("div")   
+      .attr("class", function(d){
+          return "inlinebar " + ((d.value.trend > 0) ? "positiv" : "negativ");
+        })       
+        .style("width", function(d) { 
+          return xTrend(Math.abs(d.value.trend)/2);
+        })
+        .style("margin-left", function(d) {
+          return d.value.trend < 0 ? 
+            xTrend(0.5+d.value.trend/2) : "50%";
+        });
+     
 
   table.selectAll('.dc-table-row')
     .classed("dc-table-row-filtered", function(d) {
@@ -185,7 +206,8 @@ legalTable
   .columns([
     function(d){ return nodes[d.key].name; },
     function(d){ return formatEuro(d.value.total);},
-    function(d){ return d.value.count; }
+    function(d){ return d.value.count; },
+    function(d){ return formatPercent(d.value.trend); }
     ])
   .on("renderlet.a", function(chart){tableRenderlet(chart,legalDim);});
 
@@ -202,6 +224,7 @@ mediaTable
     function(d){ return nodes[d.key].name; },
     function(d){ return formatEuro(d.value.total);},
     function(d){ return d.value.count;},
+    function(d){ return formatPercent(d.value.trend); }
     ])
   .on("renderlet.b", function(chart){tableRenderlet(chart,mediaDim);});
 

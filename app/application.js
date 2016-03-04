@@ -179,11 +179,16 @@ var spendPerLaw;
  */
 var binwidth;
 
-/** The names of the quarters
+/** The names of the quarters in the format: years*10 + quarter: e.g.: 20144 = year 2014 quarter 4
  * @type {array}
- * @see numQuarters
  */
 var quarterNames;
+
+/** The half of the quarters in the format: years*10 + quarter: e.g.: 20144 = year 2014 quarter 4
+ * @type int
+ * @see quarterNames
+ */
+var halfQuarter
 
 /** Filter a {@link https://github.com/square/crossfilter/wiki/API-Reference#wiki-dimension|crossfilter.dimension} for a string
  * @func textFilter
@@ -300,6 +305,10 @@ var formatEuro;
  * @func
  */
 var formatBigEuro;
+/** Format the the input as percentage number by multiply with 100 and suffix with "%". e.g.: 12.345%
+ * @func
+ */
+var formatPercent;
 /** Format the the input as euros with a grouping of 3 and 1 decimal place and a euro sign but truncat it to "Tsd." € or "Mil. €". e.g.: 12,3 Tsd.€
  * @func
  */
@@ -434,7 +443,9 @@ var filterTooltip;
 var chordTooltip;
 
 var TablePaging;
+
 var legalTablePaging;
+
 var mediaTablePaging;
 
 require('globalFunctions');
