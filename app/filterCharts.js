@@ -4,10 +4,10 @@ var showTimeBarTooltip = function(d){
   var text = timeBarChart.title()(d.data);
   filterTooltip
     .transition()
-    .duration(200)      
+    .duration(400)      
     .style("opacity", .9)
-    .style("left", (d3.event.pageX + 5) + "px")     
-    .style("top", (d3.event.pageY - 35) + "px");
+    .style("left", (d3.event.x + 5) + "px")     
+    .style("top", (d3.event.y - 35) + "px");
   filterTooltip.html(text);
 }
 
@@ -15,10 +15,10 @@ var showLawsBarTooltip = function(d){
   var text = lawsBarChart.title()(d.data);
   filterTooltip
     .transition()
-    .duration(200)      
+    .duration(400)      
     .style("opacity", .9)
-    .style("left", (d3.event.pageX + 5) + "px")     
-    .style("top", (d3.event.pageY - 35) + "px");
+    .style("left", (d3.event.x + 5) + "px")     
+    .style("top", (d3.event.y - 35) + "px");
   filterTooltip.html(text);
 }
 
@@ -47,6 +47,13 @@ timeBarChart
     return Math.floor(d.key/10) +" Q"+d.key%10 +": "+ formatEuro(d.value);
   })
   .on("filtered", function (chart, filter) {
+    if(filter !== null)
+      quartalSelection[quarterNames.indexOf(filter)] = 1;
+    else {
+      for (var i = quarterNames.length - 1; i >= 0; i--) {
+        quartalSelection[i] = 0;
+      }
+    }
     // update function for d3
     updateAllNonDC();
   })
@@ -64,7 +71,7 @@ timeBarChart
 
 timeBarChart.yAxis().ticks(4);
 timeBarChart.yAxis().tickFormat(function (v) {
-  return formatGuV(v,spendPerTime.top(1)[0].value,spendPerTime.bottom(1)[0].value);
+  return formatGuV(v,spendPerTime.top(1)[0].value);
 });    
 timeBarChart.xAxis().tickFormat(function (v) {
   return Math.floor(v/10) +" Q"+v%10;
@@ -102,7 +109,7 @@ lawsBarChart.xAxis().tickFormat(function (d) {
 });
 lawsBarChart.yAxis().ticks(4);
 lawsBarChart.yAxis().tickFormat(function (v) {
-  return formatGuV(v,spendPerLaw.top(1)[0].value,spendPerLaw.bottom(1)[0].value);
+  return formatGuV(v,spendPerLaw.top(1)[0].value);
 });
 
 expensesBarChart
@@ -126,7 +133,7 @@ expensesBarChart
   })
   .filterPrinter(function (filters) {
       var filter = filters[0], s = '';
-      s += formatGuV(filter[0]*binwidth,filter[0]*binwidth,filter[0]*binwidth) + ' - ' + formatGuV(filter[1]*binwidth,filter[1]*binwidth,filter[1]*binwidth);
+      s += formatGuV(filter[0]*binwidth) + ' - ' + formatGuV(filter[1]*binwidth);
       return s;
   })
   .on("renderlet.d", function(chart){
@@ -142,11 +149,46 @@ expensesBarChart
 
 expensesBarChart.xAxis().tickFormat(function (v) {
     if(spendDim.top(1)[0])
-      return formatGuV(v*binwidth,spendDim.top(1)[0].euro,spendDim.bottom(1)[0].euro);
+      return formatGuV(v*binwidth,spendDim.top(1)[0].euro);
     else
-      return formatGuV(v*binwidth,v*binwidth,v*binwidth);
+      return formatGuV(v*binwidth);
 });
 
 expensesBarChart.yAxis().ticks(4);
 expensesBarChart.yAxis().tickFormat(d3.format("d"))
     .tickSubdivide(0);
+
+trendBarChart
+  .width(function(){return $("#trend-bar-chart").width();})
+  .height(200)
+  .margins({top: 10, right: 10, bottom: 60, left: 40})
+  .dimension(trendDim)
+  .group(trendGroup)
+  .valueAccessor(function(d) {return d.value.count;})
+  .transitionDuration(500)
+  .x(d3.scale.linear().domain([-1,1]).range([-1,1]))
+  .xUnits(function(d){return d;})
+  .elasticY(true)
+  .renderHorizontalGridLines(true)
+  .title(function (d) {
+    return formatPercent(d.value.trend);
+  })
+  .filterHandler(function (dimension, filter) {
+    groupedLegalDim.all().forEach(function(v){sourceToValue[v.key] = v.value;});
+    if(filter[0])
+      dimension.filter(filter[0]);
+    else
+      dimension.filterAll();
+    return filter;
+  })
+  .filterPrinter(function (filters) {
+    var filter = filters[0];
+    return formatPercent(filter[0]) + ' - ' + formatPercent(filter[1]);
+  })
+  .on("filtered", function (chart, filter) {
+    updateAllNonDC();
+  });
+
+trendBarChart.xAxis().tickFormat(function (v) {return formatPercent(v);});
+trendBarChart.xAxis().ticks(6);
+trendBarChart.yAxis().ticks(4);

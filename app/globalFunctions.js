@@ -16,7 +16,13 @@ locale = d3.locale({
 formatEuro = locale.numberFormat("$,.2f");
 formatBigEuro = locale.numberFormat("$,d");
 formatPercent = locale.numberFormat("%");
-var formatBigWithoutEuro = locale.numberFormat(",.1f");
+var formatBigWithoutEuro = function(d){
+  var x = locale.numberFormat(",.1f")(d);
+  if(x.slice(-1) == '0')
+    return x.substr(0,x.length-2);
+  else
+    return x;
+}
 
 var getUnit = function(d){
   var t = Math.floor(d/1000);
@@ -30,19 +36,21 @@ var getUnit = function(d){
 }
 
 formatGuV = function(d,max,min){
+  max = typeof max !== "undefined" ? max : d;
+  min = typeof min !== "undefined" ? min : d;
   var m = getUnit(min);
   var n = getUnit(max);
   var u = m;
-  if(n > m + 1)
+  if(n >= m + 1)
     u = n;
-  switch(getUnit(max))
+  switch(u)
   {
     case 0: 
       return formatBigEuro(d);
     case 1:
-      return formatBigWithoutEuro(d/1000) + " Tsd. €";
+      return formatBigWithoutEuro(d/1000) + " Tsd.€";
     case 2:
-      return formatBigWithoutEuro(d/1000000) + " Mil. €";
+      return formatBigWithoutEuro(d/1000000) + " Mil.€";
   }
 }
 
@@ -397,12 +405,12 @@ removeEmptyBins = function (sourceGroup,filterFunction) {
 addTotal = function(p,v) {
   if(!p.sources[v.source])
   {
-    p.sources[v.source] = 1;
+    p.sources[v.source] = 0;
     ++p.sources.count
   }
   if(!p.targets[v.target])
   {
-    p.targets[v.target] = 1;  
+    p.targets[v.target] = 0;  
     ++p.targets.count
   }
   p.sources[v.source]++;

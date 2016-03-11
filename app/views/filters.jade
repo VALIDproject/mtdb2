@@ -1,4 +1,4 @@
-#time-bar-chart.col-sm-4
+#time-bar-chart.col-sm-3
   strong Quartale 
   span.chart-unit 
   a(href="javascript:timeBarChart.filterAll();updateAll();",style="display: none;").reset reset
@@ -8,11 +8,22 @@
   span.chart-unit 
   a(href="javascript:lawsBarChart.filterAll();updateAll();",style="display: none;").reset reset
   .clearfix
-#expenses-bar-chart.col-sm-5
+#expenses-bar-chart.col-sm-3
   strong Ausgaben 
   span.chart-unit 
   span.reset(style="display: none;")
     | Filter: 
     span.filter
+    |  
+  a(href="javascript:expensesBarChart.filterAll();updateAll();",style="display: none;").reset reset
+  .clearfix
+#trend-bar-chart.col-sm-3
+  strong Trend 
+  span.chart-unit 
+  span.reset(style="display: none;")
+    | Filter: 
+    span.filter
+    |  
+  a(href="javascript:trendBarChart.filterAll();updateAll();",style="display: none;").reset reset
   .clearfix
 #filter-tooltip.myTooltip

@@ -9,8 +9,8 @@ var sparklineMouseover = function(d)
     .duration(200)      
     .style("opacity", .9);      
     sparklineTooltip.html(text)  
-      .style("left", (d3.event.pageX) + "px")     
-      .style("top", (d3.event.pageY - 28) + "px");   
+      .style("left", (d3.event.x) + "px")     
+      .style("top", (d3.event.y - 28) + "px");   
 }
 
 var hideSparklineTooltip = function()
@@ -47,6 +47,39 @@ var tableRenderlet = function(table,dim){
     }
   });
 
+  var xCount = d3.scale.linear()
+    .domain([0, d3.max(groupedDim.all(), function(d) { return d.value.count; })])
+    .range(["0%", "100%"]); 
+
+ var countColumn = table.selectAll('td._2')
+    .classed("text-right", true)
+    .append("div")
+      .classed("inlinebar",true)
+      .style("width", "0%")
+      .transition()
+      .duration(1000)
+        .style("width", function(d) { 
+          return xCount(Math.abs(d.value.count));
+        });
+
+  var xTrend = d3.scale.linear()
+      .domain([-1,1])
+      .range(["-100%", "100%"]);
+
+  var trendColumn = table.selectAll('td._3')
+    .classed("percent text-center", true)
+    .append("div")   
+      .attr("class", function(d){
+          return "inlinebar " + ((d.value.trend > 0) ? "positiv" : "negativ");
+        })       
+        .style("width", function(d) { 
+          return xTrend(Math.abs(d.value.trend)/2);
+        })
+        .style("margin-left", function(d) {
+          return d.value.trend < 0 ? 
+            xTrend(0.5+d.value.trend/2) : "50%";
+        });   
+
   var max = 0;
   dim.filterAll();
   table.selectAll('td._1')
@@ -64,16 +97,12 @@ var tableRenderlet = function(table,dim){
   {
     dim.filterFunction(function(x){return tableFilter.indexOf(x) > -1;});
   }
-
-  var xCount = d3.scale.linear()
-      .domain([0, d3.max(groupedDim.all(), function(d) { return d.value.count; })])
-      .range(["0%", "100%"]);
-
-  var xTrend = d3.scale.linear()
-      .domain([-1,1])
-      .range(["-100%", "100%"]);  
        
   var xSum = d3.scale.linear().domain([0, max]).range(["0%", "100%"]);
+  var bQuartalSelectionOn = false;
+  for (var i = quartalSelection.length - 1; i >= 0 && !bQuartalSelectionOn; i--) {
+    bQuartalSelectionOn = quartalSelection[i] == 1;
+  };
 
   table.selectAll('td._0').classed("text-left", true);
   var sparklines = table.selectAll('td._1')
@@ -99,36 +128,12 @@ var tableRenderlet = function(table,dim){
           return xSum(height);
         })
         .attr("class", function(x,j) { 
-          var height = Math.abs(quarterSum[j][quarterNames[i]]);
-          return height == 0 ? "sparklinenull" : null;
+          var str = Math.abs(quarterSum[j][quarterNames[i]]) == 0 ? "sparklinenull" : "";
+          if(bQuartalSelectionOn)
+            str = quartalSelection[i] ? str + " selected" : str + " deselected";
+          return str;
         });
   }
-
-  var countColumn = table.selectAll('td._2')
-    .classed("text-right", true)
-    .append("div")
-      .classed("inlinebar",true)
-      .style("width", "0%")
-      .transition()
-      .duration(1000)
-        .style("width", function(d) { 
-          return xCount(Math.abs(d.value.count));
-        });
-
-  var trendColumn = table.selectAll('td._3')
-    .classed("percent text-center", true)
-    .append("div")   
-      .attr("class", function(d){
-          return "inlinebar " + ((d.value.trend > 0) ? "positiv" : "negativ");
-        })       
-        .style("width", function(d) { 
-          return xTrend(Math.abs(d.value.trend)/2);
-        })
-        .style("margin-left", function(d) {
-          return d.value.trend < 0 ? 
-            xTrend(0.5+d.value.trend/2) : "50%";
-        });
-     
 
   table.selectAll('.dc-table-row')
     .classed("dc-table-row-filtered", function(d) {

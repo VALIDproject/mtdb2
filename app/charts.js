@@ -8,6 +8,7 @@ exports.init = function(datafile) {
   timeBarChart = dc.barChart('#time-bar-chart');
   lawsBarChart = dc.barChart('#laws-bar-chart');
   expensesBarChart = dc.barChart('#expenses-bar-chart');
+  trendBarChart = dc.barChart('#trend-bar-chart');
 
   legalCount = dc.dataCount('#data-count-legal');
   mediaCount = dc.dataCount('#data-count-media');
@@ -27,6 +28,7 @@ exports.init = function(datafile) {
     links = data[1];
     ndxLinks = crossfilter(links);
     binwidth = 1000;
+    trendBinwidth = 20;
 
     var filterOutEmpty = function(d) { return Math.abs(d.value)>1e-3 };
     var filterOutEmptyTotal = function(d) { 
@@ -45,12 +47,24 @@ exports.init = function(datafile) {
     spendPerLaw = removeEmptyBins(lawsDim.group().reduceSum(function(d) {return +d.euro;}),filterOutEmpty);
     //spendGroup = removeEmptyBins(spendDim.group().reduceCount(function(d) { return +d.euro; }),filterOutEmpty);
     spendGroup = removeEmptyBins(spendDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
+    //trendGroup = removeEmptyBins(trendDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
 
     quarterNames = spendPerTime.all().map(function(d){return d.key});
     halfQuarter = quarterNames[Math.floor(quarterNames.length/2)];
+    // initialize quarter selection to not selected
+    quartalSelection = [];
+    for (var i = quarterNames.length - 1; i >= 0; i--) {
+      quartalSelection[i] = 0;
+    }
 
     groupedLegalDim = removeEmptyBins(legalDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
     groupedMediaDim = removeEmptyBins(mediaDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
+
+    sourceToValue = {};
+    groupedLegalDim.all().forEach(function(v){sourceToValue[v.key] = v.value;});
+
+    trendDim = ndxLinks.dimension(function(d) {return sourceToValue[+d.source].trend;});
+    trendGroup = removeEmptyBins(trendDim.group().reduce(addTotal,removeTotal,initTotal),filterOutEmptyTotal);
 
     tagTooltip = $("#tag-tooltip");
     sparklineTooltip = d3.select("#sparkline-tooltip");

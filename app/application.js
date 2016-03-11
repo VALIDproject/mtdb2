@@ -179,6 +179,13 @@ var spendPerLaw;
  */
 var binwidth;
 
+/**
+ * The binwidth of the trend bar chart
+ * 
+ * @type {number}
+ */
+var trendBinwidth;
+
 /** The names of the quarters in the format: years*10 + quarter: e.g.: 20144 = year 2014 quarter 4
  * @type {array}
  */
@@ -447,6 +454,10 @@ var TablePaging;
 var legalTablePaging;
 
 var mediaTablePaging;
+
+var sourceToValue;
+
+var quartalSelection;
 
 require('globalFunctions');
 
