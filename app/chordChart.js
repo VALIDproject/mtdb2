@@ -1,5 +1,5 @@
-var size = [800, 800]; // SVG SIZE WIDTH, HEIGHT
-var marg = [50, 50, 50, 50]; // TOP, RIGHT, BOTTOM, LEFT
+var size = [700, 700]; // SVG SIZE WIDTH, HEIGHT
+var marg = [30, 30, 30, 30]; // TOP, RIGHT, BOTTOM, LEFT
 var dims = []; // USABLE DIMENSIONS
 dims[0] = size[0] - marg[1] - marg[3]; // WIDTH
 dims[1] = size[1] - marg[0] - marg[2]; // HEIGHT
@@ -33,7 +33,7 @@ var matrix = require('matrixFactory').chordMatrix()
     return {value: value, data: items};
   });
 
-var innerRadius = (dims[1] / 2) - 150;
+var innerRadius = (dims[1] / 2) - 100;
 
 var arc = d3.svg.arc()
   .innerRadius(innerRadius)
@@ -149,7 +149,7 @@ drawChords = function (dataDimension) {
     .on("mouseover", textMouseover)
     .on("mouseout", resetChords)
     .text(function (d) {
-      return shortenLongName(nodes[d._id].name);
+      return shortenLongName(nodes[d._id].name,20);
     });
 
   groups.select("path")

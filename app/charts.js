@@ -23,12 +23,32 @@ exports.init = function(datafile) {
 
   function initCharts(error, rawData) 
   {
-    data = require('dataparse').parse(rawData);
+    hasLocalStorage = typeof(Storage) !== "undefined";
+    if(hasLocalStorage) {
+      data = JSON.parse(localStorage.getItem("data"));
+      if(data == null) {
+        data = require('dataparse').parse(rawData);
+        localStorage.setItem("data",JSON.stringify(data));
+      }
+    }
+    else {
+      data = require('dataparse').parse(rawData);
+    }
     nodes = data[0];
     links = data[1];
     ndxLinks = crossfilter(links);
     binwidth = 1000;
     trendBinwidth = 20;
+
+    if(hasLocalStorage) {
+      combinedObj = JSON.parse(localStorage.getItem("combinedObj"));
+      if(combinedObj == null) {
+        combinedObj = new Array();
+      }
+    }
+    else{
+      combinedObj = new Array();
+    }
 
     var filterOutEmpty = function(d) { return Math.abs(d.value)>1e-3 };
     var filterOutEmptyTotal = function(d) { 
@@ -76,6 +96,7 @@ exports.init = function(datafile) {
     require('tables');
 
     dc.renderAll();
+    showTags();
 
     $('#dataLoading').hide();
     $("#my-charts").show();

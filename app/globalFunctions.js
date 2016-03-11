@@ -133,10 +133,9 @@ rescaleAll = function()
   timeBarChart.rescale();
   lawsBarChart.rescale();
   expensesBarChart.rescale();
+  trendBarChart.rescale();
   resizeChordChart();
 };
-
-combinedObj = new Array();
 
 function hashString (s) {
   var hash = 0, i, chr, len;
@@ -199,7 +198,10 @@ deleteData = function(dimension)
       added: [],
       removed: addArr,
       type: "remove"
-    });  
+    });
+
+    if(hasLocalStorage)
+      localStorage.setItem("combinedObj",JSON.stringify(combinedObj));
 
     updateAll();
   }
@@ -255,6 +257,9 @@ combineData = function(dimension)
       removed: addArr,
       type: "combine"
     });
+
+    if(hasLocalStorage)
+      localStorage.setItem("combinedObj",JSON.stringify(combinedObj));
 
     updateAll();
   }
@@ -459,16 +464,12 @@ removeTotal = function (p, v) {
 
 initTotal = function(){return {count: 0, total: 0, trend: 0, trendAfter: 0, trendBefore: 0, sources: {count: 0}, targets: {count: 0}};}
 
-function ItlShortenLongName(name,iTo)
+shortenLongName = function(name,iTo)
 {
+  iTo = typeof iTo !== "undefined" ? iTo : 30;
   if (name.length > iTo)
     name = name.substr(0, iTo-10) + "..." + name.substr(-7);
   return name;
-}
-
-shortenLongName = function(name)
-{
-  return ItlShortenLongName(name,30);
 }
 
 numericAscendingGlyph = "glyphicon-sort-by-order";

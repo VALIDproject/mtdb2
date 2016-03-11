@@ -48,7 +48,7 @@ timeBarChart
   })
   .on("filtered", function (chart, filter) {
     if(filter !== null)
-      quartalSelection[quarterNames.indexOf(filter)] = 1;
+      quartalSelection[quarterNames.indexOf(filter)] ^= 1;
     else {
       for (var i = quarterNames.length - 1; i >= 0; i--) {
         quartalSelection[i] = 0;

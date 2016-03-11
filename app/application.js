@@ -45,6 +45,12 @@ var lawsBarChart;
  */
 var expensesBarChart;
 /**
+ * A {@link https://github.com/dc-js/dc.js/blob/master/web/docs/api-1.6.0.md#bar-chart|dc.barChart} which shows the number of relations of sources from a legal entity to a media organisation. sorted by the trend on the x axis.
+ *
+ * @type {dc.barChart}
+ */
+var trendBarChart;
+/**
  * A {@link https://github.com/dc-js/dc.js/blob/master/web/docs/api-1.6.0.md#data-count|dc.dataCount} which shows the number selected legal entities.
  *
  * @type {dc.dataCount}
@@ -458,6 +464,8 @@ var mediaTablePaging;
 var sourceToValue;
 
 var quartalSelection;
+
+var hasLocalStorage;
 
 require('globalFunctions');
 
