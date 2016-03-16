@@ -25,11 +25,12 @@ in an easy to use matter.
   -   [\[M. Hametner\]](http://derstandard.at/2000017464403/Regierungsinserate-406-Millionen-im-ersten-Quartal) presents a static visualization with bar charts and a line
       plot as a visualization for time oriented data by the Austrian
       newspaper “Der Standard”.
-  -   One of my colleagues implemented a force directed node link diagram.
+  -   [\[M. Schrempf\]](http://web.student.tuwien.ac.at/~e0920136/Files/MTDV/src/MTDV.html) 
+      implemented a force-directed node link diagram.
       The user of this visualization is able to interact with the data and
-      filter it with different queries. But the force directed node link
-      diagram was too slow for the huge database [\[Schrempf2014\]](http://web.student.tuwien.ac.at/~e0920136/Files/MTDV/src/MTDV.html).
-  -   [\[S. Peter et. al\]](http://www.medien-transparenz.at/) implemented a website to get an overview of the
+      filter it with different queries. But the force-directed node link
+      diagram was too slow for the huge database.
+  -   [\[P. Salhofer et. al\]](http://www.medien-transparenz.at/) implemented a website to get an overview of the
       media dataset. It features multiple visualizations which are all
       interactive but not connected to one dashboard.
 
@@ -41,7 +42,7 @@ in an easy to use matter.
   the payment flow, because it is visually encoded in the size of the
   nodes of the diagram. 
 
-  The visualization of [\[S. Peter et. al\]](http://www.medien-transparenz.at/) is stable, easy and fast to interact. But
+  The visualization of [\[P. Salhofer et. al\]](http://www.medien-transparenz.at/) is stable, easy and fast to interact. But
   the visualizations are distributed onto 4 different web pages, which
   makes it hard to combine the insight of the user from one visualization
   with the others. Additionally the payment flow visualization is
