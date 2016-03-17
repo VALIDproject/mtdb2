@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * Initializes the tables and the functions for updating the tables
+ */
+
 var tableRank = function (p) { return "source"; }
 
 var sparklineMouseover = function(d)

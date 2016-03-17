@@ -1,4 +1,7 @@
 "use strict";
+/**
+ * contains the definition and documentation of global variables
+ */
 
 /**
  * Path with filename and -end of the data base file to read.
@@ -184,13 +187,6 @@ var spendPerLaw;
  * @type {number}
  */
 var binwidth;
-
-/**
- * The binwidth of the trend bar chart
- * 
- * @type {number}
- */
-var trendBinwidth;
 
 /** The names of the quarters in the format: years*10 + quarter: e.g.: 20144 = year 2014 quarter 4
  * @type {array}

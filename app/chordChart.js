@@ -1,3 +1,7 @@
+/**
+ * Initializes the chord chart and implements the method for updating it.
+ */
+
 var size = [700, 700]; // SVG SIZE WIDTH, HEIGHT
 var marg = [30, 30, 30, 30]; // TOP, RIGHT, BOTTOM, LEFT
 var dims = []; // USABLE DIMENSIONS

@@ -1,3 +1,7 @@
+/**
+ * creates the matrix for the chord chart.
+ */
+
 exports.chordMatrix = function () {
 
     var _matrix = [], dataStore = [], _id = 0;

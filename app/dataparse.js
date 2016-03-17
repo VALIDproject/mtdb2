@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * parse the media transparence database data
+ */
+
 exports.parse = function(data) {
 
   var nodes = [];

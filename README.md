@@ -7,7 +7,7 @@ The "media transparency database" contains the accumulated amount of
 money spent by governmental organizations on media companies. This data
 can be explored as a multimodal dynamic network. Existing web projects
 already present solutions to visualize the dataset, but to analyse the
-data further a user needs more interaction methods. I implemented a 
+data further a user needs more interaction methods. This project implements a 
 task-tailored dashboard with multiple connected views, which implements
 brushing and linking to enable the user to analyse the dataset
 in an easy to use matter.
@@ -53,7 +53,7 @@ in an easy to use matter.
 The following technologies are used:
 
  * _JavaScript_: a script language to create dynamic client side webpage.
- * _Data-Driven Documents_: A JavaScript library for manipulating documents based on data.
+ * [_Data-Driven Documents_](https://d3js.org/): A JavaScript library for manipulating documents based on data.
  * [_jQuery_](http://jquery.com/): A fast, small, and feature-rich JavaScript library.
  * [_Bootstrap_](http://getbootstrap.com/): A framework for developing responsive, mobile first projects on the web.
  * [_Brunch_](http://brunch.io/): A [node.js](https://nodejs.org) build tool to compile scripts and styles and to concatenate scripts and styles.
@@ -61,7 +61,7 @@ The following technologies are used:
  * _uglify-js_: Is a [node.js](https://nodejs.org) library for minifying JavaScript files.
  * [_crossfilter_](http://square.github.io/crossfilter/): Is a JavaScript library to explore multivariate datasets with coordinated views.
  * [_DC_](https://dc-js.github.io/dc.js/): Is a JavaScript library with native crossfilter support to create charts for multidimensional data exploration
- * _Git_: Is used as version control system.
+ * [_Git_](https://git-scm.com/): Is used as version control system.
 
 ## Problem Description
 
@@ -114,34 +114,66 @@ formated.
 
 ![](documentation/slides/Wien.PNG)
 
-## Install
+## Source Code Documentation
+
+### Install
+
+This project depends on [Brunch](http://brunch.io/). Install it with for example [node.js](nodejs.org). All depending libraries should be managed by brunch. If something is missing you have to install it manually with [node.js](nodejs.org).
 
 1. install [node.js](nodejs.org)
-2. install brunch:
+2. install brunch globally:
 
 ```npm install -g brunch```
 
-3. install local packages:
-
+3. install local packages (if necessary):
+ 
 ```npm install --save-dev brunch javascript-brunch css-brunch sass-brunch queue-async```
 
-4. install bower
+### Run
 
-## Run
-
-### develop standard run
+__develop standard run__
 
 ```brunch build```
 
-### develop run with server
+__develop run with server__
 
 ```brunch watch --server```
 
 The standard port for the brunch server is 3333 (```localhost:3333```)
 
-### release build
+__release build__
 
 ```brunch build --production```
 
+### Documentation of global variables
+
+The source code documentation of global variables is in a seperate file: [application.js](app/application.js) I created a documentation file with [jsdoc](usejsdoc.org/) it is in [documentation/jsdoc](documentation/jsdoc/index.html).
+
+### Structure
+
+The source code of this project is in the subfolder ``app`` this folder is structured as follow:
+
+ * __assets__ the assets files that the project depends on. 
+   For example the ``index.html``, the csv data, the used fonds, ...
+ * __styles__ the style files of the project. 
+   Currently ``less`` is used to translate the style files to a single css file. The filenames of the single files have to start with an ``_`` to be ignored by the ``brunch`` compiler. And in the file [structure](app/styles/structure.less) the single files are linked together.
+ * __views__ This folder contains the files that describe the dom structure of the view.
+   * ``about.jade`` contains a documentation of the project in markdown code
+   * ``charts.jade`` contains the overall structure of the dashboard
+   * ``chordChart.jade`` contains the structure of the chord chart: the tooltip and the chart itself.
+   * ``contact.jade`` contains the contact information of the project
+   * ``filters.jade`` contains the structure of the filters of the dashboard. For example the quartals bar chart, the legal background bar chart, ...
+   * ``nav.jade`` contains the structure of the fixed navbar
+   * ``table.jade`` contains the structure of the two table widgets (legal and media entities), their count widgets and includes the chordChart.jade between them.
+ * ``application.js`` contains the definition and documentation of all global variables. 
+ * ``charts.js`` initializes the application. 
+ * ``chordChart.js`` initializes the chord chart and implements the method for updating it.
+ * ``dataparse.js`` parses the media transparence database data
+ * ``initData.js`` is responsible for initializing the data. 
+    1) if a local storage is available it is used. 
+    2) also the combined objects from a previous session is restored.
+ * ``initDimensions.js`` initializes the dimensions and the grouping of the dimensions.
+ * ``matrixFactory.js`` creates the matrix for the chord chart.
+ * ``tables.js`` initializes the tables and the functions for updating the tables
 
 
