@@ -24,12 +24,16 @@ exports.init = function(datafile) {
   mediaTablePaging = new TablePaging(mediaTable,0,10,"#media-paging");
 
   q.await(function(error, rawData) {
-
-    require('initData');
-    require('initDimensions');
-    require('filterCharts');
-    require('chordChart');
-    require('tables');
+    
+    require('data').init();
+    require('dimensions').init();
+    require('filterCharts').initTimeBar(timeBarChart);
+    require('filterCharts').initLawBar(lawsBarChart);
+    require('filterCharts').initExpensesBar(expensesBarChart);
+    require('filterCharts').initTrendBar(trendBarChart);
+    require('chordChart').init();
+    require('tables').initCount();
+    require('tables').initTables();
 
     dc.renderAll();
     showTags();
@@ -39,6 +43,6 @@ exports.init = function(datafile) {
     $('#legalSearchReset').hide();
     $('#mediaSearchReset').hide();
 
-    require('createListeners');
+    require('listeners').create();
   });
 }

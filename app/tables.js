@@ -190,51 +190,57 @@ var tableRenderlet = function(table,dim){
     });
   }
 
-var all = ndxLinks.groupAll();
-legalCount
-  .dimension(groupedLegalDim)
-  .group(all)
-  .html({
-    some: '<strong>%total-count</strong> Einträge'
-  });
+exports.initCount = function()
+{
+  var all = ndxLinks.groupAll();
+  legalCount
+    .dimension(groupedLegalDim)
+    .group(all)
+    .html({
+      some: '<strong>%total-count</strong> Einträge'
+    });
 
-mediaCount
-  .dimension(groupedMediaDim)
-  .group(all)
-  .html({
-    some: '<strong>%total-count</strong> Einträge'
-  });
+  mediaCount
+    .dimension(groupedMediaDim)
+    .group(all)
+    .html({
+      some: '<strong>%total-count</strong> Einträge'
+    });
+};
 
-legalTable
-  .dimension(groupedLegalDim)
-  .group(tableRank)
-  .sortBy(tableSorting[legalTableSorting])
-  .order(legalTableOrdering[legalTableSorting]) 
-  .showGroups(false)
-  .size(Infinity)
-  .columns([
-    function(d){ return nodes[d.key].name; },
-    function(d){ return formatEuro(d.value.total);},
-    function(d){ return d.value.count; },
-    function(d){ return formatPercent(d.value.trend); }
-    ])
-  .on("renderlet.a", function(chart){tableRenderlet(chart,legalDim);});
+exports.initTables = function()
+{
+  legalTable
+    .dimension(groupedLegalDim)
+    .group(tableRank)
+    .sortBy(tableSorting[legalTableSorting])
+    .order(legalTableOrdering[legalTableSorting]) 
+    .showGroups(false)
+    .size(Infinity)
+    .columns([
+      function(d){ return nodes[d.key].name; },
+      function(d){ return formatEuro(d.value.total);},
+      function(d){ return d.value.count; },
+      function(d){ return formatPercent(d.value.trend); }
+      ])
+    .on("renderlet.a", function(chart){tableRenderlet(chart,legalDim);});
 
-legalTablePaging.update();
+  legalTablePaging.update();
 
-mediaTable
-  .dimension(groupedMediaDim)
-  .group(tableRank)
-  .showGroups(false)
-  .sortBy(tableSorting[mediaTableSorting])
-  .order(mediaTableOrdering[mediaTableSorting])  
-  .size(Infinity)
-  .columns([
-    function(d){ return nodes[d.key].name; },
-    function(d){ return formatEuro(d.value.total);},
-    function(d){ return d.value.count;},
-    function(d){ return formatPercent(d.value.trend); }
-    ])
-  .on("renderlet.b", function(chart){tableRenderlet(chart,mediaDim);});
+  mediaTable
+    .dimension(groupedMediaDim)
+    .group(tableRank)
+    .showGroups(false)
+    .sortBy(tableSorting[mediaTableSorting])
+    .order(mediaTableOrdering[mediaTableSorting])  
+    .size(Infinity)
+    .columns([
+      function(d){ return nodes[d.key].name; },
+      function(d){ return formatEuro(d.value.total);},
+      function(d){ return d.value.count;},
+      function(d){ return formatPercent(d.value.trend); }
+      ])
+    .on("renderlet.b", function(chart){tableRenderlet(chart,mediaDim);});
 
-mediaTablePaging.update();
+  mediaTablePaging.update();
+};

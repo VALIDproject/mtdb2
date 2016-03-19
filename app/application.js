@@ -1,4 +1,3 @@
-"use strict";
 /**
  * contains the definition and documentation of global variables
  */

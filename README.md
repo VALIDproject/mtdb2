@@ -102,17 +102,23 @@ formated.
 (Click on the image to go the the video)
 
 
-[![Click on the image to go the the video](documentation/slides/Dashboard.JPG)](https://youtu.be/04bdq54m_H8)
+[![Click on the image to go the the video](documentation/screenshots/dashboard.png)](https://youtu.be/53JBg1lmyDk)
 
 ### Filters
 
-![](documentation/slides/Years.PNG)
-![](documentation/slides/Legal-Background.PNG)
-![](documentation/slides/Expenses.PNG)
+![](documentation/screenshots/quartale.png)
+![](documentation/screenshots/recht.png)
+![](documentation/screenshots/ausgaben.png)
+![](documentation/screenshots/trend.png)
 
 ### Flow Visualization
 
-![](documentation/slides/Wien.PNG)
+![](documentation/screenshots/flow.png)
+
+### Details
+
+![](documentation/screenshots/media.png)
+![](documentation/screenshots/legal.png)
 
 ## Source Code Documentation
 
@@ -168,11 +174,14 @@ The source code of this project is in the subfolder ``app`` this folder is struc
  * ``application.js`` contains the definition and documentation of all global variables. 
  * ``charts.js`` initializes the application. 
  * ``chordChart.js`` initializes the chord chart and implements the method for updating it.
- * ``dataparse.js`` parses the media transparence database data
- * ``initData.js`` is responsible for initializing the data. 
+ * ``data.js`` is responsible for initializing the data. 
     1) if a local storage is available it is used. 
     2) also the combined objects from a previous session is restored.
- * ``initDimensions.js`` initializes the dimensions and the grouping of the dimensions.
+ * ``dataparse.js`` parses the media transparence database data.
+ * ``filterCharts.js`` methods for the initialization of the 4 filter charts.
+ * ``globalFunction.js`` initializes the global functions of the application
+ * ``listeners.js`` initializes the listeners for tooltips or the table.
+ * ``dimensions.js`` initializes the dimensions and the grouping of the dimensions.
  * ``matrixFactory.js`` creates the matrix for the chord chart.
  * ``tables.js`` initializes the tables and the functions for updating the tables
 
