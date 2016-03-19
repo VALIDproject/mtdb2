@@ -26,7 +26,9 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>"use strict";
+            <pre class="prettyprint source linenums"><code>/**
+ * contains the definition and documentation of global variables
+ */
 
 /**
  * Path with filename and -end of the data base file to read.
@@ -72,6 +74,12 @@ var lawsBarChart;
  * @type {dc.barChart}
  */
 var expensesBarChart;
+/**
+ * A {@link https://github.com/dc-js/dc.js/blob/master/web/docs/api-1.6.0.md#bar-chart|dc.barChart} which shows the number of relations of sources from a legal entity to a media organisation. sorted by the trend on the x axis.
+ *
+ * @type {dc.barChart}
+ */
+var trendBarChart;
 /**
  * A {@link https://github.com/dc-js/dc.js/blob/master/web/docs/api-1.6.0.md#data-count|dc.dataCount} which shows the number selected legal entities.
  *
@@ -207,6 +215,17 @@ var spendPerLaw;
  */
 var binwidth;
 
+/** The names of the quarters in the format: years*10 + quarter: e.g.: 20144 = year 2014 quarter 4
+ * @type {array}
+ */
+var quarterNames;
+
+/** The half of the quarters in the format: years*10 + quarter: e.g.: 20144 = year 2014 quarter 4
+ * @type int
+ * @see quarterNames
+ */
+var halfQuarter
+
 /** Filter a {@link https://github.com/square/crossfilter/wiki/API-Reference#wiki-dimension|crossfilter.dimension} for a string
  * @func textFilter
  * @param {crossfilter.dimension} dim - The dimension to filter
@@ -322,6 +341,10 @@ var formatEuro;
  * @func
  */
 var formatBigEuro;
+/** Format the the input as percentage number by multiply with 100 and suffix with "%". e.g.: 12.345%
+ * @func
+ */
+var formatPercent;
 /** Format the the input as euros with a grouping of 3 and 1 decimal place and a euro sign but truncat it to "Tsd." € or "Mil. €". e.g.: 12,3 Tsd.€
  * @func
  */
@@ -440,6 +463,63 @@ var legalTableFilter;
  */
 var mediaTableFilter;
 
+/** shotens a long string to shorter representation
+ * @func
+ * @param {string} the long input string
+ * @return {string} a shorter representation of that string
+ */
+var shortenLongName;
+
+/** The tooltip of the combine or remove tags.
+ * @type {jQuery}
+ */
+var tagTooltip;
+
+/** The tooltip of the sparkline bar charts
+ * @type {d3}
+ */
+var sparklineTooltip;
+
+/** The tooltip of all filters
+ * @type {d3}
+ */
+var filterTooltip;
+
+/** The tooltip of the chord diagram
+ * @type {d3}
+ */
+var chordTooltip;
+
+/** The object for the table paging contains functions for jumping to the next and previous table pages
+ * @type {Object}
+ */
+var TablePaging;
+
+/** The table paging of the legal table
+ * @type {TablePaging}
+ */
+var legalTablePaging;
+
+/** The table paging of the media table
+ * @type {TablePaging}
+ */
+var mediaTablePaging;
+
+/** map from a source index to the value object of it.
+ * @type {Object}
+ */
+var sourceToValue;
+
+/** Contains which quartal is currently selected with booleans.
+ * @type {array}
+ */
+var quartalSelection;
+
+/** Contains true if the browser supports local storage 
+ * @type {boolean}
+ */
+var hasLocalStorage;
+
 require('globalFunctions');
 
 var App = {
@@ -467,13 +547,13 @@ module.exports = App;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addTotal">addTotal</a></li><li><a href="global.html#binwidth">binwidth</a></li><li><a href="global.html#chordTooltipUpdate">chordTooltipUpdate</a></li><li><a href="global.html#combineData">combineData</a></li><li><a href="global.html#combinedObj">combinedObj</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#drawChords">drawChords</a></li><li><a href="global.html#expensesBarChart">expensesBarChart</a></li><li><a href="global.html#filterAll">filterAll</a></li><li><a href="global.html#formatBigEuro">formatBigEuro</a></li><li><a href="global.html#formatEuro">formatEuro</a></li><li><a href="global.html#formatGuV">formatGuV</a></li><li><a href="global.html#groupedLegalDim">groupedLegalDim</a></li><li><a href="global.html#groupedMediaDim">groupedMediaDim</a></li><li><a href="global.html#initTotal">initTotal</a></li><li><a href="global.html#lawsBarChart">lawsBarChart</a></li><li><a href="global.html#lawsDim">lawsDim</a></li><li><a href="global.html#legalCount">legalCount</a></li><li><a href="global.html#legalDim">legalDim</a></li><li><a href="global.html#legalDim2">legalDim2</a></li><li><a href="global.html#legalTable">legalTable</a></li><li><a href="global.html#legalTableFilter">legalTableFilter</a></li><li><a href="global.html#legalTableOrdering">legalTableOrdering</a></li><li><a href="global.html#legalTableSorting">legalTableSorting</a></li><li><a href="global.html#legalTableSortingStatus">legalTableSortingStatus</a></li><li><a href="global.html#links">links</a></li><li><a href="global.html#locale">locale</a></li><li><a href="global.html#mediaCount">mediaCount</a></li><li><a href="global.html#mediaDim">mediaDim</a></li><li><a href="global.html#mediaDim2">mediaDim2</a></li><li><a href="global.html#mediaTable">mediaTable</a></li><li><a href="global.html#mediaTableFilter">mediaTableFilter</a></li><li><a href="global.html#mediaTableOrdering">mediaTableOrdering</a></li><li><a href="global.html#mediaTableSorting">mediaTableSorting</a></li><li><a href="global.html#mediaTableSortingStatus">mediaTableSortingStatus</a></li><li><a href="global.html#ndxLinks">ndxLinks</a></li><li><a href="global.html#nodes">nodes</a></li><li><a href="global.html#numericAscendingGlyph">numericAscendingGlyph</a></li><li><a href="global.html#numericDescendingGlyph">numericDescendingGlyph</a></li><li><a href="global.html#ordinalAscendingGlyph">ordinalAscendingGlyph</a></li><li><a href="global.html#ordinalDescendingGlyph">ordinalDescendingGlyph</a></li><li><a href="global.html#removeEmptyBins">removeEmptyBins</a></li><li><a href="global.html#removeTotal">removeTotal</a></li><li><a href="global.html#rescaleAll">rescaleAll</a></li><li><a href="global.html#resetSearchBox">resetSearchBox</a></li><li><a href="global.html#resizeChordChart">resizeChordChart</a></li><li><a href="global.html#resolveCombineData">resolveCombineData</a></li><li><a href="global.html#showLegalSelectionInteraction">showLegalSelectionInteraction</a></li><li><a href="global.html#showMediaSelectionInteraction">showMediaSelectionInteraction</a></li><li><a href="global.html#showTags">showTags</a></li><li><a href="global.html#sourceFileName">sourceFileName</a></li><li><a href="global.html#sourceRestId">sourceRestId</a></li><li><a href="global.html#spendDim">spendDim</a></li><li><a href="global.html#spendPerLaw">spendPerLaw</a></li><li><a href="global.html#spendPerTime">spendPerTime</a></li><li><a href="global.html#tableSorting">tableSorting</a></li><li><a href="global.html#targetRestId">targetRestId</a></li><li><a href="global.html#textFilter">textFilter</a></li><li><a href="global.html#timeBarChart">timeBarChart</a></li><li><a href="global.html#timeDim">timeDim</a></li><li><a href="global.html#updateAll">updateAll</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addTotal">addTotal</a></li><li><a href="global.html#binwidth">binwidth</a></li><li><a href="global.html#chordTooltip">chordTooltip</a></li><li><a href="global.html#chordTooltipUpdate">chordTooltipUpdate</a></li><li><a href="global.html#combineData">combineData</a></li><li><a href="global.html#combinedObj">combinedObj</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#drawChords">drawChords</a></li><li><a href="global.html#expensesBarChart">expensesBarChart</a></li><li><a href="global.html#filterAll">filterAll</a></li><li><a href="global.html#filterTooltip">filterTooltip</a></li><li><a href="global.html#formatBigEuro">formatBigEuro</a></li><li><a href="global.html#formatEuro">formatEuro</a></li><li><a href="global.html#formatGuV">formatGuV</a></li><li><a href="global.html#formatPercent">formatPercent</a></li><li><a href="global.html#groupedLegalDim">groupedLegalDim</a></li><li><a href="global.html#groupedMediaDim">groupedMediaDim</a></li><li><a href="global.html#halfQuarter">halfQuarter</a></li><li><a href="global.html#hasLocalStorage">hasLocalStorage</a></li><li><a href="global.html#initTotal">initTotal</a></li><li><a href="global.html#lawsBarChart">lawsBarChart</a></li><li><a href="global.html#lawsDim">lawsDim</a></li><li><a href="global.html#legalCount">legalCount</a></li><li><a href="global.html#legalDim">legalDim</a></li><li><a href="global.html#legalDim2">legalDim2</a></li><li><a href="global.html#legalTable">legalTable</a></li><li><a href="global.html#legalTableFilter">legalTableFilter</a></li><li><a href="global.html#legalTableOrdering">legalTableOrdering</a></li><li><a href="global.html#legalTablePaging">legalTablePaging</a></li><li><a href="global.html#legalTableSorting">legalTableSorting</a></li><li><a href="global.html#legalTableSortingStatus">legalTableSortingStatus</a></li><li><a href="global.html#links">links</a></li><li><a href="global.html#locale">locale</a></li><li><a href="global.html#mediaCount">mediaCount</a></li><li><a href="global.html#mediaDim">mediaDim</a></li><li><a href="global.html#mediaDim2">mediaDim2</a></li><li><a href="global.html#mediaTable">mediaTable</a></li><li><a href="global.html#mediaTableFilter">mediaTableFilter</a></li><li><a href="global.html#mediaTableOrdering">mediaTableOrdering</a></li><li><a href="global.html#mediaTablePaging">mediaTablePaging</a></li><li><a href="global.html#mediaTableSorting">mediaTableSorting</a></li><li><a href="global.html#mediaTableSortingStatus">mediaTableSortingStatus</a></li><li><a href="global.html#ndxLinks">ndxLinks</a></li><li><a href="global.html#nodes">nodes</a></li><li><a href="global.html#numericAscendingGlyph">numericAscendingGlyph</a></li><li><a href="global.html#numericDescendingGlyph">numericDescendingGlyph</a></li><li><a href="global.html#ordinalAscendingGlyph">ordinalAscendingGlyph</a></li><li><a href="global.html#ordinalDescendingGlyph">ordinalDescendingGlyph</a></li><li><a href="global.html#quartalSelection">quartalSelection</a></li><li><a href="global.html#quarterNames">quarterNames</a></li><li><a href="global.html#removeEmptyBins">removeEmptyBins</a></li><li><a href="global.html#removeTotal">removeTotal</a></li><li><a href="global.html#rescaleAll">rescaleAll</a></li><li><a href="global.html#resetSearchBox">resetSearchBox</a></li><li><a href="global.html#resizeChordChart">resizeChordChart</a></li><li><a href="global.html#resolveCombineData">resolveCombineData</a></li><li><a href="global.html#shortenLongName">shortenLongName</a></li><li><a href="global.html#showLegalSelectionInteraction">showLegalSelectionInteraction</a></li><li><a href="global.html#showMediaSelectionInteraction">showMediaSelectionInteraction</a></li><li><a href="global.html#showTags">showTags</a></li><li><a href="global.html#sourceFileName">sourceFileName</a></li><li><a href="global.html#sourceRestId">sourceRestId</a></li><li><a href="global.html#sourceToValue">sourceToValue</a></li><li><a href="global.html#sparklineTooltip">sparklineTooltip</a></li><li><a href="global.html#spendDim">spendDim</a></li><li><a href="global.html#spendPerLaw">spendPerLaw</a></li><li><a href="global.html#spendPerTime">spendPerTime</a></li><li><a href="global.html#TablePaging">TablePaging</a></li><li><a href="global.html#tableSorting">tableSorting</a></li><li><a href="global.html#tagTooltip">tagTooltip</a></li><li><a href="global.html#targetRestId">targetRestId</a></li><li><a href="global.html#textFilter">textFilter</a></li><li><a href="global.html#timeBarChart">timeBarChart</a></li><li><a href="global.html#timeDim">timeDim</a></li><li><a href="global.html#trendBarChart">trendBarChart</a></li><li><a href="global.html#updateAll">updateAll</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sat Jan 16 2016 15:41:36 GMT+0100 (W. Europe Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sat Mar 19 2016 20:47:27 GMT+0100 (W. Europe Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
