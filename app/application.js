@@ -442,24 +442,54 @@ var mediaTableFilter;
  */
 var shortenLongName;
 
+/** The tooltip of the combine or remove tags.
+ * @type {jQuery}
+ */
 var tagTooltip;
 
+/** The tooltip of the sparkline bar charts
+ * @type {d3}
+ */
 var sparklineTooltip;
 
+/** The tooltip of all filters
+ * @type {d3}
+ */
 var filterTooltip;
 
+/** The tooltip of the chord diagram
+ * @type {d3}
+ */
 var chordTooltip;
 
+/** The object for the table paging contains functions for jumping to the next and previous table pages
+ * @type {Object}
+ */
 var TablePaging;
 
+/** The table paging of the legal table
+ * @type {TablePaging}
+ */
 var legalTablePaging;
 
+/** The table paging of the media table
+ * @type {TablePaging}
+ */
 var mediaTablePaging;
 
+/** map from a source index to the value object of it.
+ * @type {Object}
+ */
 var sourceToValue;
 
+/** Contains which quartal is currently selected with booleans.
+ * @type {array}
+ */
 var quartalSelection;
 
+/** Contains true if the browser supports local storage 
+ * @type {boolean}
+ */
 var hasLocalStorage;
 
 require('globalFunctions');
