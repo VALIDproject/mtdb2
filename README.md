@@ -34,19 +34,19 @@ in an easy to use matter.
       media dataset. It features multiple visualizations which are all
       interactive but not connected to one dashboard.
 
-  The first two visualizations are presentations of an analysis of the
-  data. But the last two approaches are visualizations that support the
-  user to analyze and investigate into the data. The force directed node
-  link diagram has the problem that it is too slow to render a nice
-  overview of the dynamic network. Additionally it is hard to interpret
-  the payment flow, because it is visually encoded in the size of the
-  nodes of the diagram. 
+The first two visualizations are presentations of an analysis of the
+data. But the last two approaches are visualizations that support the
+user to analyze and investigate into the data. The force directed node
+link diagram has the problem that it is too slow to render a nice
+overview of the dynamic network. Additionally it is hard to interpret
+the payment flow, because it is visually encoded in the size of the
+nodes of the diagram. 
 
-  The visualization of [\[P. Salhofer et. al\]](http://www.medien-transparenz.at/) is stable, easy and fast to interact. But
-  the visualizations are distributed onto 4 different web pages, which
-  makes it hard to combine the insight of the user from one visualization
-  with the others. Additionally the payment flow visualization is
-  restricted to only 800 relations. 
+The visualization of [\[P. Salhofer et. al\]](http://www.medien-transparenz.at/) is stable, easy and fast to interact. But
+the visualizations are distributed onto 4 different web pages, which
+makes it hard to combine the insight of the user from one visualization
+with the others. Additionally the payment flow visualization is
+restricted to only 800 relations. 
 
 ## Technologies
 
@@ -124,6 +124,8 @@ formated.
 
 ### Install
 
+The release build from the last tag is in the subfolder [``public``](public). Copy it onto a webserver and it should work. Or visit my [server](https://pfahler.at/mtdb2)
+
 This project depends on [Brunch](http://brunch.io/). Install it with for example [node.js](nodejs.org). All depending libraries should be managed by brunch. If something is missing you have to install it manually with [node.js](nodejs.org).
 
 1. install [node.js](nodejs.org)
@@ -157,32 +159,32 @@ The source code documentation of global variables is in a seperate file: [applic
 
 ### Structure
 
-The source code of this project is in the subfolder ``app`` this folder is structured as follow:
+The source code of this project is in the subfolder [``app``](app) this folder is structured as follow:
 
- * __assets__ the assets files that the project depends on. 
+ * [``assets``](assets) the assets files that the project depends on. 
    For example the ``index.html``, the csv data, the used fonds, ...
- * __styles__ the style files of the project. 
-   Currently ``less`` is used to translate the style files to a single css file. The filenames of the single files have to start with an ``_`` to be ignored by the ``brunch`` compiler. And in the file [structure](app/styles/structure.less) the single files are linked together.
- * __views__ This folder contains the files that describe the dom structure of the view.
-   * ``about.jade`` contains a documentation of the project in markdown code
-   * ``charts.jade`` contains the overall structure of the dashboard
-   * ``chordChart.jade`` contains the structure of the chord chart: the tooltip and the chart itself.
-   * ``contact.jade`` contains the contact information of the project
-   * ``filters.jade`` contains the structure of the filters of the dashboard. For example the quartals bar chart, the legal background bar chart, ...
-   * ``nav.jade`` contains the structure of the fixed navbar
-   * ``table.jade`` contains the structure of the two table widgets (legal and media entities), their count widgets and includes the chordChart.jade between them.
- * ``application.js`` contains the definition and documentation of all global variables. 
- * ``charts.js`` initializes the application. 
- * ``chordChart.js`` initializes the chord chart and implements the method for updating it.
- * ``data.js`` is responsible for initializing the data. 
+ * [``styles``](styles) the style files of the project. 
+   Currently ``less`` is used to translate the style files to a single css file. The filenames of the single files have to start with an ``_`` to be ignored by the ``brunch`` compiler. And in the file [``structure``](app/styles/structure.less) the single files are linked together.
+ * [``views``](views) This folder contains the files that describe the dom structure of the view.
+   * [``about.jade``](app/views/about.jade) contains a documentation of the project in markdown code
+   * [``charts.jade``](app/views/charts.jade) contains the overall structure of the dashboard
+   * [``chordChart.jade``](app/views/chordChart.jade) contains the structure of the chord chart: the tooltip and the chart itself.
+   * [``contact.jade``](app/views/contact.jade) contains the contact information of the project
+   * [``filters.jade``](app/views/filters.jade) contains the structure of the filters of the dashboard. For example the quartals bar chart, the legal background bar chart, ...
+   * [``nav.jade``](app/views/nav.jade) contains the structure of the fixed navbar
+   * [``table.jade``](app/views/table.jade) contains the structure of the two table widgets (legal and media entities), their count widgets and includes the chordChart.jade between them.
+ * [``application.js``](app/application.js) contains the definition and documentation of all global variables. 
+ * [``charts.js``](app/charts.js) initializes the application. 
+ * [``chordChart.js``](app/chordChart.js) initializes the chord chart and implements the method for updating it.
+ * [``data.js``](app/data.js) is responsible for initializing the data. 
     1) if a local storage is available it is used. 
     2) also the combined objects from a previous session is restored.
- * ``dataparse.js`` parses the media transparence database data.
- * ``filterCharts.js`` methods for the initialization of the 4 filter charts.
- * ``globalFunction.js`` initializes the global functions of the application
- * ``listeners.js`` initializes the listeners for tooltips or the table.
- * ``dimensions.js`` initializes the dimensions and the grouping of the dimensions.
- * ``matrixFactory.js`` creates the matrix for the chord chart.
- * ``tables.js`` initializes the tables and the functions for updating the tables
+ * [``dataparse.js``](app/dataparse.js) parses the media transparence database data.
+ * [``filterCharts.js``](app/filterCharts.js) methods for the initialization of the 4 filter charts.
+ * [``globalFunction.js``](app/globalFunction.js) initializes the global functions of the application
+ * [``listeners.js``](app/listeners.js) initializes the listeners for tooltips or the table.
+ * [``dimensions.js``](app/dimensions.js) initializes the dimensions and the grouping of the dimensions.
+ * [``matrixFactory.js``](app/matrixFactory.js) creates the matrix for the chord chart.
+ * [``tables.js``](app/tables.js) initializes the tables and the functions for updating the tables
 
 
