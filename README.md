@@ -155,7 +155,7 @@ __release build__
 
 ### Documentation of global variables
 
-The source code documentation of global variables is in a seperate file: [application.js](app/application.js) I created a documentation file with [jsdoc](usejsdoc.org/) it is in [documentation/jsdoc](documentation/jsdoc/index.html).
+The source code documentation of global variables is in a seperate file: [application.js](app/application.js) I created a documentation file with [jsdoc](usejsdoc.org/) it is in [documentation/jsdoc](documentation/jsdoc/index.html) or online on my server: [https://pfahler.at/mtdb2/doc/](https://pfahler.at/mtdb2/doc/)
 
 ### Structure
 
