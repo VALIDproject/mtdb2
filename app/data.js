@@ -4,7 +4,7 @@
  * 2) also the combined objects from a previous session is restored.
  */ 
 
-exports.init = function()
+exports.init = function(rawData)
 {
   hasLocalStorage = typeof(Storage) !== "undefined";
   if(hasLocalStorage) {

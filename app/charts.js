@@ -25,7 +25,7 @@ exports.init = function(datafile) {
 
   q.await(function(error, rawData) {
     
-    require('data').init();
+    require('data').init(rawData);
     require('dimensions').init();
     require('filterCharts').initTimeBar(timeBarChart);
     require('filterCharts').initLawBar(lawsBarChart);
