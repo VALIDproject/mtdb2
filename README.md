@@ -192,6 +192,7 @@ The source code of this project is in the subfolder [``app``](app) this folder i
 ### How to add a new Chart
 
   1.  Add a new dimension and group for a chart:
+
       This is done in the file [``dimensions.js``](app/dimensions.js):
 
       ```
@@ -202,6 +203,7 @@ The source code of this project is in the subfolder [``app``](app) this folder i
       Look at the [_crossfilter_](http://square.github.io/crossfilter/) documentation for details.
 
   2.  Define where the chart should be:
+
       In the subfolder [``views``](app/views) the structure of the dashboard is defined. 
       Add the name of the new chart to the desired position. For example: [``filters.jade``](app/views/charts.jade)
 
@@ -221,8 +223,10 @@ The source code of this project is in the subfolder [``app``](app) this folder i
       ```
 
   3.  Initialize the chart:
+
       It does not matter where you initialize it. For example in [``charts.js``](app/charts.js) after the initialization of the dimensions. If it is not a [_DC_](https://dc-js.github.io/dc.js/) chart, dont forget to define an update method and a resize method in [``application.js``](app/application.js).
 
   4.  Calls on update:
+  
       If it is not a dc chart add the update call to the function ``updateAllNonDC`` in [``globalFunction.js``](app/globalFunction.js). In every case add the rescale call to ``rescaleAll`` in [``globalFunction.js``](app/globalFunction.js).
 
