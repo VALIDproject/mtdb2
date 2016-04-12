@@ -162,7 +162,7 @@ The source code documentation of global variables is in a seperate file: [applic
 The source code of this project is in the subfolder [``app``](app) this folder is structured as follow:
 
  * [``assets``](app/assets) the assets files that the project depends on. 
-   For example the ``index.html``, the csv data, the used fonds, ...
+   For example the ``index.html``, the csv data, the used fonts, ...
  * [``styles``](app/styles) the style files of the project. 
    Currently ``less`` is used to translate the style files to a single css file. The filenames of the single files have to start with an ``_`` to be ignored by the ``brunch`` compiler. And in the file [``structure``](app/styles/structure.less) the single files are linked together.
  * [``views``](app/views) This folder contains the files that describe the dom structure of the view.
