@@ -22,8 +22,8 @@ exports.parse = function(data) {
 
       for (var i = 0; (ri == -1 || mi == -1) && i < nodes.length; i++)
       {
-        if (d.EURO > 10000000) // Filter unrealistic values for Austria
-          return;
+//        if (d.EURO > 10000000) // Filter unrealistic values for Austria
+//          return;
 
         if (nodes[i].name == d.RECHTSTRGER)
           ri = i;
