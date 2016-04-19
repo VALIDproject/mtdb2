@@ -108,16 +108,19 @@ var tableRenderlet = function(table,dim){
     bQuartalSelectionOn = quartalSelection[i] == 1;
   };
 
+  var elementSparkLineWidth = 0.4;
+  var completeSparkLineWidth = (elementSparkLineWidth + 0.1) * quarterNames.length + 0.3;
+
   table.selectAll('td._0').classed("text-left", true);
   var sparklines = table.selectAll('td._1')
     .classed("text-right", true)
-    .append("div").attr("class", "inlinesparkline");
-  var sparklineWidthStr = sparklines.style("width");
-  var sparklineWidth = sparklineWidthStr.substr(0,sparklineWidthStr.length-2);
+    .append("div").attr("class", "inlinesparkline")
+    .style("width", completeSparkLineWidth + "em");
+
   for(var i = 0; i < quarterNames.length; i++) {
     sparklines.append("div")
       .attr("class", "sparklinecontainer")
-      .style("width",(sparklineWidth/quarterNames.length-2)+"px")
+      .style("width", elementSparkLineWidth + "em")
       .attr("tooltip_title", function(x,j) { 
         var y = quarterNames[i];
         return Math.floor(y/10) +" Q"+ y%10 + " " + formatEuro(quarterSum[j][y]);
