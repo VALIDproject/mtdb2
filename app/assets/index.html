@@ -20,7 +20,7 @@
   <script>
   require('application').init();  
   $('.navbar-nav li').siblings('li').removeClass('active');
-  $('.navbar-nav').children().first().addClass('active');
+  $('.navbar-nav li#mtdb2').addClass('active');
 
   var footer = require('views/footer');
   $('body').append(footer);
