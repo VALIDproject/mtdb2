@@ -15,14 +15,14 @@ exports.initTimeBar = function(initTimeBar)
   var hideBarTooltip = function(d){
       filterTooltip.transition()
       .duration(500)
-      .style("opacity", 0);  
+      .style("opacity", 0);
   }
 
   timeBarChart
     .width(function(){return $("#time-bar-chart").width();})
     .height(200)
     .margins({top: 10, right: 10, bottom: 60, left: 80})
-    .gap(10)
+    .gap(6)
     .dimension(timeDim)
     .group(spendPerTime)
     .renderHorizontalGridLines(true)

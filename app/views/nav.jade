@@ -1,19 +1,24 @@
 // Fixed navbar
 .navbar.navbar-default.navbar-fixed-top(role='navigation')
-  .container
-    .navbar-header
-      button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-        span.sr-only Toggle navigation
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-      a.navbar-brand(href='#') Media Transparency
-    .navbar-collapse.collapse
-      ul.nav.navbar-nav
-        li
-          a(href='index.html') Home
-        li
-          a(href='about.html') About
-        li
-          a(href='contact.html') Contact
+  .navbar-header
+    button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+      span.sr-only Toggle navigation
+      span.icon-bar
+      span.icon-bar
+      span.icon-bar
+    a.navbar-brand(href='/') Media Transparency
+  div.logo
+   a(href="http://www.validproject.at")
+     img.logo(src="http://www.validproject.at/wp-content/themes/validtheme/img/valid_logo.svg")
+     span.tagline.pull-right Visual Analytics<br/>in Data-driven Journalism
+  .navbar-collapse.collapse
+    ul.nav.navbar-nav
+      li#mtdb2
+         a(href='index.html') Dashboard
+
+
+//       li#data
+//         a(href='about.html') About the data
+//       li
+//         a(href='contact.html') Contact
     // /.nav-collapse
