@@ -200,8 +200,8 @@ deleteData = function(dimension)
       type: "remove"
     });
 
-    if(hasLocalStorage)
-      localStorage.setItem("combinedObj",JSON.stringify(combinedObj));
+    // if(hasLocalStorage)
+    //   localStorage.setItem("combinedObj",JSON.stringify(combinedObj));
 
     updateAll();
   }
@@ -258,8 +258,8 @@ combineData = function(dimension)
       type: "combine"
     });
 
-    if(hasLocalStorage)
-      localStorage.setItem("combinedObj",JSON.stringify(combinedObj));
+    // if(hasLocalStorage)
+    //   localStorage.setItem("combinedObj",JSON.stringify(combinedObj));
 
     updateAll();
   }
